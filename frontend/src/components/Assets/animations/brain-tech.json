@@ -1,0 +1,46 @@
+{
+  "v": "5.7.4",
+  "fr": 60,
+  "ip": 0,
+  "op": 180,
+  "w": 44,
+  "h": 44,
+  "nm": "Brain Tech Animation",
+  "ddd": 0,
+  "assets": [],
+  "layers": [
+    {
+      "ddd": 0,
+      "ind": 1,
+      "ty": 4,
+      "nm": "Brain Logo",
+      "sr": 1,
+      "ks": {
+        "o": { "a": 0, "k": 100 },
+        "r": { "a": 0, "k": 0 },
+        "p": { "a": 0, "k": [22, 22, 0] },
+        "a": { "a": 0, "k": [0, 0, 0] },
+        "s": { "a": 0, "k": [100, 100, 100] }
+      },
+      "ao": 0,
+      "shapes": [
+        {
+          "ty": "gr",
+          "it": [
+            {
+              "ty": "path",
+              "d": "YOUR_SVG_PATH_HERE",  // We need your brain icon SVG path here
+              "nm": "Brain Path"
+            },
+            {
+              "ty": "fl",
+              "c": { "a": 0, "k": [1, 1, 1, 1] },
+              "o": { "a": 0, "k": 100 }
+            }
+          ],
+          "nm": "Brain Shape"
+        }
+      ]
+    }
+  ]
+} 

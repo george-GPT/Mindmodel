@@ -1,0 +1,173 @@
+{
+  "title": "Attention Assessment",
+  "showProgressBar": "top",
+  "goNextPageAutomatic": true,
+  "pages": [
+    {
+      "name": "introduction",
+      "title": "Introduction",
+      "elements": [
+        {
+          "type": "html",
+          "name": "intro_text",
+          "title": "Welcome to the Attention Assessment\n\nThis assessment measures your ability to focus and sustain attention. Please answer each question thoughtfully."
+        }
+      ]
+    },
+    {
+      "name": "self_perceived_attention_span",
+      "title": "Self-Perceived Attention",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "self_perceived_attention_span",
+          "title": "How would you rate your ability to maintain attention on a single task?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Low",
+          "maxRateDescription": "High",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "common_distractions",
+      "title": "Distractions",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "common_distractions",
+          "title": "How often do you find yourself distracted when focusing on a task?",
+          "choices": [
+            "Rarely",
+            "Sometimes",
+            "Often"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "internal_external_distractions",
+      "title": "Types of Distractions",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "internal_external_distractions",
+          "title": "When you lose focus, what is more likely to distract you?",
+          "choices": [
+            "Internal thoughts",
+            "External environment",
+            "Both equally"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "attention_in_various_environments",
+      "title": "Environmental Preferences",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "attention_in_various_environments",
+          "title": "Which environment is easiest for you to focus in?",
+          "choices": [
+            "Quiet",
+            "Background Noise",
+            "Dynamic/Busy",
+            "No Preference"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "task_variety_and_attention",
+      "title": "Task Preferences",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "task_variety_and_attention",
+          "title": "Do you find it easier to focus on tasks that are varied or repetitive?",
+          "choices": [
+            "Varied",
+            "Repetitive",
+            "No Preference"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "time_of_day_for_focus",
+      "title": "Timing Preferences",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "time_of_day_for_focus",
+          "title": "What time of day do you find it easiest to focus?",
+          "choices": [
+            "Early Morning",
+            "Late Morning",
+            "Afternoon",
+            "Evening",
+            "No Preference"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "mind_wandering_tendency",
+      "title": "Mind Wandering",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "mind_wandering_tendency",
+          "title": "How often do you find your mind wandering when you're trying to focus on a task?",
+          "choices": [
+            "Rarely",
+            "Sometimes",
+            "Often",
+            "Very Often"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "focus_and_task_engagement",
+      "title": "Task Engagement",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "focus_and_task_engagement",
+          "title": "How often do you find yourself needing to take breaks or shift focus during tasks that require extended concentration?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Rarely need breaks",
+          "maxRateDescription": "Frequently take breaks or switch tasks",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "ease_of_staying_focused",
+      "title": "Focus Ability",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "ease_of_staying_focused",
+          "title": "I have an easy time staying focused when I apply myself.",
+          "rateMin": 0,
+          "rateMax": 10,
+          "minRateDescription": "Strongly Disagree",
+          "maxRateDescription": "Strongly Agree",
+          "isRequired": true
+        }
+      ]
+    }
+  ],
+  "completedHtml": "Thank you for completing the Attention Assessment!"
+}

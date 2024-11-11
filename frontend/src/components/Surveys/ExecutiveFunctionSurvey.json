@@ -1,0 +1,262 @@
+{
+  "metadata": {
+    "name": "executive_function",
+    "title": "Executive Functioning Assessment",
+    "description": "This assessment focuses on your executive functioning skills, including planning, adaptability, problem-solving, impulse control, and decision-making.",
+    "estimatedDuration": "15-20 minutes",
+    "version": "1.0.0"
+  },
+  "title": "Executive Functioning Assessment",
+  "description": "This assessment focuses on your executive functioning skills, including planning, adaptability, problem-solving, impulse control, and decision-making.",
+  "goNextPageAutomatic": true,
+  "showProgressBar": "top",
+  "completedHtml": "Thank you for completing the Executive Functioning Assessment!",
+  "pages": [
+    {
+      "name": "introduction",
+      "elements": [
+        {
+          "type": "text",
+          "name": "intro_text",
+          "title": "This assessment focuses on your executive functioning skills, including planning, adaptability, problem-solving, impulse control, and decision-making. You will complete a mix of tasks and questions designed to provide insight into these skills."
+        }
+      ]
+    },
+    {
+      "name": "planning_skills",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "planning_skills",
+          "title": "How effective are you at planning and organizing tasks?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Not Effective",
+          "maxRateDescription": "Highly Effective",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "problem_solving_confidence",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "problem_solving_confidence",
+          "title": "How confident do you feel when faced with complex problems?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Not Confident",
+          "maxRateDescription": "Very Confident",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "task_approach",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "task_approach",
+          "title": "When you have a task to complete with a set deadline, how do you tend to approach it?",
+          "choices": [
+            "Plan everything out before starting",
+            "Start immediately and adjust as I go",
+            "Break it into smaller tasks first",
+            "Wait until I feel ready or motivated",
+            "Other (please specify)"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "task_approach_other",
+      "elements": [
+        {
+          "type": "text",
+          "name": "task_approach_other",
+          "title": "Please specify your approach:",
+          "visibleIf": "{task_approach} = 'Other (please specify)'",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "adaptability",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "adaptability",
+          "title": "How easily do you adapt when plans or tasks change unexpectedly?",
+          "choices": [
+            "Very Easily",
+            "Somewhat Easily",
+            "With Difficulty",
+            "Very Difficult"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "decision_making_pressure",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "decision_making_pressure",
+          "title": "How comfortable are you making quick decisions under pressure?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Not Comfortable",
+          "maxRateDescription": "Very Comfortable",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "multi_step_tasks",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "multi_step_tasks",
+          "title": "How often do you break down tasks into smaller steps?",
+          "choices": [
+            "Always",
+            "Often",
+            "Sometimes",
+            "Rarely"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "acting_on_ideas",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "acting_on_ideas",
+          "title": "When I come up with a new idea, I act on it.",
+          "choices": [
+            "Immediately, without much thought",
+            "After considering potential outcomes",
+            "Only if I have a solid plan in place",
+            "I prefer to brainstorm with others first",
+            "No strong preference"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "planning_ahead",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "planning_ahead",
+          "title": "How often do you plan ahead before starting a major task or project?",
+          "choices": [
+            "Always",
+            "Often",
+            "Sometimes",
+            "Rarely"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "prioritizing_tasks",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "prioritizing_tasks",
+          "title": "How well do you prioritize tasks when you have multiple responsibilities at the same time?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Not Well",
+          "maxRateDescription": "Very Well",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "impulse_control",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "impulse_control",
+          "title": "How often do you find yourself making impulsive decisions, even if they might impact the outcome of a task?",
+          "choices": [
+            "Very Often",
+            "Often",
+            "Sometimes",
+            "Rarely",
+            "Never"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "task_strategy_reflection",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "task_strategy_reflection",
+          "title": "When you’re working on a challenging task, how likely are you to change your approach if you encounter obstacles?",
+          "choices": [
+            "Very Likely",
+            "Somewhat Likely",
+            "Neutral",
+            "Unlikely",
+            "Very Unlikely"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "time_management",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "time_management",
+          "title": "How would you rate your time management skills?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Poor",
+          "maxRateDescription": "Excellent",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "dealing_with_distractions",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "dealing_with_distractions",
+          "title": "How effectively do you handle distractions when focusing on a task?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Not Effective",
+          "maxRateDescription": "Highly Effective",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "conclusion",
+      "elements": [
+        {
+          "type": "comment",
+          "name": "feedback",
+          "title": "Is there anything you found particularly challenging or interesting about this assessment?",
+          "isRequired": false
+        }
+      ]
+    }
+  ]
+}

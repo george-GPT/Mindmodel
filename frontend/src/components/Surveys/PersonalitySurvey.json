@@ -1,0 +1,150 @@
+{
+  "title": "Personality & Preference Survey",
+  "showProgressBar": "top",
+  "goNextPageAutomatic": true,
+  "pages": [
+    {
+      "name": "introduction",
+      "title": "Introduction",
+      "elements": [
+        {
+          "type": "text",
+          "name": "intro_text",
+          "title": "Welcome to the Personality & Preference Survey\n\nThis survey explores your personality traits and work preferences to better understand how you approach tasks, decision-making, and collaboration."
+        }
+      ]
+    },
+    {
+      "name": "planning_style",
+      "title": "Planning Style",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "personality_planning",
+          "title": "When starting a complex task, how likely are you to plan out each step before diving in?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Jump in and adjust as I go",
+          "maxRateDescription": "Plan every step first",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "stress_mindset",
+      "title": "Stress Mindset",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "personality_stress_mindset",
+          "title": "When working under pressure, what best describes your typical mindset?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "I focus on managing stress",
+          "maxRateDescription": "I focus on finding solutions",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "work_environment",
+      "title": "Work Environment",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "working_env_preference",
+          "title": "On a scale of 1 to 10, how would you rate your preferred working environment?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Flexible",
+          "maxRateDescription": "Structured",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "team_comfort",
+      "title": "Team Comfort",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "working_env_team_comfort",
+          "title": "On a scale of 1 (Independent) to 10 (Collaborative), what is your comfort level with working in a team?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Independent",
+          "maxRateDescription": "Collaborative",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "work_environment_type",
+      "title": "Work Environment Type",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "working_env_type",
+          "title": "What type of work environment do you prefer?",
+          "choices": [
+            "Fast-paced and dynamic",
+            "Structured and predictable",
+            "Creative and flexible",
+            "Collaborative"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "goal_focus",
+      "title": "Goal Focus",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "goal_focus_preference",
+          "title": "I tend to focus more on goals that are:",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Short-Term",
+          "maxRateDescription": "Long-Term",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "organization_style",
+      "title": "Organization Style",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "organizational_style",
+          "title": "On a scale of 1 (Minimal Organization) to 10 (Highly Organized), how would you describe your organizational style?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Minimal Organization",
+          "maxRateDescription": "Highly Organized",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "motivation_source",
+      "title": "Motivation Source",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "motivation_source",
+          "title": "On a scale of 1 to 10, where does most of your motivation come from?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Internal",
+          "maxRateDescription": "External",
+          "isRequired": true
+        }
+      ]
+    }
+  ],
+  "completedHtml": "Thank you for completing the Personality Assessment!"
+}
+  

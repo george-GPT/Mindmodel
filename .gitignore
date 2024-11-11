@@ -1,0 +1,61 @@
+# .gitignore
+
+# Environment variables
+backend/core/.env
+
+# Virtual Environment
+env/
+backend/env/
+
+# Static files
+staticfiles/
+
+# Media files
+media/
+
+# Logs
+*.log
+
+# Django stuff:
+*.pyc
+__pycache__/
+
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Dependency directories
+node_modules/
+bower_components/
+
+# Build directories
+dist/
+build/
+
+# Sensitive or environment-specific files
+.env
+
+# Temporary files
+*.tmp
+*.swp
+
+# OS-specific files (Mac/Linux/Windows)
+.DS_Store
+Thumbs.db
+
+# IDE/editor specific
+.vscode/
+.idea/
+*.sublime-workspace
+
+# TypeScript
+*.tsbuildinfo
+
+# Ignore coverage results
+coverage/
+
+*storybook.log
+frontend/mindmodel_frontend

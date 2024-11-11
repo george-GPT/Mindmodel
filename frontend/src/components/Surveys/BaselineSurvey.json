@@ -1,0 +1,104 @@
+{
+  "title": "Baseline Assessment",
+  "showProgressBar": "top",
+  "goNextPageAutomatic": true,
+  "pages": [
+    {
+      "name": "welcome",
+      "title": "Welcome",
+      "elements": [
+        {
+          "type": "html",
+          "name": "welcome_message",
+          "title": "Welcome to Mindmodel\n\nYour Cognitive Journey begins here."
+        }
+      ]
+    },
+    {
+      "name": "demographics",
+      "title": "Demographics",
+      "elements": [
+        {
+          "type": "text",
+          "name": "name",
+          "title": "What is your name?",
+          "isRequired": true
+        },
+        {
+          "type": "text",
+          "name": "dob",
+          "title": "What is your date of birth?",
+          "inputType": "date",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "goals",
+      "title": "Goals",
+      "elements": [
+        {
+          "type": "radiogrid",
+          "name": "primary_goal",
+          "title": "What is your primary goal to get out of Mindmodel?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "self_awareness",
+              "text": "Gain self-awareness"
+            },
+            {
+              "value": "learning",
+              "text": "Explore new approaches for learning"
+            },
+            {
+              "value": "productivity",
+              "text": "Explore new approaches for productivity"
+            },
+            {
+              "value": "habits",
+              "text": "Develop Healthy Habits"
+            }
+          ],
+          "showOtherItem": true,
+          "otherText": "Other (please specify)"
+        }
+      ]
+    },
+    {
+      "name": "focus_area",
+      "title": "Focus Area",
+      "elements": [
+        {
+          "type": "imagepicker",
+          "name": "primary_focus",
+          "title": "What is your primary focus right now?",
+          "isRequired": true,
+          "choices": [
+            {
+              "value": "education",
+              "text": "Education",
+              "imageLink": "data:image/svg+xml;base64,..."
+            },
+            {
+              "value": "career",
+              "text": "Career",
+              "imageLink": "data:image/svg+xml;base64,..."
+            },
+            {
+              "value": "personal",
+              "text": "Personal Development",
+              "imageLink": "data:image/svg+xml;base64,..."
+            }
+          ],
+          "imageSettings": {
+            "imageWidth": 64,
+            "imageHeight": 64,
+            "fit": "cover"
+          }
+        }
+      ]
+    }
+  ],
+  "completedHtml": "Thank you for completing the Baseline Assessment!"
+}

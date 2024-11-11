@@ -1,0 +1,135 @@
+{
+  "title": "Memory Assessment",
+  "showProgressBar": "top",
+  "goNextPageAutomatic": true,
+  "pages": [
+    {
+      "name": "introduction",
+      "title": "Introduction",
+      "elements": [
+        {
+          "type": "text",
+          "name": "intro_text",
+          "title": "Welcome to the Memory Assessment\n\nThis assessment focuses specifically on memory skills, including both short-term and long-term recall. Please answer each question thoughtfully."
+        }
+      ]
+    },
+    {
+      "name": "self_perceived_memory_strength",
+      "title": "Memory Self-Assessment",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "question_self_perceived_memory_strength",
+          "title": "How would you rate your memory ability overall?",
+          "minRateDescription": "Low",
+          "maxRateDescription": "High",
+          "rateMin": 1,
+          "rateMax": 10,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "reliance_on_memory_aids",
+      "title": "Memory Strategies",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question_reliance_on_memory_aids",
+          "title": "How often do you use tools or strategies to remember important information?",
+          "choices": ["Rarely", "Sometimes", "Often"],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "memory_challenges",
+      "title": "Memory Challenges",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question_memory_challenges",
+          "title": "Which aspect of memory do you find most challenging?",
+          "choices": ["Short-term recall", "Long-term recall", "Working memory", "Attention to detail"],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "memory_technique",
+      "title": "Memory Techniques",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question_memory_technique",
+          "title": "When you need to remember something, what do you typically do?",
+          "choices": [
+            "Write it down",
+            "Create associations",
+            "Repeat it",
+            "Visualize it",
+            "Use mnemonic devices"
+          ],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "self_reflection_post_assessment",
+      "title": "Post-Assessment Reflection",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "question_self_reflection_post_assessment",
+          "title": "After completing these tasks, how would you now rate your memory ability overall?",
+          "minRateDescription": "Low",
+          "maxRateDescription": "High",
+          "rateMin": 1,
+          "rateMax": 10,
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "open_ended_feedback",
+      "title": "Additional Feedback",
+      "elements": [
+        {
+          "type": "comment",
+          "name": "question_open_ended_feedback",
+          "title": "Did you find any part of the memory assessment particularly fun or challenging? Please share your thoughts.",
+          "isRequired": false
+        }
+      ]
+    },
+    {
+      "name": "assessment_difficulty",
+      "title": "Overall Assessment",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question_assessment_difficulty",
+          "title": "How would you rate the overall difficulty of this assessment?",
+          "choices": ["Very Easy", "Easy", "Moderate", "Hard", "Very Hard"],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "future_participation",
+      "title": "Future Participation",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "question_future_participation",
+          "title": "Would you be interested in participating in more memory-related assessments in the future?",
+          "choices": ["Yes", "No", "Maybe"],
+          "isRequired": true
+        }
+      ]
+    }
+  ],
+  "completedHtml": "Thank you for completing the Memory Assessment!"
+}
+  

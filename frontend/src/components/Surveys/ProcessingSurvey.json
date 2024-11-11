@@ -1,0 +1,138 @@
+{
+  "title": "Processing Assessment",
+  "showProgressBar": "top",
+  "goNextPageAutomatic": true,
+  "pages": [
+    {
+      "name": "introduction",
+      "title": "Introduction",
+      "elements": [
+        {
+          "type": "text",
+          "name": "intro_text",
+          "title": "Welcome to the Processing Assessment\n\nThis assessment measures your speed of processing new information and your adaptability when switching between tasks. You will complete interactive tasks and self-reflective questions."
+        }
+      ]
+    },
+    {
+      "name": "self_perceived_processing_speed",
+      "title": "Processing Speed",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "self_perceived_processing_speed",
+          "title": "How quickly do you typically process new information?",
+          "choices": ["Very Slow", "Slow", "Moderate", "Fast", "Very Fast"],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "handling_complex_information",
+      "title": "Information Handling",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "handling_complex_information",
+          "title": "How comfortable are you processing large amounts of complex information at once?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Not Comfortable",
+          "maxRateDescription": "Very Comfortable",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "preferred_processing_approach",
+      "title": "Processing Approach",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "preferred_processing_approach",
+          "title": "When you process information, do you prefer to take your time for accuracy, or move quickly for efficiency?",
+          "choices": ["Take Time for Accuracy", "Move Quickly for Efficiency", "Depends on the Situation"],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "overwhelm_with_information",
+      "title": "Information Processing",
+      "elements": [
+        {
+          "type": "radiogroup",
+          "name": "overwhelm_with_information",
+          "title": "How often do you feel overwhelmed when processing large amounts of information?",
+          "choices": ["Rarely", "Sometimes", "Often"],
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "adaptability_to_task_switching",
+      "title": "Task Switching",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "adaptability_to_task_switching",
+          "title": "How easily do you adapt your processing speed when switching between different types of tasks?",
+          "rateMin": 1,
+          "rateMax": 10,
+          "minRateDescription": "Not Easily",
+          "maxRateDescription": "Very Easily",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "detail_oriented_focus",
+      "title": "Detail Focus",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "detail_oriented_focus",
+          "title": "I often find myself focusing on small details, even when it's not productive.",
+          "rateMin": 0,
+          "rateMax": 10,
+          "minRateDescription": "Strongly Disagree",
+          "maxRateDescription": "Strongly Agree",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "problem_solving_style",
+      "title": "Problem Solving",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "problem_solving_style",
+          "title": "When solving problems, I prefer using logical steps over creative thinking.",
+          "rateMin": 0,
+          "rateMax": 10,
+          "minRateDescription": "Strongly Disagree",
+          "maxRateDescription": "Strongly Agree",
+          "isRequired": true
+        }
+      ]
+    },
+    {
+      "name": "decision_making_style",
+      "title": "Decision Making",
+      "elements": [
+        {
+          "type": "rating",
+          "name": "decision_making_style",
+          "title": "When making decisions, I tend to rely more on intuition or logic.",
+          "rateMin": 0,
+          "rateMax": 10,
+          "minRateDescription": "Intuition",
+          "maxRateDescription": "Logic",
+          "isRequired": true
+        }
+      ]
+    }
+  ],
+  "completedHtml": "Thank you for completing the Processing Assessment!"
+}
