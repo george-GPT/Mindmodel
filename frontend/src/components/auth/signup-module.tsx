@@ -8,8 +8,8 @@ import {
 
 import { AppDispatch, RootState } from '../../store/store';
 import { AuthService } from '../../services';
-import GoogleIcon from '../Assets/icons/google-Icon';
-import BrainIconPurple from '../Assets/icons/brainIconPurlple';
+import GoogleIcon from '../assets/icons/google-Icon';
+import BrainIconPurple from '../assets/icons/brainIconPurlple';
 import Button from '../button/button';
 import Input from '../Input';
 import { setError, clearError } from '../../store/auth-slice';

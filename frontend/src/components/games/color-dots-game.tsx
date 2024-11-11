@@ -1,17 +1,16 @@
 import React from 'react';
-import { SymbolSearch } from '@m2c2kit/assessment-symbol-search';
-import GenericGame from './GenericGame';
+import { ColorDots } from '@m2c2kit/assessment-color-dots';
+import GenericGame from './generic-game';
 
-const SymbolSearchGame: React.FC = () => {
-  const GAME_ID = 'symbolSearch';
-  const CONTAINER_ID = 'symbol-search-container';
+const ColorDotsGame: React.FC = () => {
+  const GAME_ID = 'colorDots';
+  const CONTAINER_ID = 'color-dots-container';
 
   const initializeGame = (containerId: string, callbacks: any) => {
-    const game = new SymbolSearch({
+    const game = new ColorDots({
       containerId,
       onComplete: callbacks.onComplete,
-      onLoad: callbacks.onLoad,
-      onError: callbacks.onError
+      onLoad: callbacks.onLoad
     });
     game.start();
   };
@@ -29,9 +28,9 @@ const SymbolSearchGame: React.FC = () => {
       containerId={CONTAINER_ID}
       initializeGame={initializeGame}
       destroyGame={destroyGame}
-      title="Symbol Search Assessment"
+      title="Color Dots Assessment"
     />
   );
 };
 
-export default SymbolSearchGame;
+export default ColorDotsGame; 

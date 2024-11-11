@@ -8,9 +8,9 @@ import { RootState } from '../../store/store';
 import { submitGameScore } from '../../store/game-slice';
 import { completeGame } from '../../store/progress-slice';
 import { gamesAPI } from '../../services';
-import ErrorBoundary from '../common/errorBoundary';
-import Loading from '../common/Loading';
-import { useSurveyAnalytics } from '../Surveys/survey-hooks/useSurveyAnalytics';
+import ErrorBoundary from '../common/error-boundary';
+import Loading from '../common/loading';
+import { useSurveyAnalytics } from '../surveys/survey-hooks/useSurveyAnalytics';
 
 interface GameData {
   score: number;

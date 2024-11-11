@@ -1,6 +1,6 @@
-// src/components/Dashboard/Dashboard.tsx
+// src/components/dashboard/dashboard.tsx
 
-import './Dashboard.css'; // Import the CSS file
+import './dashboard.css'; // Import the CSS file
 
 import React, { useMemo, useEffect } from 'react';
 import { useSelector } from 'react-redux';

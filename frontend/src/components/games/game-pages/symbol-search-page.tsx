@@ -1,8 +1,8 @@
 import React from 'react';
-import GridMemoryGame from '../GridMemoryGame';
+import SymbolSearchGame from '../symbol-search-game';
 import { Box } from '@mui/material';
 
-const GridMemoryPage: React.FC = () => {
+const SymbolSearchPage: React.FC = () => {
   return (
     <Box
       sx={{
@@ -11,9 +11,9 @@ const GridMemoryPage: React.FC = () => {
         minHeight: '100vh',
       }}
     >
-      <GridMemoryGame />
+      <SymbolSearchGame />
     </Box>
   );
 };
 
-export default GridMemoryPage; 
+export default SymbolSearchPage; 

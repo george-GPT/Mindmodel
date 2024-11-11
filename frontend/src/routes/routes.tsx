@@ -11,21 +11,21 @@ import ContactPage from '../components/pages/Contact';
 import LoginModule from '../components/auth/login-module';
 import SignupModule from '../components/auth/signup-module';
 import EmailVerification from '../components/auth/email-verification';
-import Dashboard from '../components/dashboard/Dashboard';
+import Dashboard from '../components/dashboard/dashboard';
 import AccountPage from '../components/pages/account';
 import SecurityPage from '../components/pages/account/SecurityPage';
-import FinalResults from '../components/dashboard/finalResults/finalResults';
+import FinalResults from '../components/dashboard/final-ai-results/final-results';
 import PrivateRoute from './private-routes'; // Update the import path
 import { NoPageFound } from '../components/pages/NoPageFound';
 
 // Game imports
-import ColorDotsPage from '../components/games/gamePages/ColorDotsPage';
-import ColorShapesPage from '../components/games/gamePages/ColorShapesPage';
-import GridMemoryPage from '../components/games/gamePages/GridMemoryPage';
-import SymbolSearchPage from '../components/games/gamePages/SymbolSearchPage';
+import ColorDotsPage from '../components/games/game-pages/color-dots-page';
+import ColorShapesPage from '../components/games/game-pages/color-shapes-page';
+import GridMemoryPage from '../components/games/game-pages/grid-memory-page';
+import SymbolSearchPage from '../components/games/game-pages/symbol-search-page';
 
 // Survey imports
-import GenericSurvey from '../components/Surveys/generic-survey';
+import GenericSurvey from '../components/surveys/generic-survey';
 
 const AppRoutes = () => {
   return (

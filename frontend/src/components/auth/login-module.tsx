@@ -8,7 +8,7 @@ import {
 
 import { AppDispatch, RootState } from '../../store/store';
 import { AuthService } from '../../services';
-import GoogleIcon from '../Assets/icons/google-Icon';
+import GoogleIcon from '../assets/icons/google-Icon';
 import Button from '../button/button';
 import Input from '../Input';
 import { 
@@ -17,7 +17,7 @@ import {
 } from '../../store/auth-slice';
 import { validateEmail, validatePassword } from '../../utils/validation';
 import EmailInput from '../Input/EmailInput';
-import BrainIconPurple from '../Assets/icons/brainIconPurlple';
+import BrainIconPurple from '../assets/icons/brainIconPurlple';
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({

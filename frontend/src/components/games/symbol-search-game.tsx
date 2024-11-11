@@ -1,15 +1,13 @@
-// src/Components/Games/GridMemoryGame.tsx
-
 import React from 'react';
-import { GridMemory } from '@m2c2kit/assessment-grid-memory';
-import GenericGame from './GenericGame';
+import { SymbolSearch } from '@m2c2kit/assessment-symbol-search';
+import GenericGame from './generic-game';
 
-const GridMemoryGame: React.FC = () => {
-  const GAME_ID = 'gridMemory';
-  const CONTAINER_ID = 'grid-memory-container';
+const SymbolSearchGame: React.FC = () => {
+  const GAME_ID = 'symbolSearch';
+  const CONTAINER_ID = 'symbol-search-container';
 
   const initializeGame = (containerId: string, callbacks: any) => {
-    const game = new GridMemory({
+    const game = new SymbolSearch({
       containerId,
       onComplete: callbacks.onComplete,
       onLoad: callbacks.onLoad,
@@ -31,9 +29,9 @@ const GridMemoryGame: React.FC = () => {
       containerId={CONTAINER_ID}
       initializeGame={initializeGame}
       destroyGame={destroyGame}
-      title="Grid Memory Assessment"
+      title="Symbol Search Assessment"
     />
   );
 };
 
-export default GridMemoryGame;
+export default SymbolSearchGame;

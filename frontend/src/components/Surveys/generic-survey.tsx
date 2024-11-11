@@ -1,4 +1,4 @@
-// src/Surveys/GenericSurvey.tsx
+// src/surveys/generic-survey.tsx
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -16,15 +16,15 @@ import { SurveyJSON } from '../../types/survey';
 import { useSurveyAnalytics } from './survey-hooks/useSurveyAnalytics';
 import { useSurveyTheme } from './survey-hooks/useSurveyTheme';
 import SurveyAnalyticsDisplay from './survey-endscreen-analytics';
-import ErrorBoundary from '../common/errorBoundary';
+import ErrorBoundary from '../common/error-boundary';
 
 // Import all survey JSON files
 import AttentionSurvey from './attention-survey.json';
 import BaselineSurvey from './baseline-survey.json';
-import ExecutiveFunctionSurvey from './executive-function-Survey.json';
+import ExecutiveFunctionSurvey from '//executive-function-Survey.json';
 import MemorySurvey from './memory-survey.json';
 import PersonalitySurvey from './personality-survey.json';
-import ProcessingSurvey from './Processing-survey.json';
+import ProcessingSurvey from './processing-survey.json';
 
 // Apply SurveyJS theme
 StylesManager.applyTheme('modern');

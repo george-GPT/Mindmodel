@@ -39,26 +39,26 @@ import {
 } from '@mui/icons-material';
 
 import { RootState } from '../../../store/store';
-import BrainIcon from '../../Assets/icons/brainIconwhite';
-import BackgroundGraphics from '../../common/BackgroundGraphics';
-import PuzzleImage from '../../Assets/images/puzzle.png';
-import VisionImage from '../../Assets/images/vision.png';
-import ProcessImage from '../../Assets/images/process.png';
-import LogoText from '../../Assets/images/logo_text.svg';
-import PuzzleIcon from '../../Assets/icons/flaticon/puzzle.svg';
-import ProcessIcon from '../../Assets/icons/process.svg';
-import IdeaIcon from '../../Assets/icons/idea.svg';
-import VisionIcon from '../../Assets/icons/vision.svg';
-import InnovationIcon from '../../Assets/icons/innovation.svg';
-import SolutionIcon from '../../Assets/icons/solution.svg';
-import BrainFlatIcon from '../../Assets/icons/flaticon/brain.svg';
-import CreativityIcon from '../../Assets/icons/flaticon/creativity.svg';
-import NeuralIcon from '../../Assets/icons/flaticon/neural.svg';
-import ArtificialIntelligenceIcon from '../../Assets/icons/flaticon/artificial-intelligence.svg';
-import DiagramIcon from '../../Assets/icons/flaticon/diagram.svg';
-import GoalIcon from '../../Assets/icons/flaticon/goal.svg';
-import KnowledgeIcon from '../../Assets/icons/flaticon/knowledge.svg';
-import ScholarshipIcon from '../../Assets/icons/flaticon/scholarship.svg';
+import BrainIcon from '../../assets/icons/brainIconwhite';
+import BackgroundGraphics from '../../common/background-graphics';
+import PuzzleImage from '../../assets/images/puzzle.png';
+import VisionImage from '../../assets/images/vision.png';
+import ProcessImage from '../../assets/images/process.png';
+import LogoText from '../../assets/images/logo_text.svg';
+import PuzzleIcon from '../../assets/icons/flaticon/puzzle.svg';
+import ProcessIcon from '../../assets/icons/process.svg';
+import IdeaIcon from '../../assets/icons/idea.svg';
+import VisionIcon from '../../assets/icons/vision.svg';
+import InnovationIcon from '../../assets/icons/innovation.svg';
+import SolutionIcon from '../../assets/icons/solution.svg';
+import BrainFlatIcon from '../../assets/icons/flaticon/brain.svg';
+import CreativityIcon from '../../assets/icons/flaticon/creativity.svg';
+import NeuralIcon from '../../assets/icons/flaticon/neural.svg';
+import ArtificialIntelligenceIcon from '../../assets/icons/flaticon/artificial-intelligence.svg';
+import DiagramIcon from '../../assets/icons/flaticon/diagram.svg';
+import GoalIcon from '../../assets/icons/flaticon/goal.svg';
+import KnowledgeIcon from '../../assets/icons/flaticon/knowledge.svg';
+import ScholarshipIcon from '../../assets/icons/flaticon/scholarship.svg';
 
 export const HomePage: React.FC = () => {
   const theme = useTheme();

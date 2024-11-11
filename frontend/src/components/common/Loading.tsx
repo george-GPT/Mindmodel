@@ -5,7 +5,7 @@ import React from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-import logo from '../Assets/logo.png';
+import logo from '../assets/logo.png';
 
 const LoaderContainer = styled(Box)(({ theme }) => ({
   display: 'flex',

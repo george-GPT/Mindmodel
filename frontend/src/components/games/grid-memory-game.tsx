@@ -1,16 +1,19 @@
-import React from 'react';
-import { ColorDots } from '@m2c2kit/assessment-color-dots';
-import GenericGame from './GenericGame';
+// src/Components/Games/GridMemoryGame.tsx
 
-const ColorDotsGame: React.FC = () => {
-  const GAME_ID = 'colorDots';
-  const CONTAINER_ID = 'color-dots-container';
+import React from 'react';
+import { GridMemory } from '@m2c2kit/assessment-grid-memory';
+import GenericGame from './generic-game';
+
+const GridMemoryGame: React.FC = () => {
+  const GAME_ID = 'gridMemory';
+  const CONTAINER_ID = 'grid-memory-container';
 
   const initializeGame = (containerId: string, callbacks: any) => {
-    const game = new ColorDots({
+    const game = new GridMemory({
       containerId,
       onComplete: callbacks.onComplete,
-      onLoad: callbacks.onLoad
+      onLoad: callbacks.onLoad,
+      onError: callbacks.onError
     });
     game.start();
   };
@@ -28,9 +31,9 @@ const ColorDotsGame: React.FC = () => {
       containerId={CONTAINER_ID}
       initializeGame={initializeGame}
       destroyGame={destroyGame}
-      title="Color Dots Assessment"
+      title="Grid Memory Assessment"
     />
   );
 };
 
-export default ColorDotsGame; 
+export default GridMemoryGame;

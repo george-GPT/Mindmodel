@@ -1,8 +1,8 @@
 import React from 'react';
-import ColorDotsGame from '../ColorDotsGame';
+import ColorShapesGame from '../color-shapes-game';
 import { Box } from '@mui/material';
 
-const ColorDotsPage: React.FC = () => {
+const ColorShapesPage: React.FC = () => {
   return (
     <Box
       sx={{
@@ -11,9 +11,9 @@ const ColorDotsPage: React.FC = () => {
         minHeight: '100vh',
       }}
     >
-      <ColorDotsGame />
+      <ColorShapesGame />
     </Box>
   );
 };
 
-export default ColorDotsPage;
+export default ColorShapesPage;

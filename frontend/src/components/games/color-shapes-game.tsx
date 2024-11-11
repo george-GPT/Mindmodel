@@ -1,6 +1,6 @@
 import React from 'react';
 import { ColorShapes } from '@m2c2kit/assessment-color-shapes';
-import GenericGame from './GenericGame';
+import GenericGame from './generic-game';
 
 interface ColorShapesConfig {
   containerId: string;

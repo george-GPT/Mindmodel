@@ -30,7 +30,7 @@ import {
 } from '@mui/icons-material';
 import { alpha } from '@mui/material/styles';
 
-import BrainLottie from '../Assets/animations/brain-lottie';
+import BrainLottie from '../assets/animations/brain-lottie';
 import { RootState } from '../../store/store';
 import { User } from '../../types/auth-types';
 

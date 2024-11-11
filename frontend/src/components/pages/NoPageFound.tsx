@@ -1,7 +1,7 @@
 import { Container, Link, Stack, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
-import NoPageFoundIcon from '../Assets/icons/no-page-found-icon';
+import NoPageFoundIcon from '../assets/icons/no-page-found-icon';
 import Button from '../button/button';
 
 export const NoPageFound: React.FC = () => {

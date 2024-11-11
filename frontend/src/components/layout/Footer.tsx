@@ -5,7 +5,7 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { Box, Container, IconButton, Link, Typography, Grid, useTheme } from '@mui/material';
 
-import BrainIconWhite from '../Assets/icons/brainIconwhite';
+import BrainIconWhite from '../assets/icons/brainIconwhite';
 
 const Footer: React.FC = () => {
   const theme = useTheme();
