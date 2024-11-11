@@ -9,8 +9,8 @@ import { CssBaseline } from '@mui/material';
 
 import ErrorBoundary from './components/common/errorBoundary';
 import Loading from './components/common/Loading';
-import MainLayout from './components/Layout/MainLayout';
-import AppRoutes from './routes/Routes';
+import MainLayout from './components/layout/MainLayout';
+import AppRoutes from './routes/routes';
 import { persistor, store } from './store/store';
 import theme from './theme/theme';
 import './styles/animations.css';

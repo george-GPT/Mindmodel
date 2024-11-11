@@ -1,6 +1,6 @@
 import { AuthResponse, TokenResponse } from '../../types/auth-types';
-import { authAPI } from '../api/authAPI';
-import SessionSyncService from '../session/sessionSyncService';
+import { authAPI } from './auth-api';
+import SessionSyncService from '../session/session-sync-service';
 import CryptoJS from 'crypto-js';
 
 class TokenService {

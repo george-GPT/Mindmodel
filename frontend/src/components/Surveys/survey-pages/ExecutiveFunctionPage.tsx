@@ -1,7 +1,7 @@
 // src/Surveys/surveyPages/ExecutiveFunctionPage.tsx
 
 import React from 'react';
-import GenericSurvey from '../GenericSurvey';
+import GenericSurvey from '../generic-survey';
 
 const ExecutiveFunctionPage: React.FC = () => {
   const surveyId = 'ExecutiveFunctionSurvey'; // Corresponds to ExecutiveFunctionSurvey.json

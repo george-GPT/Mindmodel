@@ -1,9 +1,9 @@
-import ActivityTrackingService from '../session/activityTrackingService';
-import PersistenceService from '../session/persistenceService';
-import SessionSyncService from '../session/sessionSyncService';
-import TokenSecurityService from '../security/tokenSecurityService';
-import RateLimitService from '../security/rateLimitService';
-import OAuthMonitoringService from '../monitoring/oAuthMonitoringService';
+import ActivityTrackingService from './activity-tracking-service';
+import PersistenceService from './persistence-service';
+import SessionSyncService from './session-sync-service';
+import TokenSecurityService from '../security/token-security';
+import RateLimitService from '../security/rate-limit';
+import OAuthMonitoringService from '../monitoring/oauth-monitoring-service';
 import { AuthServiceType, LoginCredentials, SessionStatus } from '../../types/auth-types';
 
 interface SessionConfig {

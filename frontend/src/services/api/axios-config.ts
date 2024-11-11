@@ -1,5 +1,5 @@
 import axios from 'axios';
-import TokenService from '../tokens/tokenService';
+import TokenService from './token-service';
 import { TokenResponse } from '../../types/api-types';
 
 // Create axios instance with base URL

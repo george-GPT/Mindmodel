@@ -1,12 +1,12 @@
 import { store } from '../../store/store';
 import { setError } from '../../store/auth-slice';
-import TokenService from '../tokens/tokenService';
-import SessionSyncService from '../session/sessionSyncService';
-import ActivityTrackingService from '../session/activityTrackingService';
-import PersistenceService from '../session/persistenceService';
-import OAuthMonitoringService from '../monitoring/oAuthMonitoringService';
-import RateLimitService from '../security/rateLimitService';
-import TokenSecurityService from '../security/tokenSecurityService';
+import TokenService from '../api/token-service';
+import SessionSyncService from '../session/session-sync-service';
+import ActivityTrackingService from '../session/activity-tracking-service';
+import PersistenceService from '../session/persistence-service';
+import OAuthMonitoringService from '../monitoring/oauth-monitoring-service';
+import RateLimitService from '../security/rate-limit';
+import TokenSecurityService from '../security/token-security';
 import { 
     SessionStatus, 
     AuthResponse, 

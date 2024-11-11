@@ -1,9 +1,9 @@
 // API exports
-export { authAPI } from './api/authAPI';
-export { aiAPI } from './api/aiAPI';
+export { authAPI } from './api/auth-api';
+export { aiAPI } from './api/ai-api';
 export { surveyAPI } from './api/surveyAPI';
 export { gamesAPI } from './api/gamesAPI';
 
 // Service exports
-export { default as AuthService } from './auth/authService';
-export { default as TokenService } from './tokens/tokenService';
+export { default as AuthService } from './auth/auth-service';
+export { default as TokenService } from './api/token-service';

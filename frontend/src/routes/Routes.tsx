@@ -3,7 +3,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { HomePage } from '../components/pages/home';
-import AboutUsPage from '../components/pages/AboutUs';
+import AboutUsPage from '../components/pages/about-us';
 import OurApproachPage from '../components/pages/OurApproach';
 import ResearchPage from '../components/pages/Research';
 import PrivacyPolicyPage from '../components/pages/PrivacyPolicy';
@@ -12,10 +12,10 @@ import LoginModule from '../components/auth/login-module';
 import SignupModule from '../components/auth/signup-module';
 import EmailVerification from '../components/auth/email-verification';
 import Dashboard from '../components/dashboard/Dashboard';
-import AccountPage from '../components/pages/Account';
-import SecurityPage from '../components/pages/Account/SecurityPage';
+import AccountPage from '../components/pages/account';
+import SecurityPage from '../components/pages/account/SecurityPage';
 import FinalResults from '../components/dashboard/finalResults/finalResults';
-import PrivateRoute from './privateRoute'; // Update the import path
+import PrivateRoute from './private-routes'; // Update the import path
 import { NoPageFound } from '../components/pages/NoPageFound';
 
 // Game imports
@@ -25,7 +25,7 @@ import GridMemoryPage from '../components/games/gamePages/GridMemoryPage';
 import SymbolSearchPage from '../components/games/gamePages/SymbolSearchPage';
 
 // Survey imports
-import GenericSurvey from '../components/Surveys/GenericSurvey';
+import GenericSurvey from '../components/Surveys/generic-survey';
 
 const AppRoutes = () => {
   return (

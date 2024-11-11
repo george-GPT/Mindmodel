@@ -1,4 +1,4 @@
-import TokenService from '../tokens/tokenService';
+import TokenService from '../api/token-service';
 import { AuthState } from '../../types/auth-types';
 
 interface PersistenceConfig {

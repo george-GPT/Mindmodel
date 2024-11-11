@@ -1,6 +1,6 @@
 import { store } from '../../store/store';
 import { setError } from '../../store/auth-slice';
-import TokenService from '../tokens/tokenService';
+import TokenService from '../api/token-service';
 import { TokenResponse } from '../../types/auth-types';
 
 interface TokenSecurityConfig {

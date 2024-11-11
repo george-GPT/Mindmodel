@@ -13,9 +13,9 @@ import { RootState } from '../../store/store';
 import { submitSurveyResponse } from '../../store/surveySlice';
 import { completeSurvey } from '../../store/progress-slice';
 import { SurveyJSON } from '../../types/survey';
-import { useSurveyAnalytics } from './surveyHooks/useSurveyAnalytics';
-import { useSurveyTheme } from './surveyHooks/useSurveyTheme';
-import SurveyAnalyticsDisplay from './SurveyAnalyticsDisplay';
+import { useSurveyAnalytics } from './survey-hooks/useSurveyAnalytics';
+import { useSurveyTheme } from './survey-hooks/useSurveyTheme';
+import SurveyAnalyticsDisplay from './survey-endscreen-analytics';
 import ErrorBoundary from '../common/errorBoundary';
 
 // Import all survey JSON files

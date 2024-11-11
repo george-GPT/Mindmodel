@@ -1,7 +1,7 @@
 import { store } from '../../store/store';
 import { setError } from '../../store/auth-slice';
-import TokenService from '../tokens/tokenService';
-import SessionSyncService from './sessionSyncService';
+import TokenService from '../api/token-service';
+import SessionSyncService from './session-sync-service';
 
 interface ActivityConfig {
     warningTime: number;    // Time before warning in ms

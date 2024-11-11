@@ -1,7 +1,7 @@
 // src/Surveys/surveyPages/MemoryPage.tsx
 
 import React from 'react';
-import GenericSurvey from '../GenericSurvey';
+import GenericSurvey from '../generic-survey';
 
 const MemoryPage: React.FC = () => {
   const surveyId = 'MemorySurvey'; // Corresponds to MemorySurvey.json

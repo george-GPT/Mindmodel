@@ -1,7 +1,7 @@
 // src/services/authService.ts
 
 import { authAPI } from '../api/auth';
-import TokenService from '../tokens/tokenService';
+import TokenService from '../api/token-service';
 import { 
     login, 
     logout, 
@@ -26,7 +26,7 @@ import {
     PasswordResetConfirm
 } from '../../types/auth-types';
 import { handleAuthError } from '../../utils/error-handler';
-import AuthenticationService from './authenticationService';
+import AuthenticationService from './authentication-service';
 
 class AuthService implements AuthServiceType {
     private static instance: AuthService;

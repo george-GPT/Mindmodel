@@ -1,7 +1,7 @@
 // src/Surveys/surveyPages/PersonalityPage.tsx
 
 import React from 'react';
-import GenericSurvey from '../GenericSurvey';
+import GenericSurvey from '../generic-survey';
 
 const PersonalityPage: React.FC = () => {
   const surveyId = 'PersonalitySurvey'; // Corresponds to PersonalitySurvey.json

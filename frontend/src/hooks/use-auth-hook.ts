@@ -1,7 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../services/auth/authService';
+import AuthService from '../services/auth/auth-service';
 import { RootState, AppDispatch } from '../store/store';
 import { setError } from '../store/auth-slice';
 import { 
