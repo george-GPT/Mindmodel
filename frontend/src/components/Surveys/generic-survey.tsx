@@ -19,12 +19,12 @@ import SurveyAnalyticsDisplay from './survey-endscreen-analytics';
 import ErrorBoundary from '../common/errorBoundary';
 
 // Import all survey JSON files
-import AttentionSurvey from './AttentionSurvey.json';
-import BaselineSurvey from './BaselineSurvey.json';
-import ExecutiveFunctionSurvey from './ExecutiveFunctionSurvey.json';
-import MemorySurvey from './MemorySurvey.json';
-import PersonalitySurvey from './PersonalitySurvey.json';
-import ProcessingSurvey from './ProcessingSurvey.json';
+import AttentionSurvey from './attention-survey.json';
+import BaselineSurvey from './baseline-survey.json';
+import ExecutiveFunctionSurvey from './executive-function-Survey.json';
+import MemorySurvey from './memory-survey.json';
+import PersonalitySurvey from './personality-survey.json';
+import ProcessingSurvey from './Processing-survey.json';
 
 // Apply SurveyJS theme
 StylesManager.applyTheme('modern');
