@@ -183,23 +183,11 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 
 # API Documentation settings
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Mindmodel API',
-    'DESCRIPTION': 'API documentation for Mindmodel cognitive assessment platform',
+    'TITLE': 'Your API',
+    'DESCRIPTION': 'Your API description',
     'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': True,
-    'SERVE_PUBLIC': True,
-    'SWAGGER_UI_SETTINGS': {
-        'persistAuthorization': True,
-        'displayRequestDuration': True,
-        'filter': True,
-        'deepLinking': True,
-    },
-    'TAGS': [
-        {'name': 'auth', 'description': 'Authentication operations'},
-        {'name': 'users', 'description': 'User management'},
-        {'name': 'games', 'description': 'Cognitive games'},
-        {'name': 'surveys', 'description': 'Survey operations'},
-    ],
+    'SERVE_INCLUDE_SCHEMA': False,
+    'COMPONENT_SPLIT_REQUEST': True,
 }
 
 # Logging Configuration

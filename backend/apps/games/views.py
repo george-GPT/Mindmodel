@@ -3,7 +3,7 @@
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Game, GameScore, GameProgress, GameConfig
 from .serializers import (
     GameSerializer, 
@@ -19,7 +19,7 @@ class GameViewSet(viewsets.ModelViewSet):
     ViewSet for managing cognitive assessment games.
     """
     serializer_class = GameSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     
     def get_queryset(self):
         return Game.objects.filter(is_active=True)
@@ -75,6 +75,13 @@ class GameViewSet(viewsets.ModelViewSet):
             message="Invalid score data",
             errors=serializer.errors
         )
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
 class GameProgressViewSet(viewsets.ModelViewSet):
     """

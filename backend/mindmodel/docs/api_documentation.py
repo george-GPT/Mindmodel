@@ -755,19 +755,6 @@ ERROR_RESPONSES = {
                 }
             }
         },
-        "token_expired": {
-            "code": "token_expired",
-            "message": "Token has expired",
-            "status": 401,
-            "example": {
-                "success": False,
-                "message": "Authentication failed",
-                "error": {
-                    "code": "token_expired",
-                    "details": {"message": "Token has expired"}
-                }
-            }
-        },
         "token_invalid": {
             "code": "token_invalid",
             "message": "Token is invalid or malformed",
@@ -778,19 +765,6 @@ ERROR_RESPONSES = {
                 "error": {
                     "code": "token_invalid",
                     "details": {"message": "Token is invalid or malformed"}
-                }
-            }
-        },
-        "email_not_verified": {
-            "code": "email_not_verified",
-            "message": "Email address not verified",
-            "status": 403,
-            "example": {
-                "success": False,
-                "message": "Email verification required",
-                "error": {
-                    "code": "email_not_verified",
-                    "details": {"message": "Please verify your email address"}
                 }
             }
         },
@@ -830,39 +804,9 @@ ERROR_RESPONSES = {
                     }
                 }
             }
-        },
-        "email_exists": {
-            "code": "validation_error",
-            "message": "Email already registered",
-            "status": 400,
-            "example": {
-                "success": False,
-                "message": "Validation failed",
-                "error": {
-                    "code": "validation_error",
-                    "details": {
-                        "email": ["This email address is already registered"]
-                    }
-                }
-            }
-        },
-        "username_exists": {
-            "code": "validation_error",
-            "message": "Username already taken",
-            "status": 400,
-            "example": {
-                "success": False,
-                "message": "Validation failed",
-                "error": {
-                    "code": "validation_error",
-                    "details": {
-                        "username": ["This username is already taken"]
-                    }
-                }
-            }
         }
     },
-    "permission": {
+    "permissions": {
         "not_authenticated": {
             "code": "not_authenticated",
             "message": "Authentication required",
@@ -875,29 +819,16 @@ ERROR_RESPONSES = {
                     "details": {"message": "You must be logged in"}
                 }
             }
-        },
-        "not_member": {
-            "code": "permission_denied",
-            "message": "Member access required",
-            "status": 403,
-            "example": {
-                "success": False,
-                "message": "Permission denied",
-                "error": {
-                    "code": "permission_denied",
-                    "details": {"message": "This action requires member access"}
-                }
-            }
         }
     }
 }
 
-# Add these to your existing AUTH_ENDPOINTS
+# Update endpoint error responses
 for endpoint in AUTH_ENDPOINTS.values():
     if isinstance(endpoint, dict) and 'method' in endpoint:
         endpoint['error_responses'] = {
             '400': ERROR_RESPONSES['validation'],
             '401': ERROR_RESPONSES['auth'],
-            '403': ERROR_RESPONSES['permission'],
+            '403': ERROR_RESPONSES['permissions'],
             '429': ERROR_RESPONSES['auth']['rate_limit_exceeded']
         }

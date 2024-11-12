@@ -11,8 +11,8 @@ class Game(models.Model):
     """
     Represents a cognitive assessment game.
     """
-    name = models.CharField(max_length=100)
-    description = models.TextField()
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
     config = models.JSONField(default=dict, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
@@ -20,13 +20,13 @@ class Game(models.Model):
 
     class Meta:
         app_label = 'games'
-        ordering = ['name']
+        ordering = ['title']
         indexes = [
             models.Index(fields=['is_active']),
         ]
 
     def __str__(self):
-        return self.name
+        return self.title
 
 class GameScore(models.Model):
     """
@@ -35,15 +35,21 @@ class GameScore(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='game_scores')
     game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='scores')
     score = models.IntegerField()
-    completion_time = models.DurationField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    completion_time = models.DurationField(null=True, blank=True)
+    metadata = models.JSONField(null=True, blank=True)
+    completed = models.BooleanField(default=False)
+    played_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
         app_label = 'games'
-        ordering = ['-created_at']
+        ordering = ['-played_at']
+        indexes = [
+            models.Index(fields=['user', 'game']),
+            models.Index(fields=['completed']),
+        ]
 
     def __str__(self):
-        return f"{self.user.username} - {self.game.name} - {self.score}"
+        return f"{self.user.username} - {self.game.title} - {self.score}"
 
 class GameProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

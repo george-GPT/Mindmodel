@@ -15,8 +15,8 @@ class GameScoreSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = GameScore
-        fields = ['id', 'user', 'game', 'score', 'completion_time', 'created_at']
-        read_only_fields = ['user', 'created_at']
+        fields = ['id', 'user', 'game', 'score', 'completion_time', 'metadata', 'completed', 'played_at']
+        read_only_fields = ['user', 'played_at']
 
 class GameProgressSerializer(serializers.ModelSerializer):
     """
@@ -24,8 +24,9 @@ class GameProgressSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = GameProgress
-        fields = ['id', 'user', 'game', 'status', 'current_level', 'last_played', 'created_at', 'updated_at']
-        read_only_fields = ['user', 'created_at', 'updated_at']
+        fields = ['id', 'user', 'game_id', 'current_level', 'current_score', 
+                 'time_spent', 'last_played', 'completed']
+
 
 class GameConfigSerializer(serializers.ModelSerializer):
     """
@@ -33,5 +34,6 @@ class GameConfigSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = GameConfig
-        fields = ['id', 'game', 'difficulty', 'settings', 'created_at', 'updated_at']
-        read_only_fields = ['created_at', 'updated_at']
+        fields = ['id', 'game_id', 'title', 'description', 'instructions', 
+                 'min_score', 'max_score', 'time_limit', 'difficulty', 
+                 'category', 'required_for_completion']
