@@ -32,7 +32,7 @@ import { alpha } from '@mui/material/styles';
 
 import BrainLottie from '../assets/animations/brain-lottie';
 import { RootState } from '../../store/store';
-import { User } from '../../types/auth-types';
+import { User } from '../../types/auth.types';
 
 const Header: React.FC = () => {
     const theme = useTheme();

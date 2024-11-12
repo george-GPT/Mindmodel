@@ -7,7 +7,7 @@ import {
     UserProfile, 
     PasswordChangeData, 
     EmailChangeData 
-} from '../../types/auth-types';
+} from '../../types/auth.types';
 
 // Define all API endpoints in one place
 const AUTH_ENDPOINTS = {

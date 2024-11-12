@@ -24,7 +24,7 @@ import {
     PermissionLevel,
     AuthServiceType,
     PasswordResetConfirm
-} from '../../types/auth-types';
+} from '../../types/auth.types';
 import { handleAuthError } from '../../utils/error-handler';
 import AuthenticationService from './authentication-service';
 

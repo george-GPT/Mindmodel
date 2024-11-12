@@ -17,7 +17,7 @@ import {
     AuthProvider,
     User,
     SocialAuthRequest
-} from '../../types/auth-types';
+} from '../../types/auth.types';
 
 export const API_PATHS: AuthApiPaths = {
     BASE: '/api/users/auth',

@@ -1,7 +1,7 @@
 import { store } from '../../store/store';
 import { setError } from '../../store/auth-slice';
 import TokenService from '../api/token-service';
-import { TokenResponse } from '../../types/auth-types';
+import { TokenResponse } from '../../types/auth.types';
 
 interface TokenSecurityConfig {
     refreshThreshold: number;      // Time in ms before expiry to trigger refresh

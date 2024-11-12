@@ -1,7 +1,7 @@
 import { AppDispatch } from '../store/store';
 import { setError } from '../store/auth-slice';
 import { StandardError, ValidationError, ErrorCodes } from '../types/error-types';
-import { AuthErrorResponse, AuthErrorCode } from '../types/auth-types';
+import { AuthErrorResponse, AuthErrorCode } from '../types/auth.types';
 
 export const createStandardError = (
   code: keyof typeof ErrorCodes,

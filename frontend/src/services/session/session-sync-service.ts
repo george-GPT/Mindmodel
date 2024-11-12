@@ -1,4 +1,4 @@
-import { AuthState } from '../../types/auth-types';
+import { AuthState } from '../../types/auth.types';
 import TokenService from '../api/token-service';
 import { store } from '../../store/store';
 import { logout, setError } from '../../store/auth-slice';

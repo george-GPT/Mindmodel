@@ -11,7 +11,7 @@ import {
     SessionStatus, 
     AuthResponse, 
     LoginCredentials 
-} from '../../types/auth-types';
+} from '../../types/auth.types';
 
 class AuthenticationService {
     private static instance: AuthenticationService;

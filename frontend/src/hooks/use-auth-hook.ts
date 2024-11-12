@@ -9,7 +9,7 @@ import {
     User, 
     AuthResponse,
     LoadingStateType 
-} from '../types/auth-types';
+} from '../types/auth.types';
 import { TokenResponse } from '../types/api-types';
 
 interface UseAuthenticationOptions {

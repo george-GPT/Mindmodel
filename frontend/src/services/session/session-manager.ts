@@ -4,7 +4,7 @@ import SessionSyncService from './session-sync-service';
 import TokenSecurityService from '../security/token-security';
 import RateLimitService from '../security/rate-limit';
 import OAuthMonitoringService from '../monitoring/oauth-monitoring-service';
-import { AuthServiceType, LoginCredentials, SessionStatus } from '../../types/auth-types';
+import { AuthServiceType, LoginCredentials, SessionStatus } from '../../types/auth.types';
 
 interface SessionConfig {
     activityTimeout?: number;
