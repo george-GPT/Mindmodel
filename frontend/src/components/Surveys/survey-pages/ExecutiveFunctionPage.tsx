@@ -1,4 +1,4 @@
-// src/surveys/surveyPages/ExecutiveFunctionPage.tsx
+// src/surveys/survey-pages/ExecutiveFunctionPage.tsx
 
 import React from 'react';
 import GenericSurvey from '../generic-survey';

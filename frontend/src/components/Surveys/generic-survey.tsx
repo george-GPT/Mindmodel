@@ -21,7 +21,7 @@ import ErrorBoundary from '../common/error-boundary';
 // Import all survey JSON files
 import AttentionSurvey from './attention-survey.json';
 import BaselineSurvey from './baseline-survey.json';
-import ExecutiveFunctionSurvey from '//executive-function-Survey.json';
+import ExecutiveFunctionSurvey from './executive-function-Survey.json';
 import MemorySurvey from './memory-survey.json';
 import PersonalitySurvey from './personality-survey.json';
 import ProcessingSurvey from './processing-survey.json';
