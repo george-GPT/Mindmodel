@@ -10,18 +10,18 @@ import { StylesManager } from 'survey-core';
 import axios from 'axios';
 
 import { RootState } from '../../store/store';
-import { submitSurveyResponse } from '../../store/surveySlice';
+import { submitSurveyResponse } from '../../store/survey-slice';
 import { completeSurvey } from '../../store/progress-slice';
 import { SurveyJSON } from '../../types/survey';
-import { useSurveyAnalytics } from './survey-hooks/useSurveyAnalytics';
-import { useSurveyTheme } from './survey-hooks/useSurveyTheme';
+import { useSurveyAnalytics } from './survey-hooks/use-survey-analytics';
+import { useSurveyTheme } from './survey-hooks/use-survey-theme';
 import SurveyAnalyticsDisplay from './survey-endscreen-analytics';
 import ErrorBoundary from '../common/error-boundary';
 
 // Import all survey JSON files
 import AttentionSurvey from './attention-survey.json';
 import BaselineSurvey from './baseline-survey.json';
-import ExecutiveFunctionSurvey from './executive-function-Survey.json';
+import ExecutiveFunctionSurvey from './executive-function-survey.json';
 import MemorySurvey from './memory-survey.json';
 import PersonalitySurvey from './personality-survey.json';
 import ProcessingSurvey from './processing-survey.json';

@@ -10,7 +10,7 @@ import { completeGame } from '../../store/progress-slice';
 import { gamesAPI } from '../../services';
 import ErrorBoundary from '../common/error-boundary';
 import Loading from '../common/loading';
-import { useSurveyAnalytics } from '../surveys/survey-hooks/useSurveyAnalytics';
+import { useSurveyAnalytics } from '../surveys/survey-hooks/use-survey-analytics';
 
 interface GameData {
   score: number;

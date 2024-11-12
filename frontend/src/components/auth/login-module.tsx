@@ -10,13 +10,13 @@ import { AppDispatch, RootState } from '../../store/store';
 import { AuthService } from '../../services';
 import GoogleIcon from '../assets/icons/google-Icon';
 import Button from '../button/button';
-import Input from '../Input';
+import Input from '../input';
 import { 
   setError, 
   clearError 
 } from '../../store/auth-slice';
 import { validateEmail, validatePassword } from '../../utils/validation';
-import EmailInput from '../Input/EmailInput';
+import EmailInput from '../input/email-input';
 import BrainIconPurple from '../assets/icons/brainIconPurlple';
 
 // Styled components

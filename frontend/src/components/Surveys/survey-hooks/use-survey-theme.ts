@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { StylesManager } from 'survey-core';
-import SurveyTheme from './SurveyTheme';
+import SurveyTheme from './survey-theme';
 
 export const useSurveyTheme = () => {
   useEffect(() => {

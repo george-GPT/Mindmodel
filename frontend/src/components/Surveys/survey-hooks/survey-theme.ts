@@ -4,7 +4,7 @@ palette, layout settings, and more. It also includes global CSS variables using 
 consistent styling across the survey components. */
 // src/styles/SurveyTheme.ts
 
-import { DesignTokens } from './DesignTokens';
+import { DesignTokens } from './design-tokens';
 
 export const SurveyTheme = {
     // Core theme configuration

@@ -10,7 +10,7 @@ import {
 import { AppDispatch, RootState } from '../../store/store';
 import { AuthService } from '../../services';
 import Button from '../button/button';
-import Input from '../Input';
+import Input from '../input';
 import { validatePassword, validatePasswordMatch } from '../../utils/validation';
 import { setError, clearError } from '../../store/auth-slice';
 

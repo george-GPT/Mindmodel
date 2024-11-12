@@ -4,10 +4,10 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { HomePage } from '../components/pages/home';
 import AboutUsPage from '../components/pages/about-us';
-import OurApproachPage from '../components/pages/OurApproach';
-import ResearchPage from '../components/pages/Research';
-import PrivacyPolicyPage from '../components/pages/PrivacyPolicy';
-import ContactPage from '../components/pages/Contact';
+import OurApproachPage from '../components/pages/our-approach';
+import ResearchPage from '../components/pages/research';
+import PrivacyPolicyPage from '../components/pages/privacy-policy';
+import ContactPage from '../components/pages/contact';
 import LoginModule from '../components/auth/login-module';
 import SignupModule from '../components/auth/signup-module';
 import EmailVerification from '../components/auth/email-verification';
@@ -16,7 +16,7 @@ import AccountPage from '../components/pages/account';
 import SecurityPage from '../components/pages/account/SecurityPage';
 import FinalResults from '../components/dashboard/final-ai-results/final-results';
 import PrivateRoute from './private-routes'; // Update the import path
-import { NoPageFound } from '../components/pages/NoPageFound';
+import { NoPageFound } from '../components/pages/no-page-found';
 
 // Game imports
 import ColorDotsPage from '../components/games/game-pages/color-dots-page';

@@ -28,7 +28,7 @@ import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
 import { AuthService } from '../../../services';
 import { validatePassword, validatePasswordMatch } from '../../../utils/validation';
-import EmailInput from '../../Input/EmailInput';
+import EmailInput from '../../input/email-input';
 import { clearError } from '../../../store/auth-slice';
 
 const SecurityPage = () => {

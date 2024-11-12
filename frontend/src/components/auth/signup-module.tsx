@@ -11,10 +11,10 @@ import { AuthService } from '../../services';
 import GoogleIcon from '../assets/icons/google-Icon';
 import BrainIconPurple from '../assets/icons/brainIconPurlple';
 import Button from '../button/button';
-import Input from '../Input';
+import Input from '../input';
 import { setError, clearError } from '../../store/auth-slice';
 import { validateEmail, validatePassword, validateUsername, validatePasswordMatch } from '../../utils/validation';
-import EmailInput from '../Input/EmailInput';
+import EmailInput from '../input/email-input';
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({

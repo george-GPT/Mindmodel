@@ -2,7 +2,7 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authReducer from './auth-slice';
 import gameReducer from './game-slice';
-import surveyReducer from './surveySlice';
+import surveyReducer from './survey-slice';
 import progressReducer from './progress-slice';
 import analysisReducer from './analysis-slice';
 import {
