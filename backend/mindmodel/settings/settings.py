@@ -186,35 +186,20 @@ SPECTACULAR_SETTINGS = {
     'TITLE': 'Mindmodel API',
     'DESCRIPTION': 'API documentation for Mindmodel cognitive assessment platform',
     'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-    'SERVE_AUTHENTICATION': None,
+    'SERVE_INCLUDE_SCHEMA': True,
+    'SERVE_PUBLIC': True,
     'SWAGGER_UI_SETTINGS': {
         'persistAuthorization': True,
         'displayRequestDuration': True,
         'filter': True,
         'deepLinking': True,
-        'displayOperationId': True,
-        'defaultModelsExpandDepth': 3,
     },
     'TAGS': [
         {'name': 'auth', 'description': 'Authentication operations'},
         {'name': 'users', 'description': 'User management'},
-        {'name': 'surveys', 'description': 'Survey operations'},
         {'name': 'games', 'description': 'Cognitive games'},
-        {'name': 'ai', 'description': 'AI analysis'},
+        {'name': 'surveys', 'description': 'Survey operations'},
     ],
-    'ENUM_NAME_OVERRIDES': {
-        'GameDifficultyEnum': 'Apps.Games.models.GameConfig.DIFFICULTY_CHOICES',
-    },
-    'DEFAULT_GENERATOR_CLASS': 'mindmodel.core.schema_generator.MindmodelSchemaGenerator',
-    'SCHEMA_PATH_PREFIX': '/api/',
-    'SERVER_AUTHENTICATION': ['Bearer'],
-    'DEFAULT_SCHEMA_CLASS': 'mindmodel.core.schema.MindmodelSchema',
-    'COMPONENT_NO_READ_ONLY_REQUIRED': True,
-    'COMPONENT_SPLIT_REQUEST': True,
-    'SORT_OPERATIONS': False,
-    'OPERATIONS_SORTER': None,
-    'TAGS_SORTER': None,
 }
 
 # Logging Configuration

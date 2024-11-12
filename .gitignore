@@ -19,6 +19,7 @@ media/
 # Django stuff:
 *.pyc
 __pycache__/
+*.so
 
 # Node modules
 node_modules/
@@ -59,3 +60,29 @@ coverage/
 
 *storybook.log
 frontend/mindmodel_frontend
+
+# Python
+*.py[cod]
+*.so
+
+# Environment
+.env
+venv/
+env/
+
+# Database
+*.sqlite3
+
+# Static & Media
+/static/
+/media/
+/staticfiles/
+
+# IDE
+.vscode/
+.idea/
+
+# Frontend
+node_modules/
+build/
+.DS_Store

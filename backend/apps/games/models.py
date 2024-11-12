@@ -3,13 +3,16 @@
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class Game(models.Model):
     """
-    Model for game configuration and metadata.
+    Represents a cognitive assessment game.
     """
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
     config = models.JSONField(default=dict, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=timezone.now)
@@ -17,43 +20,30 @@ class Game(models.Model):
 
     class Meta:
         app_label = 'games'
-        ordering = ['title']
+        ordering = ['name']
         indexes = [
             models.Index(fields=['is_active']),
         ]
 
     def __str__(self):
-        return self.title
+        return self.name
 
 class GameScore(models.Model):
     """
-    Model for storing user game scores.
+    Stores game scores and performance metrics for users.
     """
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name='game_scores'
-    )
-    game = models.ForeignKey(
-        Game,
-        on_delete=models.CASCADE,
-        related_name='scores'
-    )
-    score = models.IntegerField(default=0)
-    metadata = models.JSONField(null=True, blank=True)
-    completed = models.BooleanField(default=False)
-    played_at = models.DateTimeField(default=timezone.now)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='game_scores')
+    game = models.ForeignKey(Game, on_delete=models.CASCADE, related_name='scores')
+    score = models.IntegerField()
+    completion_time = models.DurationField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         app_label = 'games'
-        ordering = ['-played_at']
-        indexes = [
-            models.Index(fields=['user', 'game']),
-            models.Index(fields=['completed']),
-        ]
+        ordering = ['-created_at']
 
     def __str__(self):
-        return f"{self.user.username}'s score for {self.game.title}"
+        return f"{self.user.username} - {self.game.name} - {self.score}"
 
 class GameProgress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
