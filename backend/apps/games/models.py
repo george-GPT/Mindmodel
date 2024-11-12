@@ -16,7 +16,7 @@ class Game(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        app_label = 'Games'
+        app_label = 'games'
         ordering = ['title']
         indexes = [
             models.Index(fields=['is_active']),
@@ -45,7 +45,7 @@ class GameScore(models.Model):
     played_at = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        app_label = 'Games'
+        app_label = 'games'
         ordering = ['-played_at']
         indexes = [
             models.Index(fields=['user', 'game']),
@@ -65,7 +65,7 @@ class GameProgress(models.Model):
     completed = models.BooleanField(default=False)
 
     class Meta:
-        app_label = 'Games'
+        app_label = 'games'
         unique_together = ('user', 'game_id')
         indexes = [
             models.Index(fields=['user', 'game_id']),
@@ -94,4 +94,4 @@ class GameConfig(models.Model):
         return self.title
 
     class Meta:
-        app_label = 'Games'
+        app_label = 'games'

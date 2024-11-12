@@ -14,8 +14,6 @@ def redirect_to_admin(request):
     return redirect('admin/')
 
 # Update root URL conf
-ROOT_URLCONF = 'mindmodel.core.urls'
-
 urlpatterns = [
     # Root path redirects to admin
     path('', redirect_to_admin),

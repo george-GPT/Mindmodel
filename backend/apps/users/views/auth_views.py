@@ -15,8 +15,8 @@ from django.core.exceptions import ValidationError
 from ..validators import validate_password_strength, validate_password_history
 from ..models import PasswordHistory
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
-from apps.docs.api_documentation import (
-    AUTH_ENDPOINTS,
+from mindmodel.docs.api_documentation import (
+    AUTH_EXAMPLES,
     ERROR_RESPONSES,
     VALIDATION_RULES,
     SECURITY_SCHEMAS
@@ -29,14 +29,8 @@ User = get_user_model()
 @extend_schema(
     tags=['auth'],
     examples=[
-        OpenApiExample(
-            'Success Response',
-            value=AUTH_ENDPOINTS['login_success'].value
-        ),
-        OpenApiExample(
-            'Error Response',
-            value=AUTH_ENDPOINTS['auth_error'].value
-        )
+        AUTH_EXAMPLES["login_success"],
+        AUTH_EXAMPLES["auth_error"]
     ]
 )
 class LoginView(TokenObtainPairView):

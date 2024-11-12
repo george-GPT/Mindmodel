@@ -29,7 +29,7 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ['email']
 
     class Meta:
-        app_label = 'Users'
+        app_label = 'users'
         verbose_name = 'User'
         verbose_name_plural = 'Users'
         indexes = [
@@ -113,7 +113,7 @@ class User(AbstractUser):
 
 class MemberProfile(models.Model):
     user = models.OneToOneField(
-        'Users.User',
+        'users.User',
         on_delete=models.CASCADE,
         related_name='memberprofile'
     )
@@ -127,7 +127,7 @@ class MemberProfile(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        app_label = 'Users'
+        app_label = 'users'
 
 class BlacklistedToken(models.Model):
     token = models.CharField(max_length=500)

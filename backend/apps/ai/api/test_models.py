@@ -3,8 +3,8 @@
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from Apps.AI.models import AnalysisResult
-from Apps.AI.ai_models.cogGPT import perform_analysis
+from apps.ai.models import AnalysisResult
+from apps.ai.ai_models.cog_gpt import perform_analysis
 
 @pytest.mark.django_db
 class TestAIAnalysis:

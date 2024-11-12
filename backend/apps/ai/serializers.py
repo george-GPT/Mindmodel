@@ -1,4 +1,4 @@
-# Backend/Apps/AI/serializers.py
+# Backend/apps/ai/serializers.py
 
 from rest_framework import serializers
 from .models import Analysis

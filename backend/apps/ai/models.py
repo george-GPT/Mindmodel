@@ -1,4 +1,4 @@
-# Backend/Apps/AI/models.py
+# Backend/apps/AI/models.py
 
 from django.db import models
 from django.conf import settings

@@ -32,3 +32,19 @@ MindModel is a full-stack application with a React + TypeScript frontend and a D
 1. **Frontend**: Navigate to `frontend` and follow the steps in the setup guide.
 2. **Backend**: Navigate to `backend`, activate the virtual environment, and install dependencies.
 3. **Documentation**: Start by navigating to the `docs/` folder and running Sphinx or MkDocs to build the documentation.
+
+## **Common Scripts & Commands**
+
+### **Backend Commands**
+
+Database migrations
+
+python manage.py makemigrations
+
+python manage.py migrate
+
+Run development server
+
+python manage.py runserver
+Create superuser
+python manage.py createsuperuser

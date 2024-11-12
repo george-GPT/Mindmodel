@@ -1,7 +1,7 @@
 import pytest
 from django.test import TestCase
 from django.conf import settings
-from Apps.AI.ai_models.cogGPT import (
+from apps.ai.ai_models.cog_gpt import (
     upload_file_to_openai,
     create_fine_tuning_job,
     monitor_fine_tuning_job,

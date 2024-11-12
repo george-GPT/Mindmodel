@@ -23,9 +23,9 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 # Application definition
 INSTALLED_APPS = [
     # Django apps
-    'django.contrib.admin',
-    'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -187,7 +187,7 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'API documentation for Mindmodel cognitive assessment platform',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
-    'COMPONENT_SPLIT_REQUEST': True,
+    'SERVE_AUTHENTICATION': None,
     'SWAGGER_UI_SETTINGS': {
         'persistAuthorization': True,
         'displayRequestDuration': True,
@@ -206,37 +206,15 @@ SPECTACULAR_SETTINGS = {
     'ENUM_NAME_OVERRIDES': {
         'GameDifficultyEnum': 'Apps.Games.models.GameConfig.DIFFICULTY_CHOICES',
     },
-    'PREPROCESSING_HOOKS': ['mindmodel.core.schema.preprocess_schema_hook'],
-    'POSTPROCESSING_HOOKS': ['mindmodel.core.schema.postprocess_schema_hook'],
+    'DEFAULT_GENERATOR_CLASS': 'mindmodel.core.schema_generator.MindmodelSchemaGenerator',
     'SCHEMA_PATH_PREFIX': '/api/',
-    'SERVE_AUTHENTICATION': ['Bearer'],
+    'SERVER_AUTHENTICATION': ['Bearer'],
     'DEFAULT_SCHEMA_CLASS': 'mindmodel.core.schema.MindmodelSchema',
     'COMPONENT_NO_READ_ONLY_REQUIRED': True,
-    'ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE': False,
-    'DESCRIPTION_WHITESPACE': False,
-    'SORT_OPERATIONS': False,
-    'DEFAULT_GENERATOR_CLASS': 'mindmodel.core.schema_generator.MindmodelSchemaGenerator',
     'COMPONENT_SPLIT_REQUEST': True,
-    'COMPONENT_NO_READ_ONLY_REQUIRED': True,
-    'ENUM_ADD_EXPLICIT_BLANK_NULL_CHOICE': False,
-    'DESCRIPTION_WHITESPACE': False,
     'SORT_OPERATIONS': False,
     'OPERATIONS_SORTER': None,
     'TAGS_SORTER': None,
-    'SWAGGER_UI_SETTINGS': {
-        'deepLinking': True,
-        'persistAuthorization': True,
-        'displayOperationId': True,
-        'defaultModelsExpandDepth': 3,
-        'defaultModelExpandDepth': 3,
-        'defaultModelRendering': 'model',
-        'displayRequestDuration': True,
-        'docExpansion': 'none',
-        'filter': True,
-        'showExtensions': True,
-        'showCommonExtensions': True,
-        'tryItOutEnabled': True
-    }
 }
 
 # Logging Configuration

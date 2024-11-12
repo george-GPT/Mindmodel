@@ -17,7 +17,7 @@ const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
 
 ### Backend Implementation
 ```python
-# Apps/Users/views.py
+# Apps/users/views.py
 class LoginView(APIView):
     def post(self, request):
         serializer = LoginSerializer(data=request.data)

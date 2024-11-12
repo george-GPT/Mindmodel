@@ -1,4 +1,4 @@
-# Backend/Apps/Surveys/models.py
+# Backend/apps/Surveys/models.py
 
 from django.db import models
 from django.conf import settings
@@ -16,7 +16,7 @@ class Survey(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        app_label = 'Surveys'  # Changed from 'Apps.Surveys'
+        app_label = 'Surveys'  # Changed from 'apps.Surveys'
         ordering = ['-created_at']
         indexes = [
             models.Index(fields=['is_active']),
@@ -41,7 +41,7 @@ class SurveyResponse(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        app_label = 'Surveys'  # Changed from 'Apps.Surveys'
+        app_label = 'Surveys'  # Changed from 'apps.Surveys'
         ordering = ['-submitted_at']
         indexes = [
             models.Index(fields=['user', 'survey']),

@@ -8,10 +8,10 @@ def find_and_fix_imports():
     
     # Patterns to search for
     patterns = [
-        r'from Apps\.',  # From imports
-        r'import Apps\.',  # Direct imports
-        r"'Apps\.",      # String references
-        r'"Apps\.',      # String references
+        r'from apps\.',  # From imports
+        r'import apps\.',  # Direct imports
+        r"'apps\.",      # String references
+        r'"apps\.',      # String references
     ]
     
     # Files to check (by extension)

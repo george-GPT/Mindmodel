@@ -1,4 +1,4 @@
-# Backend/Apps/Users/member_views.py
+# Backend/Apps/users/member_views.py
 
 from rest_framework import status
 from rest_framework.views import APIView
