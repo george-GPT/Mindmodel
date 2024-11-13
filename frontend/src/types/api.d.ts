@@ -495,16 +495,6 @@ export interface components {
                 results?: Record<string, never>[];
             };
         };
-        ErrorResponse: {
-            /** @default false */
-            success: boolean;
-            message: string;
-            error?: {
-                /** @enum {string} */
-                code?: "invalid_credentials" | "token_invalid" | "token_expired" | "validation_error" | "email_not_verified" | "not_authenticated" | "permission_denied" | "rate_limit_exceeded";
-                details?: Record<string, never>;
-            };
-        };
         Game: {
             readonly id?: number;
             title: string;
