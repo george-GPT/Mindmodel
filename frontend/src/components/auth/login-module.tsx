@@ -20,8 +20,6 @@ import EmailInput from '../input/email-input';
 import BrainIconPurple from '../assets/icons/brainIconPurlple';
 import { AuthProvider } from '../../types';
 import type { AuthResponse } from 'types/auth';
-import 'types/google';  // Correct path from components/auth to types
-
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
   width: "100%",
