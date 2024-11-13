@@ -618,6 +618,7 @@ export interface components {
             username: string;
             /** Format: email */
             email: string;
+            email_verified: boolean;
             first_name?: string | null;
             last_name?: string | null;
             /** Format: date-time */
@@ -657,18 +658,22 @@ export interface components {
         MetadataObject: {
             [key: string]: unknown;
         } | null;
-        TokenResponse: components["schemas"]["SuccessResponse"] & {
-            data?: {
-                access: string;
-                refresh: string;
-                user: components["schemas"]["UserProfile"];
-            };
-        };
-        AuthResponse: components["schemas"]["SuccessResponse"] & {
+        AuthResponse: {
+            success: boolean;
+            message?: string;
             data?: {
                 access: string;
                 refresh: string;
                 user?: components["schemas"]["UserProfile"];
+            };
+        };
+        TokenResponse: {
+            success: boolean;
+            message?: string;
+            data?: {
+                access: string;
+                refresh: string;
+                user: components["schemas"]["UserProfile"];
             };
         };
         EmailTokenObtainPairRequest: {
@@ -676,6 +681,61 @@ export interface components {
             email: string;
             /** Format: password */
             password: string;
+        };
+        // AI Analysis schemas
+        AIAnalysis: {
+            id: number;
+            status: 'pending' | 'processing' | 'completed' | 'failed';
+            insights: {
+                surveys?: {
+                    summary: string;
+                    key_findings: string[];
+                    recommendations: string[];
+                };
+                games?: {
+                    summary: string;
+                    performance_metrics: {
+                        accuracy: string;
+                        speed: string;
+                        consistency: string;
+                    };
+                };
+                overall: {
+                    summary: string;
+                    strengths: string[];
+                    areas_for_improvement: string[];
+                    recommendations: string[];
+                };
+            };
+            charts?: Record<string, unknown>;
+            created_at: string;
+            updated_at: string;
+        };
+
+        AIAnalysisRequest: {
+            surveyData?: Record<string, unknown>;
+            gameData?: Record<string, unknown>;
+        };
+
+        AIAnalysisResponse: {
+            success: boolean;
+            message?: string;
+            data?: {
+                task_id: string;
+            };
+        };
+
+        AIAnalysisResult: {
+            success: boolean;
+            message?: string;
+            data?: components['schemas']['AIAnalysis'];
+        };
+
+        UserSettings: {
+            theme: 'light' | 'dark' | 'system';
+            notifications: boolean;
+            language: string;
+            timezone: string;
         };
     };
     responses: never;

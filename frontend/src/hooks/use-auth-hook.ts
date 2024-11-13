@@ -1,16 +1,17 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../services/monitoring/authService';
 import { RootState, AppDispatch } from '../store/store';
 import { setError } from '../store/authSlice';
-import { 
-    LoginCredentials, 
-    User, 
+import type { 
+    LoginCredentials,
+    User,
     AuthResponse,
-    LoadingStateType 
+    TokenResponse,
+    LoadingStateType,
+    AuthServiceType 
 } from '../types/auth';
-import { TokenResponse } from '../types/api-types';
+import AuthService from '../services/auth/authService';
 
 interface UseAuthenticationOptions {
     redirectTo?: string;
@@ -66,32 +67,38 @@ export const useAuthentication = (
     }, [isAuthenticated, isMember, requireAuth, requiresMember, redirectTo, dispatch, navigate]);
 
     const login = async (credentials: LoginCredentials): Promise<TokenResponse> => {
-        const authFn = AuthService.loginUser(credentials);
-        const response = await authFn(dispatch);
-        if (!response) throw new Error('Login failed');
-        return {
-            access: response.access,
-            refresh: response.refresh,
-            user: {
-                ...response.user,
-                is_verified: response.user.email_verified,
-                created_at: response.user.date_joined,
-                updated_at: response.user.date_joined
-            }
-        };
+        try {
+            const response = await AuthService.loginUser(credentials);
+            if (!response?.data?.user) throw new Error('Login failed');
+            
+            return {
+                success: true,
+                message: 'Login successful',
+                data: {
+                    access: response.data.access,
+                    refresh: response.data.refresh,
+                    user: response.data.user
+                }
+            };
+        } catch (error) {
+            throw new Error('Login failed');
+        }
     };
 
     const logout = useCallback(async () => {
-        await AuthService.logout()(dispatch);
+        await AuthService.logout();
         navigate(redirectTo);
-    }, [dispatch, navigate, redirectTo]);
+    }, [navigate, redirectTo]);
 
     const socialLogin = useCallback(async (provider: 'google', token: string): Promise<TokenResponse> => {
-        const authFn = AuthService.socialAuth(provider, token);
-        const response = await authFn(dispatch);
-        if (!response) throw new Error('Social login failed');
-        return response as TokenResponse;
-    }, [dispatch]);
+        try {
+            const response = await AuthService.googleLogin({ token });
+            if (!response?.data) throw new Error('Social login failed');
+            return response as TokenResponse;
+        } catch (error) {
+            throw new Error('Social login failed');
+        }
+    }, []);
 
     // Get specific loading state for login
     const isLoading = useSelector((state: RootState) => state.auth.loading.login);

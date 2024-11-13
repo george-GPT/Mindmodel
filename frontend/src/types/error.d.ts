@@ -1,48 +1,47 @@
 import { operations } from './api';
 
 // Base API error type from backend schema
-export interface APIError {
+export interface ApiError {
   success: false;
   message: string;
   error: {
-    code: typeof ErrorCodes[keyof typeof ErrorCodes];
+    code: ErrorCode;
     details?: Record<string, unknown>;
   };
 }
 
-// Error codes matching backend schema exactly
+// Error codes matching backend schema
 export const ErrorCodes = {
     // Auth errors
-    AUTHENTICATION_ERROR: 'authentication_error',
-    TOKEN_INVALID: 'token_invalid',
+    AUTHENTICATION_ERROR: 'authentication_error' as const,
+    TOKEN_INVALID: 'token_invalid' as const,
+    TOKEN_EXPIRED: 'token_expired' as const,
     
     // Validation errors
-    VALIDATION_ERROR: 'validation_error',
-    EMAIL_NOT_VERIFIED: 'email_not_verified',
+    VALIDATION_ERROR: 'validation_error' as const,
+    EMAIL_NOT_VERIFIED: 'email_not_verified' as const,
     
     // Permission errors
-    PERMISSION_DENIED: 'permission_denied',
+    PERMISSION_DENIED: 'permission_denied' as const,
+    NOT_AUTHENTICATED: 'not_authenticated' as const,
     
     // Resource errors
-    NOT_FOUND: 'not_found',
+    NOT_FOUND: 'not_found' as const,
     
     // Server errors
-    SERVER_ERROR: 'server_error',
+    SERVER_ERROR: 'server_error' as const,
     
     // Rate limiting
-    RATE_LIMIT_EXCEEDED: 'rate_limit_exceeded',
-    
-    // User management
-    PASSWORD_HISTORY: 'password_history',
-    DUPLICATE_EMAIL: 'duplicate_email',
+    RATE_LIMIT_EXCEEDED: 'rate_limit_exceeded' as const,
     
     // Frontend errors
-    NETWORK_ERROR: 'network_error',
-    FORM_VALIDATION: 'form_validation',
-    GAME_ERROR: 'game_error'
+    NETWORK_ERROR: 'network_error' as const,
+    FORM_VALIDATION: 'form_validation' as const,
+    GAME_ERROR: 'game_error' as const
 } as const;
 
-export type ErrorCode = keyof typeof ErrorCodes;
+// Extract type from const values
+export type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
 
 // Frontend error types
 export type NetworkError = {
@@ -62,11 +61,11 @@ export type GameError = {
 };
 
 // Combined error type
-export type FrontendError = APIError | NetworkError | ValidationError | GameError;
+export type FrontendError = ApiError | NetworkError | ValidationError | GameError;
 
 // Type guards
-export const isAPIError = (error: unknown): error is APIError => 
-    !!(error as APIError)?.error?.code;
+export const isAPIError = (error: unknown): error is ApiError => 
+    !!(error as ApiError)?.error?.code;
 
 export const isNetworkError = (error: unknown): error is NetworkError => 
     (error as NetworkError)?.code === ErrorCodes.NETWORK_ERROR;

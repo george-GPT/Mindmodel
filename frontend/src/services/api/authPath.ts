@@ -1,10 +1,6 @@
 import axios from 'axios';
-import { operations, components } from 'types/api';
-
-import {
-    AuthProvider,
-    RegisterRequest
-} from 'types/auth';
+import type { operations, components } from 'types/api';
+import type { AuthProvider } from 'types/auth';
 
 export const API_PATHS = {
     LOGIN: '/api/users/auth/login/',
@@ -21,60 +17,69 @@ export const API_PATHS = {
 // Type-safe API client
 export const authAPI = {
     login: (credentials: components['schemas']['EmailTokenObtainPairRequest']) => 
-        axios.post<operations['api_users_auth_auth_login_create']['responses'][200]['content']['application/json']>(
+        axios.post<components['schemas']['AuthResponse']>(
             API_PATHS.LOGIN, 
             credentials
         ),
 
-    register: (data: operations['api_users_auth_auth_register_create']['requestBody']['content']['application/json']) => 
-        axios.post<operations['api_users_auth_auth_register_create']['responses'][201]['content']['application/json']>(
+    register: (data: {
+        email: string;
+        username: string;
+        password: string;
+    }) => 
+        axios.post<components['schemas']['SuccessResponse']>(
             API_PATHS.REGISTER, 
             data
         ),
 
     logout: () => 
-        axios.post<operations['api_users_auth_auth_logout_create']['responses'][200]['content']['application/json']>(
+        axios.post<components['schemas']['SuccessResponse']>(
             API_PATHS.LOGOUT
         ),
 
-    googleAuth: (credential: string) => 
-        axios.post<operations['api_users_auth_auth_google_create']['responses'][200]['content']['application/json']>(
+    googleAuth: (token: string) => 
+        axios.post<components['schemas']['AuthResponse']>(
             API_PATHS.GOOGLE_AUTH, 
-            { credential }
+            { token }
         ),
 
     verifyEmail: (token: string) => 
-        axios.post<operations['api_users_auth_verify_email_create']['responses'][200]['content']['application/json']>(
+        axios.post<components['schemas']['SuccessResponse']>(
             API_PATHS.VERIFY_EMAIL, 
             { token }
         ),
 
     resendVerification: (email: string) =>
-        axios.post<operations['api_users_auth_resend_verification_create']['responses'][200]['content']['application/json']>(
+        axios.post<components['schemas']['SuccessResponse']>(
             API_PATHS.RESEND_VERIFICATION, 
             { email }
         ),
 
-    changePassword: (data: operations['api_users_auth_change_password_create']['requestBody']['content']['application/json']) => 
-        axios.post<operations['api_users_auth_change_password_create']['responses'][200]['content']['application/json']>(
+    changePassword: (data: {
+        old_password: string;
+        new_password: string;
+    }) => 
+        axios.post<components['schemas']['SuccessResponse']>(
             API_PATHS.CHANGE_PASSWORD, 
             data
         ),
 
-    changeEmail: (data: operations['api_users_auth_change_email_create']['requestBody']['content']['application/json']) => 
-        axios.post<operations['api_users_auth_change_email_create']['responses'][200]['content']['application/json']>(
+    changeEmail: (data: {
+        new_email: string;
+        password: string;
+    }) => 
+        axios.post<components['schemas']['SuccessResponse']>(
             API_PATHS.CHANGE_EMAIL, 
             data
         ),
 
     getProfile: () => 
-        axios.get<operations['api_users_auth_profile_retrieve']['responses'][200]['content']['application/json']>(
-            API_PATHS.PROFILE
-        ),
+        axios.get<components['schemas']['SuccessResponse'] & {
+            data: components['schemas']['UserProfile']
+        }>(API_PATHS.PROFILE),
 
-    updateProfile: (data: operations['api_users_auth_profile_partial_update']['requestBody']['content']['application/json']) => 
-        axios.patch<operations['api_users_auth_profile_partial_update']['responses'][200]['content']['application/json']>(
-            API_PATHS.PROFILE, 
-            data
-        ),
+    updateProfile: (data: components['schemas']['UserProfileRequest']) => 
+        axios.patch<components['schemas']['SuccessResponse'] & {
+            data: components['schemas']['UserProfile']
+        }>(API_PATHS.PROFILE, data),
 } as const;

@@ -1,34 +1,56 @@
-import axios from './axios';
-import { 
-    VerificationResponse,
-    ResendVerificationResponse,
-    RegisterRequest,
-    PasswordChangeRequest,
-    EmailChangeRequest
+import type { components } from 'types/api';
+import type { 
+    AuthResponse,
+    TokenResponse,
+    LoginCredentials
 } from 'types/auth';
 
-// Define request/response types from API schema
-type LoginRequest = components['schemas']['EmailTokenObtainPairRequest'];
-type LoginResponse = operations['api_users_auth_auth_login_create']['responses'][200]['content']['application/json'];
+// Axios Instance
+import axios from './axios';
+
+// Request Types
+interface RegisterRequest {
+    email: string;
+    username: string;
+    password: string;
+}
+
+interface PasswordChangeRequest {
+    old_password: string;
+    new_password: string;
+}
+
+interface EmailChangeRequest {
+    new_email: string;
+    password: string;
+}
+
+// Response Types with proper type composition
+type VerificationResponse = components['schemas']['SuccessResponse'] & {
+    data?: {
+        verified: boolean;
+    };
+};
+
+type ResendVerificationResponse = components['schemas']['SuccessResponse'] & {
+    data?: {
+        sent: boolean;
+        email: string;
+    };
+};
 
 export const authAPI = {
-    login: (credentials: LoginRequest) => 
-        axios.post<LoginResponse>('/api/users/auth/login/', credentials),
+    login: (credentials: LoginCredentials) => 
+        axios.post<AuthResponse>('/api/users/auth/login/', credentials),
     
     register: (data: RegisterRequest) => 
-        axios.post<operations['api_users_auth_auth_register_create']['responses'][201]['content']['application/json']>(
-            '/api/users/auth/register/', 
-            data
-        ),
+        axios.post<components['schemas']['SuccessResponse']>('/api/users/auth/register/', data),
     
     logout: () => 
-        axios.post('/api/users/auth/logout/'),
+        axios.post<components['schemas']['SuccessResponse']>('/api/users/auth/logout/'),
     
     googleAuth: (credential: string) => 
-        axios.post<operations['api_users_auth_auth_google_create']['responses'][200]['content']['application/json']>(
-            '/api/users/auth/google/', 
-            { credential }
-        ),
+        axios.post<AuthResponse>('/api/users/auth/google/', { credential }),
     
     verifyEmail: (token: string) => 
         axios.post<VerificationResponse>('/api/users/auth/verify-email/', { token }),
@@ -37,8 +59,13 @@ export const authAPI = {
         axios.post<ResendVerificationResponse>('/api/users/auth/resend-verification/', { email }),
 
     changePassword: (data: PasswordChangeRequest) => 
-        axios.post('/api/users/auth/change-password/', data),
+        axios.post<components['schemas']['SuccessResponse']>('/api/users/auth/change-password/', data),
 
     getProfile: () => 
-        axios.get('/api/users/auth/profile/'),
+        axios.get<components['schemas']['SuccessResponse'] & {
+            data: components['schemas']['UserProfile']
+        }>('/api/users/auth/profile/'),
+
+    refresh: (refresh: string) => 
+        axios.post<TokenResponse>('/api/users/auth/refresh/', { refresh })
 }; 

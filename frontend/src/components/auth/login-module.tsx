@@ -7,7 +7,7 @@ import {
 } from '@mui/material';
 
 import { AppDispatch, RootState } from '../../store/store';
-import { AuthService } from '../../services';
+import authService from '../../services/auth/authService';
 import GoogleIcon from '../assets/icons/google-Icon';
 import Button from '../button/button';
 import Input from '../input';
@@ -19,6 +19,8 @@ import { validateEmail, validatePassword } from '../../utils/validation';
 import EmailInput from '../input/email-input';
 import BrainIconPurple from '../assets/icons/brainIconPurlple';
 import { AuthProvider } from '../../types';
+import type { AuthResponse } from 'types/auth';
+import 'types/google';  // Correct path from components/auth to types
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -72,43 +74,43 @@ const LoginModule = () => {
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
 
-    // If any validation fails, show the first error
-    const firstError = emailError || passwordError;
-    if (firstError) {
-      dispatch(setError(firstError));
+    if (emailError || passwordError) {
+      dispatch(setError(emailError || passwordError));
       return;
     }
 
     setIsLoading(true);
     try {
-      const loginAction = AuthService.loginUser({ email, password });
-      const response = await dispatch(loginAction);
+      const response = await authService.loginUser({ email, password });
       
-      // Check if email is verified
-      if (!response.user.email_verified) {
+      if (!response?.data?.user?.email_verified) {
         localStorage.setItem('pendingVerificationEmail', email);
         navigate('/verify-email');
         return;
       }
+
+      navigate('/dashboard');
     } catch (error) {
       console.error("Login failed:", error);
+      dispatch(setError('Login failed'));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSocialAuth = async (provider: 'google', accessToken: string) => {
-    if (!accessToken) {
-      dispatch(setError(`${provider} authentication failed: No access token`));
+  const handleSocialAuth = async (provider: AuthProvider, token: string) => {
+    if (!token) {
+      dispatch(setError(`${provider} authentication failed: No token`));
       return;
     }
 
     setIsLoading(true);
     try {
-      await dispatch(AuthService.googleLogin(accessToken));
+      await authService.googleLogin({ token });
       navigate('/dashboard');
     } catch (error) {
       console.error(`${provider} login failed:`, error);
+      dispatch(setError(`${provider} authentication failed`));
     } finally {
       setIsLoading(false);
     }
@@ -127,13 +129,19 @@ const LoginModule = () => {
           document.body.appendChild(script);
         });
 
-        // Initialize Google OAuth client
+        // Add null check and throw if missing
+        const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+        if (!clientId) {
+          throw new Error('Google client ID not configured');
+        }
+
         window.google?.accounts.id.initialize({
-          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+          client_id: clientId, // Now TypeScript knows this is string
           callback: handleGoogleCallback
         });
       } catch (error) {
         console.error('Failed to initialize Google OAuth:', error);
+        dispatch(setError('Google authentication configuration error'));
       }
     };
 
@@ -143,7 +151,7 @@ const LoginModule = () => {
   const handleGoogleCallback = async (response: any) => {
     if (response?.credential) {
       try {
-        await dispatch(AuthService.googleLogin(response.credential));
+        await authService.googleLogin({ token: response.credential });
         navigate('/dashboard');
       } catch (error) {
         console.error('Google auth failed:', error);
@@ -178,7 +186,7 @@ const LoginModule = () => {
 
         {authError && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            {authError}
+            {authError.message || 'An error occurred'}
           </Alert>
         )}
 

@@ -6,26 +6,37 @@ src/types/:
         - GameConfig
         - GameProgress
         - GameScore
-        - User
+        - UserProfile
+        - AuthResponse
+        - EmailTokenObtainPairRequest
+        - TokenResponse
     operations:
       - api_games_games_record_score_create
       - api_games_progress_list
       - api_games_progress_create
+      - api_users_auth_login_create
+      - api_users_auth_google_create
+      - api_users_auth_2fa_create
 
   auth.ts:  # Auth-specific types
     state:
       AuthState:
         isAuthenticated: boolean
-        user: User | null
+        isMember: boolean
+        isAdmin?: boolean
+        user: UserProfile | null
         loading: Record<LoadingStateType, boolean>
     constants:
       TOKEN_EXPIRY:
         VERIFICATION: 86400
         EMAIL_CHANGE: 3600
+        PASSWORD_RESET: 3600
         REFRESH: 604800
+        ACCESS: 900
     types:
       AuthStatus: 'authenticated' | 'unauthenticated' | 'loading'
-      LoadingStateType: login | register | etc
+      AuthProvider: 'google'
+      LoadingStateType: login | register | passwordChange | emailChange | twoFactor | etc
 
   game.ts:  # Game-specific types
     state:

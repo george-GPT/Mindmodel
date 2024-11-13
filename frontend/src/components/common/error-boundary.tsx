@@ -5,13 +5,14 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 import AlertIcon from '@mui/icons-material/ReportProblem'; // MUI Icon for alert
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import type { ApiError } from '../../types/error';
 
 interface Props {
   children: ReactNode;
 }
 
 interface State {
-  hasError: boolean;
+  error: ApiError | null;
 }
 
 const FallbackContainer = styled(Box)(({ theme }) => ({
@@ -45,16 +46,23 @@ const StyledButton = styled(Button)(({ theme }) => ({
 class ErrorBoundary extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { hasError: false };
+    this.state = { error: null };
   }
 
-  static getDerivedStateFromError(_: Error): State {
-    // Update state to display fallback UI
-    return { hasError: true };
+  static getDerivedStateFromError(error: Error): State {
+    return {
+      error: {
+        success: false,
+        message: error.message,
+        error: {
+          code: 'server_error',
+          details: { originalError: error }
+        }
+      }
+    };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    // You can log the error to an error reporting service here
     console.error('Uncaught error:', error, errorInfo);
   }
 
@@ -63,7 +71,7 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   render() {
-    if (this.state.hasError) {
+    if (this.state.error) {
       return (
         <FallbackContainer>
           <FallbackPaper>
@@ -72,7 +80,7 @@ class ErrorBoundary extends Component<Props, State> {
               Oops! Something went wrong.
             </Typography>
             <Typography variant="body1" gutterBottom>
-              We're sorry for the inconvenience. Please try refreshing the page.
+              {this.state.error.message}
             </Typography>
             <StyledButton variant="contained" onClick={this.handleReload}>
               Reload Page

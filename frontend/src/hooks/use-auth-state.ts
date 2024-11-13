@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
-import { LoadingStateType } from '../store/authSlice';
+import type { AuthState, LoadingStateType } from '../types/auth';
+import type { ApiError } from '../types/error';
 
 export const useAuthState = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -12,7 +13,7 @@ export const useAuthState = () => {
     isMember
   } = useSelector((state: RootState) => state.auth);
 
-  const isLoading = (type: LoadingStateType) => loading[type];
+  const isLoading = (type: LoadingStateType): boolean => loading[type];
 
   const isAnyLoading = Object.values(loading).some(Boolean);
 
@@ -24,5 +25,5 @@ export const useAuthState = () => {
     isAnyLoading,
     isMember,
     dispatch
-  };
+  } as const;
 }; 

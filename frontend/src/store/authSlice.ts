@@ -1,14 +1,15 @@
 // src/Store/authSlice.ts
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, LoadingStateType, AuthErrorResponse } from '../types/auth';
+import type { User, LoadingStateType } from '../types/auth';
+import type { ApiError } from '../types/error';
 
 interface AuthState {
   isAuthenticated: boolean;
   user: User | null;
   isMember: boolean;
   isAdmin: boolean;
-  error: AuthErrorResponse | null;
+  error: ApiError | null;
   loading: Record<LoadingStateType, boolean>;
 }
 
@@ -26,13 +27,11 @@ const initialState: AuthState = {
     twoFactor: false,
     auth: false,
     profile: false,
-    passwordReset: false,
     verification: false,
     social: false
   },
 };
 
-// First, define the login payload type
 interface LoginPayload {
     user: User;
     isMember: boolean;
@@ -59,8 +58,19 @@ const authSlice = createSlice({
     }>) => {
       state.loading[action.payload.type] = action.payload.isLoading;
     },
-    setError: (state, action: PayloadAction<AuthErrorResponse | null>) => {
-      state.error = action.payload;
+    setError: (state, action: PayloadAction<string | null>) => {
+      if (action.payload) {
+        state.error = {
+          success: false,
+          message: action.payload,
+          error: {
+            code: 'validation_error',
+            details: {}
+          }
+        };
+      } else {
+        state.error = null;
+      }
     },
     clearError: (state) => {
       state.error = null;
