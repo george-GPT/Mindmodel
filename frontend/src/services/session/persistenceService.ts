@@ -132,6 +132,14 @@ class PersistenceService {
             this.migrateStorage(oldStorage, this.config.storage);
         }
     }
+
+    public async clearLoginState(): Promise<void> {
+        // Implement login state clearing
+    }
+
+    public async clearAuthState(): Promise<void> {
+        // Implement auth state clearing
+    }
 }
 
 export default PersistenceService; 

@@ -1,14 +1,14 @@
 // src/declarations.d.ts
 
-declare module '@m2c2kit-assessment-color-dots' {
+declare module '@m2c2kit/assessment-color-dots' {
     export class ColorDots {
-      constructor();
-      initialize(): Promise<void>;
-      destroy(): void;
-      // Add additional methods and properties as needed
-      // For example:
-      // onGameComplete(callback: (score: number) => void): void;
-      // getTrialData(): TrialData[];
+      constructor(config: {
+        containerId: string;
+        onComplete: (score: number) => void;
+        onLoad: () => void;
+        onError?: (error: any) => void;
+      });
+      start(): void;
     }
   
     interface TrialData {
@@ -27,17 +27,6 @@ declare module '@m2c2kit-assessment-color-dots' {
 
   
   // src/declarations.d.t
-
-declare module '@m2c2kit/assessment-color-dots' {
-  export class ColorDots {
-    constructor(config: {
-      containerId: string;
-      onComplete: (score: number) => void;
-      onLoad: () => void;
-    });
-    start(): void;
-  }
-}
 
 declare module '@m2c2kit/assessment-color-shapes' {
   export class ColorShapes {
@@ -84,5 +73,15 @@ declare module '@m2c2kit/assessment-symbol-search' {
 declare module "*.json" {
     const value: any;
     export default value;
+}
+
+declare module "*.svg" {
+  const content: any;
+  export default content;
+}
+
+declare module "*.png" {
+  const content: any;
+  export default content;
 }
 

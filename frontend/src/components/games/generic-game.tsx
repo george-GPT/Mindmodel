@@ -8,8 +8,8 @@ import { RootState } from '../../store/store';
 import { submitGameScore } from '../../store/gameSlice';
 import { completeGame } from '../../store/progressSlice';
 import { gamesAPI } from '../../services';
-import ErrorBoundary from '../common/error-boundary';
-import Loading from '../common/loading';
+import ErrorBoundary from '../dashboard/common/error-boundary';
+import Loading from '../dashboard/common/loading';
 import { useSurveyAnalytics } from '../surveys/survey-hooks/use-survey-analytics';
 
 interface GameData {

@@ -40,7 +40,7 @@ import {
 
 import { RootState } from '../../../store/store';
 import BrainIcon from '../../assets/icons/brainIconwhite';
-import BackgroundGraphics from '../../common/background-graphics';
+import BackgroundGraphics from '../../dashboard/common/background-graphics';
 import PuzzleImage from '../../assets/images/puzzle.png';
 import VisionImage from '../../assets/images/vision.png';
 import ProcessImage from '../../assets/images/process.png';

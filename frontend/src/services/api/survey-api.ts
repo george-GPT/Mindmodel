@@ -1,24 +1,26 @@
-import axios from './axios';
-import { API_PATHS } from '../../constants/api-path-two';
-import { SurveyResponse, Survey } from '../../types/survey-types';
+import type { AxiosResponse } from 'axios';
+import axiosInstance from './axios-instance';
+import { API_PATHS } from '../../constants/api-paths';
+import type { components } from '../../types/api';
 
-type TokenResponse = {
-  access: string;
-  refresh?: string;
-} | null;
+type Survey = components['schemas']['Survey'];
+type SurveyResponse = components['schemas']['SurveyResponse'];
+type SuccessResponse<T> = components['schemas']['SuccessResponse'] & {
+    data: T;
+};
 
 export const surveyAPI = {
-    getSurveys: () => 
-        axios.get<Survey[]>(API_PATHS.SURVEYS.BASE),
+    getSurveys: (): Promise<AxiosResponse<SuccessResponse<Survey[]>>> => 
+        axiosInstance.get(API_PATHS.SURVEYS.BASE),
 
-    getSurveyDetails: (id: number) => 
-        axios.get<Survey>(API_PATHS.SURVEYS.DETAIL(id)),
+    getSurveyDetails: (id: number): Promise<AxiosResponse<SuccessResponse<Survey>>> => 
+        axiosInstance.get(API_PATHS.SURVEYS.DETAIL(id)),
 
-    submitSurveyResponse: (responseData: SurveyResponse) => 
-        axios.post(API_PATHS.SURVEYS.RESPONSES, responseData),
+    submitSurveyResponse: (responseData: SurveyResponse): Promise<AxiosResponse<SuccessResponse<SurveyResponse>>> => 
+        axiosInstance.post(API_PATHS.SURVEYS.RESPONSES, responseData),
 
-    getSurveyResponse: (id: number) => 
-        axios.get<SurveyResponse>(API_PATHS.SURVEYS.DETAIL(id))
+    getSurveyResponse: (id: number): Promise<AxiosResponse<SuccessResponse<SurveyResponse>>> => 
+        axiosInstance.get(API_PATHS.SURVEYS.DETAIL(id))
 };
 
 // ... rest of your code ... 

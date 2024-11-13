@@ -624,6 +624,8 @@ export interface components {
             /** Format: date-time */
             readonly date_joined?: string;
             readonly is_active?: boolean;
+            readonly is_member: boolean;
+            avatar_url?: string;
         };
         UserProfileRequest: {
             username: string;
@@ -736,6 +738,23 @@ export interface components {
             notifications: boolean;
             language: string;
             timezone: string;
+        };
+
+        LoginCredentials: {
+            email: string;
+            password: string;
+        };
+
+        SessionStatus: {
+            isValid: boolean;
+            remainingTime: number;
+            warningIssued: boolean;
+        };
+
+        AuthResponse: {
+            access: string;
+            refresh: string;
+            user: components["schemas"]["UserProfile"];
         };
     };
     responses: never;

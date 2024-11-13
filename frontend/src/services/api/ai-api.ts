@@ -1,24 +1,26 @@
-import axios from './axios';
-import { API_PATHS } from '../../constants/api-path-two';
-import type { AIAnalysisData, AIAnalysisResult } from 'types/ai.types';
-import type { components } from 'types/api';
+import type { AxiosResponse } from 'axios';
+import axiosInstance from './axios-instance';
+import { API_PATHS } from '../../constants/api-paths';
+import type { components } from '../../types/api';
+
+type AIAnalysisData = components['schemas']['AIAnalysisRequest'];
+type AIAnalysisResult = components['schemas']['AIAnalysisResult'];
+type SuccessResponse<T> = components['schemas']['SuccessResponse'] & {
+    data: T;
+};
 
 export const aiAPI = {
-    generateAnalysis: (data: AIAnalysisData) => 
-        axios.post<components['schemas']['SuccessResponse'] & {
-            data: { task_id: string }
-        }>(API_PATHS.AI.GENERATE, data),
+    generateAnalysis: (data: AIAnalysisData): Promise<AxiosResponse<SuccessResponse<{ task_id: string }>>> => 
+        axiosInstance.post(API_PATHS.AI.GENERATE, data),
     
-    getAnalysisResult: (id: number) => 
-        axios.get<AIAnalysisResult>(API_PATHS.AI.ANALYSIS(id)),
+    getAnalysisResult: (id: number): Promise<AxiosResponse<AIAnalysisResult>> => 
+        axiosInstance.get(API_PATHS.AI.ANALYSIS(id)),
     
-    aggregateResults: (userId: number) =>
-        axios.post<components['schemas']['SuccessResponse'] & {
-            data: { task_id: string }
-        }>(API_PATHS.AI.AGGREGATE, { userId }),
+    aggregateResults: (userId: number): Promise<AxiosResponse<SuccessResponse<{ task_id: string }>>> =>
+        axiosInstance.post(API_PATHS.AI.AGGREGATE, { userId }),
     
-    getInsights: (userId: number) =>
-        axios.get<AIAnalysisResult>(`${API_PATHS.AI.BASE}/insights`, { 
+    getInsights: (userId: number): Promise<AxiosResponse<AIAnalysisResult>> =>
+        axiosInstance.get(`${API_PATHS.AI.BASE}/insights`, { 
             params: { userId } 
         })
 };

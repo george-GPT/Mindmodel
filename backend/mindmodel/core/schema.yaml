@@ -1440,6 +1440,33 @@ components:
         - email
         - password
 
+    LoginCredentials:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - password
+
+    SessionStatus:
+      type: object
+      properties:
+        isValid:
+          type: boolean
+        remainingTime:
+          type: number
+        warningIssued:
+          type: boolean
+      required:
+        - isValid
+        - remainingTime
+        - warningIssued
+
   securitySchemes:
     jwtAuth:
       type: http

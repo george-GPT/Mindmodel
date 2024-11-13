@@ -16,7 +16,7 @@ import { SurveyJSON } from '../../types/survey';
 import { useSurveyAnalytics } from './survey-hooks/use-survey-analytics';
 import { useSurveyTheme } from './survey-hooks/use-survey-theme';
 import SurveyAnalyticsDisplay from './survey-endscreen-analytics';
-import ErrorBoundary from '../common/error-boundary';
+import ErrorBoundary from '../dashboard/common/error-boundary';
 
 // Import all survey JSON files
 import AttentionSurvey from './attention-survey.json';

@@ -128,7 +128,7 @@ const LoginModule = () => {
         });
 
         // Add null check and throw if missing
-        const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+        const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
         if (!clientId) {
           throw new Error('Google client ID not configured');
         }

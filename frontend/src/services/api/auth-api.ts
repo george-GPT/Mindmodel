@@ -1,71 +1,33 @@
-import type { components } from 'types/api';
+import type { AxiosResponse } from 'axios';
 import type { 
-    AuthResponse,
+    LoginCredentials, 
     TokenResponse,
-    LoginCredentials
-} from 'types/auth';
+    User
+} from '../../types/auth';
+import axiosInstance from './axios-instance';
 
-// Axios Instance
-import axios from './axios';
+class AuthAPI {
+    async login(credentials: LoginCredentials): Promise<AxiosResponse<TokenResponse>> {
+        return axiosInstance.post<TokenResponse>('/users/auth/login', credentials);
+    }
 
-// Request Types
-interface RegisterRequest {
-    email: string;
-    username: string;
-    password: string;
+    async googleAuth(token: string): Promise<AxiosResponse<TokenResponse>> {
+        return axiosInstance.post<TokenResponse>('/users/auth/google', { token });
+    }
+
+    async refresh(refreshToken: string): Promise<AxiosResponse<TokenResponse>> {
+        return axiosInstance.post<TokenResponse>('/users/auth/refresh', {
+            refresh: refreshToken
+        });
+    }
+
+    async logout(): Promise<AxiosResponse<{ success: boolean; message?: string }>> {
+        return axiosInstance.post('/users/auth/logout');
+    }
+
+    async getProfile(): Promise<AxiosResponse<{ data: User }>> {
+        return axiosInstance.get('/users/auth/me');
+    }
 }
 
-interface PasswordChangeRequest {
-    old_password: string;
-    new_password: string;
-}
-
-interface EmailChangeRequest {
-    new_email: string;
-    password: string;
-}
-
-// Response Types with proper type composition
-type VerificationResponse = components['schemas']['SuccessResponse'] & {
-    data?: {
-        verified: boolean;
-    };
-};
-
-type ResendVerificationResponse = components['schemas']['SuccessResponse'] & {
-    data?: {
-        sent: boolean;
-        email: string;
-    };
-};
-
-export const authAPI = {
-    login: (credentials: LoginCredentials) => 
-        axios.post<AuthResponse>('/api/users/auth/login/', credentials),
-    
-    register: (data: RegisterRequest) => 
-        axios.post<components['schemas']['SuccessResponse']>('/api/users/auth/register/', data),
-    
-    logout: () => 
-        axios.post<components['schemas']['SuccessResponse']>('/api/users/auth/logout/'),
-    
-    googleAuth: (credential: string) => 
-        axios.post<AuthResponse>('/api/users/auth/google/', { credential }),
-    
-    verifyEmail: (token: string) => 
-        axios.post<VerificationResponse>('/api/users/auth/verify-email/', { token }),
-    
-    resendVerification: (email: string) =>
-        axios.post<ResendVerificationResponse>('/api/users/auth/resend-verification/', { email }),
-
-    changePassword: (data: PasswordChangeRequest) => 
-        axios.post<components['schemas']['SuccessResponse']>('/api/users/auth/change-password/', data),
-
-    getProfile: () => 
-        axios.get<components['schemas']['SuccessResponse'] & {
-            data: components['schemas']['UserProfile']
-        }>('/api/users/auth/profile/'),
-
-    refresh: (refresh: string) => 
-        axios.post<TokenResponse>('/api/users/auth/refresh/', { refresh })
-}; 
+export const authAPI = new AuthAPI(); 

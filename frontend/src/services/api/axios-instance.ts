@@ -1,57 +1,53 @@
 import axios from 'axios';
 import TokenService from './token-service';
 
+const baseURL = import.meta.env.VITE_API_BASE_URL;
+
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8000',
-  headers: {
-    'Content-Type': 'application/json'
-  }
+    baseURL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
 });
 
+// Request interceptor for adding auth token
 axiosInstance.interceptors.request.use(
-  async (config) => {
-    const accessToken = TokenService.getAccessToken();
-    
-    if (accessToken && config.headers) {
-      if (TokenService.isTokenExpired(accessToken)) {
-        try {
-          const { access } = await TokenService.refreshAccessToken();
-          config.headers.Authorization = `Bearer ${access}`;
-        } catch (error) {
-          TokenService.clearTokens();
-          window.location.href = '/login';
-          return Promise.reject(error);
+    (config) => {
+        const token = TokenService.getAccessToken();
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
         }
-      } else {
-        config.headers.Authorization = `Bearer ${accessToken}`;
-      }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => Promise.reject(error)
 );
 
+// Response interceptor for handling token refresh
 axiosInstance.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
+        if (error.response?.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
 
-      try {
-        const { access } = await TokenService.refreshAccessToken();
-        originalRequest.headers.Authorization = `Bearer ${access}`;
-        return axiosInstance(originalRequest);
-      } catch (refreshError) {
-        TokenService.clearTokens();
-        window.location.href = '/login';
-        return Promise.reject(refreshError);
-      }
+            try {
+                const refreshResponse = await TokenService.refreshAccessToken();
+                if (refreshResponse.data?.access) {
+                    originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access}`;
+                    return axiosInstance(originalRequest);
+                }
+            } catch (refreshError) {
+                // Handle refresh token failure
+                TokenService.clearTokens();
+                return Promise.reject(refreshError);
+            }
+        }
+
+        return Promise.reject(error);
     }
-
-    return Promise.reject(error);
-  }
 );
 
 export default axiosInstance; 

@@ -1,5 +1,6 @@
 // src/services/authService.ts
 
+import type { AxiosResponse } from 'axios';
 import { authAPI } from '../api/authPath';
 import TokenService from '../api/token-service';
 import { login, logout, setLoading, clearError } from '../../store/authSlice';
@@ -8,7 +9,8 @@ import type {
     AuthServiceType,
     LoginCredentials,
     GoogleAuthRequest,
-    AuthResponse
+    AuthResponse,
+    TokenResponse
 } from '../../types/auth';
 import AuthenticationService from '../auth/authentication-service';
 
@@ -28,14 +30,24 @@ class AuthServiceImpl implements AuthServiceType {
         return AuthServiceImpl.instance;
     }
 
-    private handleAuthResponse(response: { data: AuthResponse }): AuthResponse {
-        if (response.data?.data) {
-            TokenService.setTokens({
-                access: response.data.data.access,
-                refresh: response.data.data.refresh
-            });
+    private handleAuthResponse(response: AxiosResponse<TokenResponse>): AuthResponse {
+        if (!response.data?.data) {
+            throw new Error('Invalid auth response format');
         }
-        return response.data;
+
+        const { data, success, message } = response.data;
+        
+        TokenService.setTokens(response.data);
+
+        return {
+            success,
+            message,
+            data: {
+                access: data.access,
+                refresh: data.refresh,
+                user: data.user
+            }
+        };
     }
 
     public async loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
@@ -54,7 +66,7 @@ class AuthServiceImpl implements AuthServiceType {
             if (authResponse.data?.user) {
                 this.dispatch(login({
                     user: authResponse.data.user,
-                    isMember: false,
+                    isMember: authResponse.data.user.is_member,
                     isAdmin: false
                 }));
             }

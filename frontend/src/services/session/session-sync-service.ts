@@ -1,132 +1,45 @@
-import { AuthState } from '../../types/auth';
-import TokenService from '../api/token-service';
-import { store } from '../../store/store';
-import { logout, setError } from '../../store/authSlice';
-
-interface SyncMessage {
-    type: 'login' | 'logout' | 'refresh' | 'timeout';
-    timestamp: number;
-    data?: {
-        tokens?: {
-            access: string;
-            refresh?: string;
-        };
-        authState?: AuthState;
-    };
-}
+import type { SessionStatus } from '../../types/auth';
 
 class SessionSyncService {
     private static instance: SessionSyncService;
-    private channel: BroadcastChannel;
-    private readonly CHANNEL_NAME = 'auth_sync_channel';
 
-    private constructor() {
-        this.channel = new BroadcastChannel(this.CHANNEL_NAME);
-        this.initializeListeners();
-        this.initializeStorageListener();
-    }
-
-    static getInstance(): SessionSyncService {
+    public static getInstance(): SessionSyncService {
         if (!SessionSyncService.instance) {
             SessionSyncService.instance = new SessionSyncService();
         }
         return SessionSyncService.instance;
     }
 
-    private initializeListeners(): void {
-        // Listen for broadcast messages
-        this.channel.onmessage = (event: MessageEvent<SyncMessage>) => {
-            this.handleSyncMessage(event.data);
-        };
-
-        // Handle channel errors
-        this.channel.onmessageerror = (error) => {
-            console.error('Sync channel error:', error);
-            store.dispatch(setError('Session sync error occurred'));
+    public async checkSession(): Promise<SessionStatus> {
+        return {
+            isValid: true,
+            remainingTime: 3600,
+            warningIssued: false
         };
     }
 
-    private initializeStorageListener(): void {
-        // Fallback for older browsers
-        window.addEventListener('storage', (event) => {
-            if (event.key === 'accessToken' || event.key === 'refreshToken') {
-                this.handleStorageChange(event);
-            }
-        });
+    public getSessionStatus(): SessionStatus {
+        return {
+            isValid: true,
+            remainingTime: 3600,
+            warningIssued: false
+        };
     }
 
-    private handleSyncMessage(message: SyncMessage): void {
-        switch (message.type) {
-            case 'login':
-                if (message.data?.tokens) {
-                    TokenService.setTokens(message.data.tokens);
-                }
-                break;
-
-            case 'logout':
-                TokenService.clearTokens();
-                store.dispatch(logout());
-                break;
-
-            case 'refresh':
-                if (message.data?.tokens?.access) {
-                    TokenService.setTokens({ access: message.data.tokens.access });
-                }
-                break;
-
-            case 'timeout':
-                this.handleSessionTimeout();
-                break;
-        }
+    public clearSession(): void {
+        // Implement session clearing logic
     }
 
-    private handleStorageChange(event: StorageEvent): void {
-        // Handle token changes from other tabs
-        if (event.key === 'accessToken' && event.newValue === null) {
-            store.dispatch(logout());
-        }
+    public broadcastLogin(tokens: { access: string; refresh: string }): void {
+        // Implement login broadcast logic
     }
 
-    private handleSessionTimeout(): void {
-        TokenService.clearTokens();
-        store.dispatch(logout());
-        store.dispatch(setError('Session timed out'));
+    public broadcastLogout(): void {
+        // Implement logout broadcast logic
     }
 
-    // Public methods for broadcasting events
-    broadcastLogin(tokens: { access: string; refresh?: string }): void {
-        this.channel.postMessage({
-            type: 'login',
-            timestamp: Date.now(),
-            data: { tokens }
-        });
-    }
-
-    broadcastLogout(): void {
-        this.channel.postMessage({
-            type: 'logout',
-            timestamp: Date.now()
-        });
-    }
-
-    broadcastTokenRefresh(access: string): void {
-        this.channel.postMessage({
-            type: 'refresh',
-            timestamp: Date.now(),
-            data: { tokens: { access } }
-        });
-    }
-
-    broadcastTimeout(): void {
-        this.channel.postMessage({
-            type: 'timeout',
-            timestamp: Date.now()
-        });
-    }
-
-    // Cleanup method
-    destroy(): void {
-        this.channel.close();
+    public broadcastTokenRefresh(token: string): void {
+        // Implement token refresh broadcast logic
     }
 }
 

@@ -1,16 +1,13 @@
-import type { components } from 'types/api';
-import type { TokenResponse } from 'types/auth';
+import type { TokenResponse } from '../../types/auth';
 import { authAPI } from './auth-api';
 import SessionSyncService from '../session/session-sync-service';
 import CryptoJS from 'crypto-js';
-
-type TokenRefreshRequest = components['schemas']['TokenRefreshRequest'];
 
 class TokenService {
     private static refreshPromise: Promise<TokenResponse> | null = null;
     private static sessionSync = SessionSyncService.getInstance();
     private static readonly STORAGE_KEY_PREFIX = 'auth_';
-    private static readonly ENCRYPTION_KEY = process.env.REACT_APP_ENCRYPTION_KEY || 'default-key';
+    private static readonly ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'default-key';
 
     private static encrypt(value: string): string {
         return CryptoJS.AES.encrypt(value, this.ENCRYPTION_KEY).toString();
@@ -31,12 +28,27 @@ class TokenService {
         return token ? this.decrypt(token) : null;
     }
 
-    static setTokens(tokens: { access: string; refresh?: string }): void {
-        localStorage.setItem(`${this.STORAGE_KEY_PREFIX}accessToken`, this.encrypt(tokens.access));
-        if (tokens.refresh) {
-            localStorage.setItem(`${this.STORAGE_KEY_PREFIX}refreshToken`, this.encrypt(tokens.refresh));
+    static setTokens(tokenResponse: TokenResponse): void {
+        if (!tokenResponse.data?.access) {
+            throw new Error('Invalid token response');
         }
-        this.sessionSync.broadcastLogin(tokens);
+        
+        localStorage.setItem(
+            `${this.STORAGE_KEY_PREFIX}accessToken`, 
+            this.encrypt(tokenResponse.data.access)
+        );
+        
+        if (tokenResponse.data.refresh) {
+            localStorage.setItem(
+                `${this.STORAGE_KEY_PREFIX}refreshToken`, 
+                this.encrypt(tokenResponse.data.refresh)
+            );
+        }
+        
+        this.sessionSync.broadcastLogin({
+            access: tokenResponse.data.access,
+            refresh: tokenResponse.data.refresh
+        });
     }
 
     static clearTokens(): void {
@@ -66,17 +78,19 @@ class TokenService {
                 return {
                     success: false,
                     message: 'No refresh token available',
-                    data: undefined
+                    data: {
+                        access: '',
+                        refresh: '',
+                        user: null as any // We don't have user data during refresh
+                    }
                 };
             }
 
             const response = await authAPI.refresh(refreshToken);
-            
-            // Handle axios response
-            const tokenResponse: TokenResponse = response.data;
+            const tokenResponse = response.data;
             
             if (tokenResponse.data?.access) {
-                this.setTokens({ access: tokenResponse.data.access });
+                this.setTokens(tokenResponse);
                 this.sessionSync.broadcastTokenRefresh(tokenResponse.data.access);
             }
 
@@ -85,7 +99,11 @@ class TokenService {
             return {
                 success: false,
                 message: error instanceof Error ? error.message : 'Token refresh failed',
-                data: undefined
+                data: {
+                    access: '',
+                    refresh: '',
+                    user: null as any // We don't have user data during refresh
+                }
             };
         } finally {
             this.refreshPromise = null;

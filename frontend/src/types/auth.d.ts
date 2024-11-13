@@ -1,32 +1,26 @@
-import { paths, operations, components } from './api';
+import type { components } from './api';
 import { ApiError } from './error';
 
 // Core types from API schema
-export type LoginCredentials = components['schemas']['EmailTokenObtainPairRequest'];
+export type LoginCredentials = components['schemas']['LoginCredentials'];
 export type User = components['schemas']['UserProfile'];
+export type SessionStatus = components['schemas']['SessionStatus'];
+export type AuthProvider = 'google';
 
-// More flexible response types
-export type AuthResponse = {
-    success: boolean;
-    message?: string;
-    data?: {
-        access: string;
-        refresh: string;
-        user?: User;  // Optional in AuthResponse
-    };
-};
-
+// Token types that match the backend schema exactly
 export type TokenResponse = {
     success: boolean;
     message?: string;
-    data?: {
+    data: {
         access: string;
         refresh: string;
-        user: User;  // Required in TokenResponse
+        user: User;
     };
 };
 
-// Simple request types
+export type AuthResponse = components['schemas']['AuthResponse'];
+
+// Request types
 export interface GoogleAuthRequest {
     token: string;
 }
@@ -70,5 +64,4 @@ export const TOKEN_EXPIRY = {
     ACCESS: 900
 } as const;
 
-export type AuthProvider = 'google';
 export type AuthStatus = 'authenticated' | 'unauthenticated' | 'loading';

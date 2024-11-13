@@ -37,7 +37,7 @@ import { User } from '../../types/auth';
 const Header: React.FC = () => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+    const { isAuthenticated, user, isMember } = useSelector((state: RootState) => state.auth);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [resourcesAnchorEl, setResourcesAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -238,7 +238,7 @@ const Header: React.FC = () => {
                         </List>
                     </Collapse>
 
-                    {isAuthenticated && user?.is_member && (
+                    {isAuthenticated && isMember && (
                         <ListItemButton
                             component={RouterLink}
                             to="/assessments/dashboard"
@@ -297,7 +297,7 @@ const Header: React.FC = () => {
                 >
                     {isAuthenticated ? (
                         <>
-                            {user?.is_member && (
+                            {isMember && (
                                 <Button
                                     component={RouterLink}
                                     to="/assessments/dashboard"
