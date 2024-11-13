@@ -1,5 +1,5 @@
 import { store } from '../../store/store';
-import { setError } from '../../store/auth-slice';
+import { setError } from '../../store/authSlice';
 import TokenService from '../api/token-service';
 import SessionSyncService from './session-sync-service';
 

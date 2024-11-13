@@ -1,6 +1,6 @@
 import axios from './axios';
 import { API_PATHS } from '../../constants/api-path-two';
-import { AIAnalysisData, AIAnalysisResult } from '../../types/ai-types';
+import { AIAnalysisData, AIAnalysisResult } from '@/types/OLDai.types';
 
 export const aiAPI = {
     generateAnalysis: (data: AIAnalysisData) => 

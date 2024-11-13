@@ -1,0 +1,57 @@
+src/types/:
+  api.ts:  # Auto-generated, do not modify
+    components:
+      schemas:
+        - Game
+        - GameConfig
+        - GameProgress
+        - GameScore
+        - User
+    operations:
+      - api_games_games_record_score_create
+      - api_games_progress_list
+      - api_games_progress_create
+
+  auth.ts:  # Auth-specific types
+    state:
+      AuthState:
+        isAuthenticated: boolean
+        user: User | null
+        loading: Record<LoadingStateType, boolean>
+    constants:
+      TOKEN_EXPIRY:
+        VERIFICATION: 86400
+        EMAIL_CHANGE: 3600
+        REFRESH: 604800
+    types:
+      AuthStatus: 'authenticated' | 'unauthenticated' | 'loading'
+      LoadingStateType: login | register | etc
+
+  game.ts:  # Game-specific types
+    state:
+      GameState:
+        currentGame: components['schemas']['Game'] | null
+        progress: components['schemas']['GameProgress'] | null
+    types:
+      GameEvent: start | pause | complete
+      GameMetadata:
+        sessionId: string
+        startTime: number
+
+  utils.ts:  # Common utility types
+    responses:
+      ApiResponse<T>:
+        success: boolean
+        data: T
+        message?: string
+      PaginatedResponse<T>:
+        count: number
+        results: T[]
+        next?: string
+        previous?: string
+
+imports:
+  pattern: "import type { components, operations } from './types/api'"
+  usage: "type Game = components['schemas']['Game']"
+
+  

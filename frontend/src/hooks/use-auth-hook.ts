@@ -1,15 +1,15 @@
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../services/auth/auth-service';
+import AuthService from '../services/monitoring/authService';
 import { RootState, AppDispatch } from '../store/store';
-import { setError } from '../store/auth-slice';
+import { setError } from '../store/authSlice';
 import { 
     LoginCredentials, 
     User, 
     AuthResponse,
     LoadingStateType 
-} from '../types/auth.types';
+} from '../types/auth';
 import { TokenResponse } from '../types/api-types';
 
 interface UseAuthenticationOptions {

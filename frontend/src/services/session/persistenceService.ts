@@ -1,5 +1,5 @@
 import TokenService from '../api/token-service';
-import { AuthState } from '../../types/auth.types';
+import { AuthState } from '../../types/auth';
 
 interface PersistenceConfig {
     storage: 'local' | 'session';

@@ -39,21 +39,20 @@ app_name = 'users'
 
 urlpatterns = [
     # Auth endpoints
-    path('auth/login/', LoginView.as_view(), name='login'),
-    path('auth/register/', RegisterView.as_view(), name='register'),
-    path('auth/logout/', LogoutView.as_view(), name='logout'),
-    path('auth/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/', LoginView.as_view(), name='login'),
+    path('register/', RegisterView.as_view(), name='register'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
     path('change-email/', ChangeEmailView.as_view(), name='change_email'),
     
     # Member endpoints
-    path('member/register/', MemberRegistrationView.as_view(), name='member_register'),
+    path('member/me/', UserProfileView.as_view(), name='user_profile'),
     path('member/profile/', MemberProfileView.as_view(), name='member_profile'),
-    path('me/', UserProfileView.as_view(), name='user_profile'),
-    path('profile/', ProfileView.as_view(), name='profile'),
+    path('member/register/', MemberRegistrationView.as_view(), name='member_register'),
     
     # Social auth
-    path('auth/google/', GoogleAuthView.as_view(), name='google-auth'),
+    path('google/', GoogleAuthView.as_view(), name='google-auth'),
     
     # 2FA
     path('2fa/enable/', TwoFactorEnableView.as_view(), name='2fa_enable'),

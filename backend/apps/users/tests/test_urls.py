@@ -31,10 +31,10 @@ class TestURLAccess:
     def test_api_endpoints(self, client):
         """Test that our API endpoints exist"""
         endpoints = [
-            'users:auth:login',
-            'users:auth:register',
-            'users:auth:token-refresh',
-            'users:member:me',
+            'users:login',
+            'users:register',
+            'users:token-refresh',
+            'users:user_profile',
         ]
         
         for endpoint in endpoints:

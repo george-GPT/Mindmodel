@@ -1,10 +1,10 @@
-import ActivityTrackingService from './activity-tracking-service';
-import PersistenceService from './persistence-service';
+import ActivityTrackingService from './activityTrackingService';
+import PersistenceService from './persistenceService';
 import SessionSyncService from './session-sync-service';
-import TokenSecurityService from '../security/token-security';
-import RateLimitService from '../security/rate-limit';
-import OAuthMonitoringService from '../monitoring/oauth-monitoring-service';
-import { AuthServiceType, LoginCredentials, SessionStatus } from '../../types/auth.types';
+import TokenSecurityService from '../security/tokenSecurity';
+import RateLimitService from '../security/rateLimit';
+import OAuthMonitoringService from '../monitoring/oauthMonitoring-service';
+import { AuthServiceType, LoginCredentials, SessionStatus } from '../../types/auth';
 
 interface SessionConfig {
     activityTimeout?: number;

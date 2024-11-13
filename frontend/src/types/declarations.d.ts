@@ -80,25 +80,9 @@ declare module '@m2c2kit/assessment-symbol-search' {
   }
 }
 
-import { ButtonProps as MuiButtonProps } from '@mui/material';
-
-export type ButtonVariant = 
-  | "primary"    // Main actions
-  | "secondary"  // Alternative actions
-  | "success"    // Completion/confirmation actions
-  | "warning"    // Cautionary actions
-  | "error"      // Destructive/critical actions
-  | "info"       // Informational actions
-  | "neutral"    // Default/basic actions
-  | "outlined"   // Border-only style
-  | "text";      // Text-only style
-
-export interface ButtonProps extends Omit<MuiButtonProps, "variant"> {
-  variant?: ButtonVariant;
-  isLoading?: boolean;
-  fullWidth?: boolean;
-  disabled?: boolean;
-  startIcon?: React.ReactNode;
-  endIcon?: React.ReactNode;
-  size?: 'small' | 'medium' | 'large';
+// Only keep module declarations
+declare module "*.json" {
+    const value: any;
+    export default value;
 }
+

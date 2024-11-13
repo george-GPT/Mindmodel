@@ -1,77 +1,62 @@
 from drf_spectacular.generators import SchemaGenerator
-from drf_spectacular.plumbing import build_basic_type
-from mindmodel.docs.api_documentation import (
-    ERROR_RESPONSES,
-    VALIDATION_RULES,
-    SECURITY_SCHEMAS
+from apps.users.serializers.auth_serializers import (
+    EmailTokenObtainPairSerializer,
+    UserSerializer,
+    PasswordChangeSerializer,
+    EmailChangeSerializer,
+    SocialAuthSerializer
 )
 
 class MindmodelSchemaGenerator(SchemaGenerator):
     def get_schema(self, request=None, public=False):
         schema = super().get_schema(request, public)
         
-        # Initialize components if not present
+        # Add auth-specific schemas
         if 'components' not in schema:
             schema['components'] = {}
-            schema['components'].update({
-                'securitySchemes': {},
-                'schemas': {},
-                'responses': {}
-            })
-
-        # Update security schemes
-        schema['components']['securitySchemes'].update(SECURITY_SCHEMAS)
-        
-        # Add validation rules to components
+            
+        if 'schemas' not in schema['components']:
+            schema['components']['schemas'] = {}
+            
+        # Use all auth serializers with proper ref_names
         schema['components']['schemas'].update({
-            'ValidationRules': {
+            'PasswordChangeRequest': {
                 'type': 'object',
-                'properties': VALIDATION_RULES
+                'properties': {
+                    'old_password': {'type': 'string'},
+                    'new_password': {'type': 'string'}
+                },
+                'required': ['old_password', 'new_password']
+            },
+            'EmailChangeRequest': {
+                'type': 'object',
+                'properties': {
+                    'new_email': {'type': 'string', 'format': 'email'},
+                    'password': {'type': 'string'}
+                },
+                'required': ['new_email', 'password']
+            },
+            'VerificationRequest': {
+                'type': 'object',
+                'properties': {
+                    'token': {'type': 'string'}
+                },
+                'required': ['token']
+            },
+            'ResendVerificationRequest': {
+                'type': 'object',
+                'properties': {
+                    'email': {'type': 'string', 'format': 'email'}
+                },
+                'required': ['email']
+            },
+            'GoogleAuthRequest': {
+                'type': 'object',
+                'properties': {
+                    'credential': {'type': 'string'}
+                },
+                'required': ['credential']
             }
         })
         
-        # Add error responses to components
-        schema['components']['responses'].update({
-            'Error400': {
-                'description': 'Validation Error',
-                'content': {
-                    'application/json': {
-                        'schema': {
-                            '$ref': '#/components/schemas/ErrorResponse'
-                        }
-                    }
-                }
-            },
-            'Error401': {
-                'description': 'Authentication Error',
-                'content': {
-                    'application/json': {
-                        'schema': {
-                            '$ref': '#/components/schemas/ErrorResponse'
-                        }
-                    }
-                }
-            },
-            'Error403': {
-                'description': 'Permission Error',
-                'content': {
-                    'application/json': {
-                        'schema': {
-                            '$ref': '#/components/schemas/ErrorResponse'
-                        }
-                    }
-                }
-            },
-            'Error429': {
-                'description': 'Rate Limit Error',
-                'content': {
-                    'application/json': {
-                        'schema': {
-                            '$ref': '#/components/schemas/ErrorResponse'
-                        }
-                    }
-                }
-            }
-        })
-
         return schema

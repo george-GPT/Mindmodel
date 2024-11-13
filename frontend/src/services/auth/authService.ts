@@ -1,32 +1,54 @@
 // src/services/authService.ts
 
-import { authAPI } from '../api/auth';
+import { authAPI } from '../api/authPath';
 import TokenService from '../api/token-service';
 import { 
     login, 
     logout, 
     setLoading, 
     clearError
-} from '../../store/auth-slice';
+} from '../../store/authSlice';
 import { store } from '../../store/store';
+import { operations, components } from 'types/api';
+
+// API Response Types
+type ApiResponse<T> = {
+    success: boolean;
+    message: string;
+    data: T;
+    error?: {
+        code: string;
+        details: Record<string, any>;
+    };
+};
+
+// Type aliases from API schema
+type User = components['schemas']['User'];
+type LoginRequest = components['schemas']['EmailTokenObtainPairRequest'];
+type LoginResponse = ApiResponse<{
+    access: string;
+    refresh: string;
+    user: User;
+}>;
+type GoogleAuthResponse = ApiResponse<{
+    access: string;
+    refresh: string;
+    user: User;
+    provider: 'google';
+    provider_id: string;
+}>;
+type RegisterRequest = operations['api_users_auth_auth_register_create']['requestBody']['content']['application/json'];
+type BaseResponse = ApiResponse<Record<string, any>>;
+
 import { 
-    AuthResponse,
     AuthProvider,
-    LoginCredentials,
-    RegisterData,
-    PasswordChangeData,
-    EmailChangeData,
-    GoogleAuthResponse,
-    SessionStatus,
-    BaseAuthResponse,
-    TwoFactorAuthResponse,
-    User,
-    PermissionLevel,
     AuthServiceType,
-    PasswordResetConfirm
-} from '../../types/auth.types';
+    SessionStatus,
+    PermissionLevel
+} from '@/types/auth';
+
 import { handleAuthError } from '../../utils/error-handler';
-import AuthenticationService from './authentication-service';
+import AuthenticationService from '../auth/authentication-service';
 
 class AuthService implements AuthServiceType {
     private static instance: AuthService;
@@ -44,10 +66,10 @@ class AuthService implements AuthServiceType {
         return AuthService.instance;
     }
 
-    private handleAuthResponse<T extends AuthResponse>(response: T): T {
+    private handleAuthResponse<T extends LoginResponse>(response: T): T {
         TokenService.setTokens({
-            access: response.access,
-            refresh: response.refresh
+            access: response.data.access,
+            refresh: response.data.refresh
         });
         return response;
     }
@@ -56,7 +78,7 @@ class AuthService implements AuthServiceType {
         return user.meta?.custom?.permissionLevel === PermissionLevel.Admin;
     }
 
-    public async loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
+    public async loginUser(credentials: LoginRequest): Promise<LoginResponse> {
         try {
             this.dispatch(setLoading({ type: 'login', isLoading: true }));
             this.dispatch(clearError());
@@ -72,9 +94,9 @@ class AuthService implements AuthServiceType {
             await this.authManager.initializeAuth(credentials.remember_me);
             
             this.dispatch(login({
-                user: data.user,
-                isMember: data.user.is_member,
-                isAdmin: this.determineAdminStatus(data.user)
+                user: data.data.user,
+                isMember: data.data.user.is_member,
+                isAdmin: this.determineAdminStatus(data.data.user)
             }));
             
             return data;
@@ -86,7 +108,7 @@ class AuthService implements AuthServiceType {
         }
     }
 
-    public async socialAuth(provider: AuthProvider, accessToken: string): Promise<AuthResponse> {
+    public async socialAuth(provider: AuthProvider, accessToken: string): Promise<LoginResponse> {
         try {
             this.dispatch(setLoading({ type: 'login', isLoading: true }));
             this.dispatch(clearError());
@@ -97,9 +119,9 @@ class AuthService implements AuthServiceType {
             this.handleAuthResponse(data);
             
             this.dispatch(login({
-                user: data.user,
-                isMember: data.user.is_member,
-                isAdmin: this.determineAdminStatus(data.user)
+                user: data.data.user,
+                isMember: data.data.user.is_member,
+                isAdmin: this.determineAdminStatus(data.data.user)
             }));
             
             return data;
@@ -117,22 +139,22 @@ class AuthService implements AuthServiceType {
             this.dispatch(clearError());
             
             const { data } = await authAPI.googleAuth(credential);
-            if (!data.provider || !data.provider_id) {
+            if (!data.data.provider || !data.data.provider_id) {
                 throw new Error('Invalid Google auth response');
             }
             
             this.handleAuthResponse(data);
             
             this.dispatch(login({
-                user: data.user,
-                isMember: data.user.is_member,
-                isAdmin: this.determineAdminStatus(data.user)
+                user: data.data.user,
+                isMember: data.data.user.is_member,
+                isAdmin: this.determineAdminStatus(data.data.user)
             }));
             
             return {
-                ...data,
+                ...data.data,
                 provider: 'google' as const,
-                provider_id: data.provider_id
+                provider_id: data.data.provider_id
             };
         } catch (error) {
             handleAuthError(error, this.dispatch);
@@ -142,11 +164,11 @@ class AuthService implements AuthServiceType {
         }
     }
 
-    public async registerUser(data: RegisterData): Promise<AuthResponse> {
+    public async registerUser(data: RegisterRequest): Promise<LoginResponse> {
         try {
             this.dispatch(setLoading({ type: 'register', isLoading: true }));
             const response = await authAPI.register(data);
-            return response.data;
+            return response;
         } catch (error) {
             handleAuthError(error, this.dispatch);
             throw error;
@@ -167,11 +189,11 @@ class AuthService implements AuthServiceType {
         }
     }
 
-    public async changePassword(data: PasswordChangeData): Promise<BaseAuthResponse> {
+    public async changePassword(data: PasswordChangeRequest): Promise<BaseResponse> {
         try {
             this.dispatch(setLoading({ type: 'passwordChange', isLoading: true }));
             const response = await authAPI.changePassword(data);
-            return response.data;
+            return response;
         } catch (error) {
             handleAuthError(error, this.dispatch);
             throw error;
@@ -180,11 +202,11 @@ class AuthService implements AuthServiceType {
         }
     }
 
-    public async changeEmail(data: EmailChangeData): Promise<BaseAuthResponse> {
+    public async changeEmail(data: EmailChangeRequest): Promise<BaseResponse> {
         try {
             this.dispatch(setLoading({ type: 'emailChange', isLoading: true }));
             const response = await authAPI.changeEmail(data);
-            return response.data;
+            return response;
         } catch (error) {
             handleAuthError(error, this.dispatch);
             throw error;
@@ -193,11 +215,11 @@ class AuthService implements AuthServiceType {
         }
     }
 
-    public async enableTwoFactor(): Promise<TwoFactorAuthResponse> {
+    public async enableTwoFactor(): Promise<BaseResponse> {
         try {
             this.dispatch(setLoading({ type: 'twoFactor', isLoading: true }));
             const response = await authAPI.twoFactor.enable();
-            return response.data;
+            return response;
         } catch (error) {
             handleAuthError(error, this.dispatch);
             throw error;
@@ -206,11 +228,11 @@ class AuthService implements AuthServiceType {
         }
     }
 
-    public async disableTwoFactor(): Promise<BaseAuthResponse> {
+    public async disableTwoFactor(): Promise<BaseResponse> {
         try {
             this.dispatch(setLoading({ type: 'twoFactor', isLoading: true }));
             const response = await authAPI.twoFactor.disable();
-            return response.data;
+            return response;
         } catch (error) {
             handleAuthError(error, this.dispatch);
             throw error;
@@ -231,11 +253,11 @@ class AuthService implements AuthServiceType {
         this.authManager.cleanup();
     }
 
-    public async requestPasswordReset(email: string): Promise<BaseAuthResponse> {
+    public async requestPasswordReset(email: string): Promise<BaseResponse> {
         try {
             this.dispatch(setLoading({ type: 'passwordReset', isLoading: true }));
             const response = await authAPI.requestPasswordReset(email);
-            return response.data;
+            return response;
         } catch (error) {
             handleAuthError(error, this.dispatch);
             throw error;
@@ -244,11 +266,11 @@ class AuthService implements AuthServiceType {
         }
     }
 
-    public async confirmPasswordReset(data: PasswordResetConfirm): Promise<BaseAuthResponse> {
+    public async confirmPasswordReset(data: PasswordResetConfirm): Promise<BaseResponse> {
         try {
             this.dispatch(setLoading({ type: 'passwordReset', isLoading: true }));
             const response = await authAPI.confirmPasswordReset(data);
-            return response.data;
+            return response;
         } catch (error) {
             handleAuthError(error, this.dispatch);
             throw error;

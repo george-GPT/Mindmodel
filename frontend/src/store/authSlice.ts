@@ -1,7 +1,7 @@
 // src/Store/authSlice.ts
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, LoadingStateType, AuthErrorResponse } from '../types/auth.types';
+import { User, LoadingStateType, AuthErrorResponse } from '../types/auth';
 
 interface AuthState {
   isAuthenticated: boolean;

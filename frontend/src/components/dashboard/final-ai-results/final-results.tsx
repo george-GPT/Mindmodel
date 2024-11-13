@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../../store/store';
-import { startProcessing, processingSuccess, processingFailure } from '../../../store/analysis-slice';
+import { startProcessing, processingSuccess, processingFailure } from '../../../store/analysisSlice';
 import { aiAPI } from '../../../services';
 
 const FinalResults: React.FC = () => {

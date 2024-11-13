@@ -45,7 +45,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "generate-types": "npx openapi-typescript ..//SWAGGER_API.yaml --output src/types/api.d.ts"
+    "generate-types": "npx openapi-typescript schema.yaml --output src/types/api.d.ts"
   },
   "eslintConfig": {
     "extends": [

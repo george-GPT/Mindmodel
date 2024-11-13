@@ -1,10 +1,10 @@
 // src/Store/Store.ts
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import authReducer from './auth-slice';
-import gameReducer from './game-slice';
-import surveyReducer from './survey-slice';
-import progressReducer from './progress-slice';
-import analysisReducer from './analysis-slice';
+import authReducer from './authSlice';
+import gameReducer from './gameSlice';
+import surveyReducer from './surveySlice';
+import progressReducer from './progressSlice';
+import analysisReducer from './analysisSlice';
 import {
   persistStore,
   persistReducer,
@@ -16,6 +16,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { AuthState, GameState } from '../types';
 
 const rootReducer = combineReducers({
   auth: authReducer,

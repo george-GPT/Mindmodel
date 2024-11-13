@@ -1,7 +1,7 @@
 // src/Store/gameSlice.ts
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GameTrial, GameScore } from '../types/game-types';
+import { GameScore } from '../types/game.d';
 
 interface GamesState {
   scores: GameScore[];

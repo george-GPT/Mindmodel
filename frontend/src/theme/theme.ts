@@ -1,19 +1,17 @@
-import '@fontsource/inter/400.css'; // Regular
-import '@fontsource/inter/500.css'; // Medium
-import '@fontsource/inter/600.css'; // Semi-bold
-import '@fontsource/inter/700.css'; // Bold
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 import { createTheme, ThemeOptions } from '@mui/material/styles';
 
 const themeOptions: ThemeOptions = {
   typography: {
     fontFamily: [
-      "Inter",
+      "Roboto",
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
       "Arial",
       "sans-serif",
     ].join(","),
@@ -25,6 +23,22 @@ const themeOptions: ThemeOptions = {
       fontWeight: 600,
       fontFamily: "Roboto",
     },
+    h3: {
+      fontWeight: 600,
+      fontFamily: "Roboto",
+    },
+    h4: {
+      fontWeight: 500,
+      fontFamily: "Roboto",
+    },
+    h5: {
+      fontWeight: 500,
+      fontFamily: "Roboto",
+    },
+    h6: {
+      fontWeight: 500,
+      fontFamily: "Roboto",
+    },
     body1: {
       fontWeight: 400,
       fontFamily: "Roboto",
@@ -33,28 +47,33 @@ const themeOptions: ThemeOptions = {
       fontWeight: 400,
       fontFamily: "Roboto",
     },
+    button: {
+      fontWeight: 500,
+      fontFamily: "Roboto",
+      textTransform: 'none',
+    },
   },
   palette: {
     primary: {
-      main: "#3442DA", // Main
-      100: "#EBEEFF", // Lightest
-      200: "#D4D8FA", // Very Light
-      300: "#96A5EF", // Lighter
-      400: "#5966E8", // Light
-      500: "#3442DA", // primary
-      600: "#2D39B2", // Dark
-      700: "#25308A", // Darker
-      800: "#1C2663", // Darkest
+      main: "#3442DA",
+      100: "#EBEEFF",
+      200: "#D4D8FA",
+      300: "#96A5EF",
+      400: "#5966E8",
+      500: "#3442DA",
+      600: "#2D39B2",
+      700: "#25308A",
+      800: "#1C2663",
     },
     secondary: {
-      main: "#757575", // Main
-      100: "#FFFFFF", // White
-      200: "#F7F7F7", // Off White
-      300: "#E0E0E0", // Light Grey
-      400: "#BDBDBD", // Grey
-      500: "#757575", // Main (duplicate for clarity)
-      600: "#212121", // Dark Grey
-      700: "#000000", // Black
+      main: "#757575",
+      100: "#FFFFFF",
+      200: "#F7F7F7",
+      300: "#E0E0E0",
+      400: "#BDBDBD",
+      500: "#757575",
+      600: "#212121",
+      700: "#000000",
     },
     success: {
       main: "#B5E5B5",
@@ -69,16 +88,11 @@ const themeOptions: ThemeOptions = {
   components: {
     MuiCssBaseline: {
       styleOverrides: `
-      body {
-          background-color: #F9FAFF; /* Your desired background color */
-          paper: '#FFFFFF',
-          margin: 0; /* Ensure no default margin */
-          padding: 0; /* Ensure no default padding */
-        }
-        @font-face {
-          font-family: 'Inter';
-          font-style: normal;
-          font-weight: 400 700;
+        body {
+          background-color: #F9FAFF;
+          margin: 0;
+          padding: 0;
+          font-family: 'Roboto', sans-serif;
         }
       `,
     },

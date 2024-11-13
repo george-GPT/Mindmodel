@@ -12,8 +12,13 @@ import {
 } from '@mui/material';
 import { CheckCircleOutline, ErrorOutline, MailOutline } from '@mui/icons-material';
 import { AppDispatch } from '../../store/store';
-import { authAPI } from '../../services/api/auth';
+import { authAPI } from '../../services/api/authPath';
 import Button from '../button/button';
+import { 
+    VerificationResponse,
+    ResendVerificationResponse,
+    ErrorResponse 
+} from '../../types';
 
 const EmailVerification: React.FC = () => {
     const [verifying, setVerifying] = useState(true);

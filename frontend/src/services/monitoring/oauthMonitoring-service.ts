@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/react';
 import * as Sentry from '@sentry/react';
 import { store } from '../../store/store';
-import { setError } from '../../store/auth-slice';
+import { setError } from '../../store/authSlice';
 
 interface OAuthMetrics {
     provider: 'google';

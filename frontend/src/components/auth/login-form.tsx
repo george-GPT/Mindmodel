@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, FormControlLabel, Checkbox, Typography } from '@mui/material';
 import { useAuthentication } from '../../hooks/use-auth-hook';
-import { LoginCredentials } from '../../types/auth.types';
+import { LoginCredentials } from '../../types/auth';
 import { GoogleLogin } from '@react-oauth/google';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';

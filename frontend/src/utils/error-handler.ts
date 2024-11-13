@@ -1,14 +1,24 @@
 import { AppDispatch } from '../store/store';
-import { setError } from '../store/auth-slice';
-import { StandardError, ValidationError, ErrorCodes } from '../types/error-types';
-import { AuthErrorResponse, AuthErrorCode } from '../types/auth.types';
+import { setError } from '../store/authSlice';
+import { ErrorResponse, AuthState } from '../types';
+import { AuthErrorCode } from 'types/auth';
+
+// Define ErrorCodes enum
+export enum AuthErrorCode {
+    NETWORK_ERROR = 'NETWORK_ERROR',
+    VALIDATION_ERROR = 'VALIDATION_ERROR',
+    INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+    PERMISSION_DENIED = 'PERMISSION_DENIED',
+    NOT_FOUND = 'NOT_FOUND',
+    SERVER_ERROR = 'SERVER_ERROR'
+}
 
 export const createStandardError = (
   code: keyof typeof ErrorCodes,
   message: string,
   status: number,
   details?: Record<string, any>
-): StandardError => ({
+): ErrorResponse => ({
   code: ErrorCodes[code],
   message,
   status,
@@ -16,9 +26,10 @@ export const createStandardError = (
   timestamp: new Date().toISOString()
 });
 
+
 export const handleAuthError = (error: any, dispatch: AppDispatch) => {
-  let standardError: StandardError;
-  let authError: AuthErrorResponse;
+  let standardError: ErrorResponse;
+  let authError: AuthState;
 
   if (!error.response) {
     standardError = createStandardError(

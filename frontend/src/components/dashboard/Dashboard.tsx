@@ -66,7 +66,7 @@ const Dashboard: React.FC = () => {
       progress: completedSurveys.length,
       total: totalSurveys,
       buttonText: "View Surveys",
-      route: '/surveys',
+      route: '/app/surveys',
       tooltipText: "View and complete surveys",
       color: 'primary'
     },
@@ -76,11 +76,28 @@ const Dashboard: React.FC = () => {
       progress: completedGames.length,
       total: totalGames,
       buttonText: "View Games",
-      route: '/games',
+      route: '/app/games',
       tooltipText: "Play and complete games",
       color: 'secondary'
     }
   ], [completedSurveys.length, completedGames.length, totalSurveys, totalGames]);
+
+  // Add survey and game lists for better navigation
+  const availableSurveys = useMemo(() => [
+    { id: 'AttentionSurvey', title: 'Attention Assessment' },
+    { id: 'BaselineSurvey', title: 'Baseline Assessment' },
+    { id: 'ExecutiveFunctionSurvey', title: 'Executive Function Assessment' },
+    { id: 'MemorySurvey', title: 'Memory Assessment' },
+    { id: 'PersonalitySurvey', title: 'Personality Assessment' },
+    { id: 'ProcessingSurvey', title: 'Processing Assessment' }
+  ], []);
+
+  const availableGames = useMemo(() => [
+    { id: 'colorDots', title: 'Color Dots', route: '/app/games/color-dots' },
+    { id: 'colorShapes', title: 'Color Shapes', route: '/app/games/color-shapes' },
+    { id: 'gridMemory', title: 'Grid Memory', route: '/app/games/grid-memory' },
+    { id: 'symbolSearch', title: 'Symbol Search', route: '/app/games/symbol-search' }
+  ], []);
 
   // If not authenticated or not a member, return null (useEffect will handle redirect)
   if (!isAuthenticated || !isMember) {

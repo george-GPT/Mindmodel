@@ -55,237 +55,50 @@
 
 ## API Endpoints
 
-### Authentication
-- POST `/api/users/auth/login/` - User login
-- POST `/api/users/auth/logout/` - User logout
-- POST `/api/users/auth/token/` - Obtain JWT token
-- POST `/api/users/auth/token/refresh/` - Refresh JWT token
-- POST `/api/users/auth/social-auth/` - Social authentication
+# API Documentation
 
-### User Management
+## Authentication
+- POST `/api/auth/login/` - User login
+- POST `/api/auth/refresh/` - Refresh authentication token
+- POST `/api/auth/logout/` - User logout
+
+## User Management
 - POST `/api/users/member/register/` - User registration
 - GET `/api/users/member/me/` - Get user profile
 - PATCH `/api/users/member/profile/` - Update user profile
 
-### Surveys
-- GET `/api/surveys/` - List Surveys
-- POST `/api/surveys/` - Create Survey
-- GET `/api/surveys/<id>/` - Retrieve Survey
-- PUT `/api/surveys/<id>/` - Update Survey
-- DELETE `/api/surveys/<id>/` - Delete Survey
-- GET `/api/surveys/responses/` - List Survey Responses
-- POST `/api/surveys/responses/` - Submit Survey Response
+## Games
+- GET `/api/games/games/` - List all games
+- POST `/api/games/games/` - Create new game
+- GET `/api/games/games/{id}/` - Get specific game
+- PUT `/api/games/games/{id}/` - Update game
+- PATCH `/api/games/games/{id}/` - Partial update game
+- DELETE `/api/games/games/{id}/` - Delete game
 
-### Games
-- GET `/api/games/` - List Games
-- POST `/api/games/` - Create Game
-- GET `/api/games/<id>/` - Retrieve Game
-- PUT `/api/games/<id>/` - Update Game
-- DELETE `/api/games/<id>/` - Delete Game
-- GET `/api/games/scores/` - List Game Scores
-- POST `/api/games/scores/` - Submit Game Score
+### Game Configuration
+- GET `/api/games/config/` - List game configurations
+- GET `/api/games/config/{id}/` - Get specific game configuration
 
-### AI
-- POST `/api/ai/generate-analysis/` - Generate AI Analysis
+### Game Progress
+- GET `/api/games/progress/` - List user's game progress
+- POST `/api/games/progress/` - Create game progress
+- GET `/api/games/progress/{id}/` - Get specific progress
+- PUT `/api/games/progress/{id}/` - Update progress
+- PATCH `/api/games/progress/{id}/` - Partial update progress
+- DELETE `/api/games/progress/{id}/` - Delete progress
 
-## Frontend Setup
+### Game Scores
+- GET `/api/games/scores/` - List game scores
+- POST `/api/games/scores/` - Submit game score
 
-- **Navigate to Frontend Directory:**
+## Surveys
+- GET `/api/surveys/` - List all surveys
+- GET `/api/surveys/{id}/` - Get specific survey
+- POST `/api/surveys/{id}/submit/` - Submit survey response
 
-    ```bash
-    cd Frontend
-    ```
 
-- **Install Dependencies:**
-
-    ```bash
-    npm install
-    ```
-
-- **Run Frontend Development Server:**
-
-    ```bash
-    npm start
-    ```
-
-## Testing
-
-- **Run Backend Tests:**
-
-    ```bash
-    cd Backend
-    pytest
-    ```
-
-# Backend Testing
-
-## Running Tests
-
-To run all tests:
-
-```bash
-# Run all tests
+## Authentication
+All endpoints except login and register require JWT authentication:
+- Header: `Authorization: Bearer <token>`
+- Cookie: `sessionid`
 pytest
-
-# Run tests with detailed output
-pytest -v
-
-# Run tests in a specific file
-pytest path/to/test_file.py
-
-# Run a specific test function
-pytest path/to/test_file.py::test_function_name
-
-# Run tests matching a pattern
-pytest -k "test_pattern"
-```
-
-### Test Categories
-```bash
-# Run unit tests only
-pytest -m unit
-
-# Run integration tests only
-pytest -m integration
-
-# Run all tests except slow ones
-pytest -m "not slow"
-```
-
-### Coverage Reports
-```bash
-# Generate coverage report
-pytest --cov=apps
-
-# Generate detailed HTML coverage report
-pytest --cov=apps --cov-report=html
-
-# Generate coverage with missing lines
-pytest --cov=apps --cov-report=term-missing
-```
-
-### Debugging
-```bash
-# Show print statements in tests
-pytest -s
-
-# Stop on first failure
-pytest -x
-
-# Show local variables in failures
-pytest -l
-
-# Enter PDB on first failure
-pytest --pdb
-```
-
-### Parallel Testing
-```bash
-# Run tests in parallel
-pytest -n auto
-
-# Run tests in parallel with 4 processes
-pytest -n 4
-```
-
-### Additional Options
-```bash
-# Show slowest test durations
-pytest --durations=10
-
-# Rerun only failed tests
-pytest --lf
-
-# Clear test cache
-pytest --cache-clear
-```
-
-To install all testing dependencies:
-```bash
-pip install pytest pytest-django pytest-cov pytest-xdist
-```
-
-## Testing Commands
-
-### Basic Commands
-```bash
-# Run all tests
-pytest
-
-# Run tests with detailed output
-pytest -v
-
-# Run tests in a specific file
-pytest path/to/test_file.py
-
-# Run a specific test function
-pytest path/to/test_file.py::test_function_name
-
-# Run tests matching a pattern
-pytest -k "test_pattern"
-```
-
-### Test Categories
-```bash
-# Run unit tests only
-pytest -m unit
-
-# Run integration tests only
-pytest -m integration
-
-# Run all tests except slow ones
-pytest -m "not slow"
-```
-
-### Coverage Reports
-```bash
-# Generate coverage report
-pytest --cov=apps
-
-# Generate detailed HTML coverage report
-pytest --cov=apps --cov-report=html
-
-# Generate coverage with missing lines
-pytest --cov=apps --cov-report=term-missing
-```
-
-### Debugging
-```bash
-# Show print statements in tests
-pytest -s
-
-# Stop on first failure
-pytest -x
-
-# Show local variables in failures
-pytest -l
-
-# Enter PDB on first failure
-pytest --pdb
-```
-
-### Parallel Testing
-```bash
-# Run tests in parallel
-pytest -n auto
-
-# Run tests in parallel with 4 processes
-pytest -n 4
-```
-
-### Additional Options
-```bash
-# Show slowest test durations
-pytest --durations=10
-
-# Rerun only failed tests
-pytest --lf
-
-# Clear test cache
-pytest --cache-clear
-```
-
-To install all testing dependencies:
-```bash
-pip install pytest pytest-django pytest-cov pytest-xdist
-```

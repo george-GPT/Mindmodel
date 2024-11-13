@@ -1,0 +1,1475 @@
+openapi: 3.0.3
+info:
+  title: Mindmodel API
+  version: 1.0.0
+  description: Your API description
+  contact:
+    name: Support Team
+    email: support@example.com
+    url: https://example.com/support
+servers:
+  - url: https://api.example.com
+    description: Production server
+  - url: http://localhost:8000/api
+    description: Development server
+tags:
+  - name: games
+    description: Game-related endpoints
+  - name: surveys
+    description: Survey-related endpoints
+  - name: auth
+    description: Authentication endpoints
+  - name: ai
+    description: AI-related endpoints
+  - name: users
+    description: User-related endpoints
+paths:
+  /api/games/config:
+    get:
+      operationId: api_games_config_list
+      description: View game configurations.
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+        - games
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved game configurations
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/PaginatedList'
+  /api/games/config/{id}:
+    get:
+      operationId: api_games_config_retrieve
+      description: View game configurations.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this game config.
+          required: true
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+        - games
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved specific game configuration
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Game'
+  /api/games/{id}:
+    get:
+      operationId: api_games_games_retrieve
+      description: ViewSet for managing cognitive assessment games.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this game.
+          required: true
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+        - games
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved game details
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Game'
+    put:
+      operationId: api_games_games_update
+      description: ViewSet for managing cognitive assessment games.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this game.
+          required: true
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+        - games
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/GameRequest'
+          multipart/form-data:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/GameRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/GameRequest'
+        required: true
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully updated game
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/Game'
+    patch:
+      operationId: api_games_games_partial_update
+      description: ViewSet for managing cognitive assessment games.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this game.
+          required: true
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+        - games
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedGameRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedGameRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedGameRequest'
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully patched game
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+    delete:
+      operationId: api_games_games_destroy
+      description: ViewSet for managing cognitive assessment games.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this game.
+          required: true
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+        - games
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/games/{id}/record_score:
+    post:
+      operationId: api_games_games_record_score_create
+      description: Save a user's game score and performance data
+      summary: Record game score
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: A unique integer value identifying this game.
+          required: true
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+        - games
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/GameScoreRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/GameScoreRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/GameScoreRequest'
+        required: true
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '201':
+          description: Successfully recorded game score
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GameScore'
+  /api/games/progress:
+    get:
+      operationId: api_games_progress_list
+      description: Handle game progress operations.
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+        - games
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved game progress list
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        allOf:
+                          - $ref: '#/components/schemas/PaginatedList'
+                          - type: object
+                            properties:
+                              items:
+                                type: array
+                                items:
+                                  $ref: '#/components/schemas/GameProgress'
+  /api/games/progress/{id}:
+    get:
+      operationId: api_games_progress_retrieve
+      description: Handle game progress operations.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+        - games
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved game progress
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GameProgress'
+    put:
+      operationId: api_games_progress_update
+      description: Handle game progress operations.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+      - games
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/GameProgressRequest'
+      responses:
+        '200':
+          description: Successfully updated game progress
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GameProgress'
+    patch:
+      operationId: api_games_progress_partial_update
+      description: Handle game progress operations.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+      - games
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/GameProgressRequest'
+          multipart/form-data:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/GameProgressRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/GameProgressRequest'
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully patched game progress
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/GameProgress'
+    delete:
+      operationId: api_games_progress_destroy
+      description: Handle game progress operations.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      tags:
+      - games
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/surveys:
+    get:
+      operationId: api_surveys_list
+      description: List all surveys.
+      parameters:
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+      - surveys
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: 'Successfully retrieved surveys list'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedList'
+  /api/surveys/{id}:
+    get:
+      operationId: api_surveys_retrieve
+      description: Retrieve a specific survey.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+      - surveys
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: 'Successfully retrieved survey details'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Survey'
+  /api/surveys/{id}/submit:
+    post:
+      operationId: api_surveys_submit_create
+      description: Submit a survey response.
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+        - $ref: '#/components/parameters/PageNumber'
+        - $ref: '#/components/parameters/PageSize'
+      tags:
+      - surveys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/SurveyResponseRequest'
+      responses:
+        '201':
+          description: Successfully submitted survey response
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/SurveyResponse'
+  /api/users/auth/2fa:
+    post:
+      operationId: api_users_auth_2fa_create
+      description: Enable/disable two-factor authentication
+      tags:
+      - auth
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully toggled 2FA status
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          enabled:
+                            type: boolean
+  /api/users/auth/2fa/disable:
+    post:
+      operationId: api_users_auth_2fa_disable_create
+      description: Disable two-factor authentication for the authenticated user
+      summary: Disable two-factor authentication
+      tags:
+      - auth
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully disabled two-factor authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/auth/2fa/enable:
+    post:
+      operationId: api_users_auth_2fa_enable_create
+      description: Enable two-factor authentication for the authenticated user
+      summary: Enable two-factor authentication
+      tags:
+      - auth
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully enabled two-factor authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/auth/google:
+    post:
+      operationId: api_users_auth_auth_google_create
+      description: Authenticate user with Google OAuth credential
+      summary: Google OAuth authentication
+      tags:
+      - auth
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully authenticated with Google
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /api/users/auth/login:
+    post:
+      operationId: api_users_auth_auth_login_create
+      description: Authenticate user and return JWT tokens
+      summary: User login
+      tags:
+        - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailTokenObtainPairRequest'
+      responses:
+        '200':
+          description: Successfully authenticated user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+  /api/users/auth/logout:
+    post:
+      operationId: api_users_auth_auth_logout_create
+      description: Logout the authenticated user
+      summary: Logout user
+      tags:
+      - auth
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully logged out user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/auth/refresh:
+    post:
+      operationId: api_users_auth_auth_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          description: Successfully refreshed access token
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/TokenRefresh'
+  /api/users/auth/register:
+    post:
+      operationId: api_users_auth_auth_register_create
+      description: Register a new user account
+      summary: User registration
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                username:
+                  type: string
+                  minLength: 3
+                password:
+                  type: string
+                  minLength: 8
+                  format: password
+              required:
+                - email
+                - username
+                - password
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '201':
+          description: Successfully registered new user account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/auth/change-email:
+    post:
+      operationId: api_users_auth_change_email_create
+      description: Change the user's email
+      summary: Change user email
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  minLength: 8
+                  format: password
+              required:
+                - new_email
+                - password
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully changed user email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/auth/change-password:
+    post:
+      operationId: api_users_auth_change_password_create
+      description: Change the user's password
+      summary: Change user password
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                old_password:
+                  type: string
+                  minLength: 8
+                  format: password
+                new_password:
+                  type: string
+                  minLength: 8
+                  format: password
+              required:
+                - old_password
+                - new_password
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully changed user password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/auth/me:
+    get:
+      operationId: api_users_auth_me_retrieve
+      description: Handle user profile operations
+      tags:
+      - users
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved authenticated user profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+  /api/users/auth/profile:
+    get:
+      operationId: api_users_auth_profile_retrieve
+      description: Retrieve the authenticated user's profile
+      summary: Get user profile
+      tags:
+      - auth
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved user profile
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/UserProfile'
+    patch:
+      operationId: api_users_auth_profile_partial_update
+      description: Update the authenticated user's profile
+      summary: Update user profile
+      tags:
+      - auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                email:
+                  type: string
+                  format: email
+                first_name:
+                  type: string
+                last_name:
+                  type: string
+              required:
+                - username
+                - email
+                - first_name
+                - last_name
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully updated user profile
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/UserProfile'
+  /api/users/auth/resend-verification:
+    post:
+      operationId: api_users_auth_resend_verification_create
+      description: Resend email verification token to user's email address
+      tags:
+      - auth
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully resent verification email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/auth/verify-email:
+    post:
+      operationId: api_users_auth_verify_email_create
+      description: Verify user email address with verification token
+      tags:
+      - auth
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully verified email address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/member/register:
+    post:
+      operationId: api_users_member_register_create
+      description: Upgrade regular user account to member status
+      tags:
+        - users
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully registered/upgraded member account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+  /api/users/member/me:
+    get:
+      operationId: api_users_member_me
+      description: Retrieve current member profile details
+      tags:
+        - users
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully retrieved current user profile
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/UserProfile'
+    patch:
+      operationId: api_users_member_profile_update
+      description: Update current member profile details
+      tags:
+        - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/SuccessResponse'
+                - type: object
+                  properties:
+                    data:
+                      $ref: '#/components/schemas/UserProfileRequest'
+        required: true
+      security:
+        - jwtAuth: []
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Successfully updated member profile
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/components/schemas/UserProfile'
+
+components:
+  schemas:
+    BaseResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: true
+        message:
+          type: string
+        data:
+          type: object
+      required:
+        - success
+
+    PaginatedResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                count:
+                  type: integer
+                next:
+                  type: string
+                  format: uri
+                  nullable: true
+                previous:
+                  type: string
+                  format: uri
+                  nullable: true
+                results:
+                  type: array
+                  items:
+                    type: object
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          default: false
+        message:
+          type: string
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+                - invalid_credentials
+                - token_invalid
+                - token_expired
+                - validation_error
+                - email_not_verified
+                - not_authenticated
+                - permission_denied
+                - rate_limit_exceeded
+            details:
+              type: object
+      required:
+        - success
+        - message
+
+    Game:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        config:
+          type: object
+          additionalProperties: true
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - title
+
+    GameRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        config:
+          type: object
+          additionalProperties: true
+        is_active:
+          type: boolean
+      required:
+        - title
+
+    GameProgress:
+      type: object
+      description: Serializer for GameProgress model to track user progress
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        game_id:
+          type: string
+          maxLength: 100
+        current_level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        current_score:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        time_spent:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          description: Time spent in seconds
+        last_played:
+          type: string
+          format: date-time
+          readOnly: true
+        completed:
+          type: boolean
+      required:
+        - game_id
+        - current_level
+        - current_score
+        - time_spent
+        - completed
+
+    GameProgressRequest:
+      type: object
+      properties:
+        game_id:
+          type: string
+          maxLength: 100
+        current_level:
+          type: integer
+          minimum: 0
+        current_score:
+          type: integer
+          minimum: 0
+        time_spent:
+          type: integer
+          minimum: 0
+          description: Time spent in seconds
+        completed:
+          type: boolean
+      required:
+        - game_id
+        - current_level
+        - current_score
+        - time_spent
+        - completed
+
+    GameScore:
+      type: object
+      description: Serializer for GameScore model
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          readOnly: true
+        game:
+          type: integer
+        score:
+          type: integer
+        completion_time:
+          type: string
+          format: duration
+          nullable: true
+        metadata:
+          $ref: '#/components/schemas/MetadataObject'
+        completed:
+          type: boolean
+        played_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+        - game
+        - score
+    GameScoreRequest:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/MetadataObject'
+        game:
+          type: integer
+        score:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        completion_time:
+          type: string
+          format: duration
+          nullable: true
+          description: Duration in ISO 8601 format (e.g. PT1H30M)
+        completed:
+          type: boolean
+      required:
+        - game
+        - score
+    PatchedGameProgressRequest:
+      type: object
+      description: Serializer for GameProgress model to track user progress.
+      properties:
+        user:
+          type: integer
+        game_id:
+          type: string
+          minLength: 1
+          maxLength: 100
+        current_level:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        current_score:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        time_spent:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        completed:
+          type: boolean
+      required:
+      - game_id
+      - user
+      - current_level
+      - current_score
+      - time_spent
+    PatchedGameRequest:
+      type: object
+      description: Serializer for Game model with complete game information.
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 255
+        description:
+          type: string
+        config: {}
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+    Survey:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        questions: {}
+        is_active:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - questions
+      - title
+      - updated_at
+    SurveyResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        survey:
+          type: integer
+        responses: {}
+        completed:
+          type: boolean
+        submitted_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        metadata:
+          $ref: '#/components/schemas/MetadataObject'
+    SurveyResponseRequest:
+      type: object
+      properties:
+        survey:
+          type: integer
+        responses: {}
+        completed:
+          type: boolean
+      required:
+      - responses
+      - survey
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+        refresh:
+          type: string
+      required:
+      - access
+      - refresh
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          minLength: 1
+      required:
+      - refresh
+    UserProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          minLength: 1
+          maxLength: 150
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+          maxLength: 150
+          nullable: true
+        last_name:
+          type: string
+          maxLength: 150
+          nullable: true
+        date_joined:
+          type: string
+          format: date-time
+          readOnly: true
+        is_active:
+          type: boolean
+          readOnly: true
+      required:
+        - id
+        - username
+        - email
+
+    UserProfileRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 150
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+          maxLength: 150
+          nullable: true
+        last_name:
+          type: string
+          maxLength: 150
+          nullable: true
+      required:
+        - username
+        - email
+    Pagination:
+      type: object
+      required:
+        - count
+        - total_pages
+      properties:
+        count:
+          type: integer
+        total_pages:
+          type: integer
+        next:
+          type: string
+          nullable: true
+          format: uri
+        previous:
+          type: string
+          nullable: true
+          format: uri
+
+    PaginatedList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+      example: {
+        "items": [],
+        "pagination": {
+          "count": 0,
+          "total_pages": 0,
+          "next": null,
+          "previous": null
+        }
+      }
+
+    MetadataObject:
+      type: object
+      additionalProperties: true
+      nullable: true
+    TokenResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                access:
+                  type: string
+                refresh:
+                  type: string
+                user:
+                  $ref: '#/components/schemas/UserProfile'
+              required:
+                - access
+                - refresh
+
+    AuthResponse:
+      allOf:
+        - $ref: '#/components/schemas/SuccessResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                access:
+                  type: string
+                refresh:
+                  type: string
+                user:
+                  $ref: '#/components/schemas/UserProfile'
+              required:
+                - access
+                - refresh
+
+    EmailTokenObtainPairRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          format: password
+      required:
+        - email
+        - password
+
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token authentication. Format: Bearer <token>
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+      description: Session cookie authentication
+
+  parameters:
+    PageNumber:
+      name: page
+      in: query
+      required: false
+      description: Page number within the paginated result set.
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+        example: 1
+    
+    PageSize:
+      name: page_size
+      in: query
+      required: false
+      description: Number of results to return per page.
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+        example: 10

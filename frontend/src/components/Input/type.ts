@@ -1,9 +1,31 @@
 // src/components/common/Input/Input.types.ts
-import { TextFieldProps as MuiTextFieldProps } from '@mui/material';
+import { TextFieldProps } from '@mui/material';
+import { components } from '../../types/api';
 
-export type InputVariant = "outlined" | "filled" | "standard"; // Add any other variants you want to support
+// Use consistent casing with our API types
+export type InputVariant = "outlined" | "filled" | "standard";
 
-export interface InputProps extends Omit<MuiTextFieldProps, "variant"> {
-  variant?: InputVariant; // Custom variant prop
-  isLoading?: boolean; // Example of a custom prop, if you want to include it in the future
+// Extend from API types where possible
+export interface InputProps extends Omit<TextFieldProps, "variant"> {
+    variant?: InputVariant;
+    isLoading?: boolean;
+    // Add validation from our API validation rules
+    validation?: {
+        pattern?: RegExp;
+        minLength?: number;
+        maxLength?: number;
+        required?: boolean;
+    };
+    // Add error handling consistent with our API error structure
+    error?: {
+        message?: string;
+        code?: string;
+    };
 }
+
+// Add type guards for validation
+export const isPasswordInput = (name: string): boolean => 
+    name === 'password' || name === 'newPassword' || name === 'oldPassword';
+
+export const isEmailInput = (name: string): boolean => 
+    name === 'email' || name === 'newEmail';

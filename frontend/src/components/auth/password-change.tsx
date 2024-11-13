@@ -12,7 +12,11 @@ import { AuthService } from '../../services';
 import Button from '../button/button';
 import Input from '../input';
 import { validatePassword, validatePasswordMatch } from '../../utils/validation';
-import { setError, clearError } from '../../store/auth-slice';
+import { setError, clearError } from '../../store/authSlice';
+import { 
+  PasswordChangeRequest, 
+  ErrorResponse 
+} from '../../types'; // Updated imports
 
 const PasswordChange = () => {
     const dispatch = useDispatch<AppDispatch>();

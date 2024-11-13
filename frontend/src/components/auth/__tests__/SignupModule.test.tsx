@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import SignupModule from '../signup-module';
 import { AuthService } from '../../../services';
-import authReducer from '../../../store/auth-slice';
+import authReducer from '../../../store/authSlice';
 
 jest.mock('../../../services/auth/authService');
 

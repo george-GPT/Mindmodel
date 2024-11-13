@@ -10,8 +10,8 @@ import { StylesManager } from 'survey-core';
 import axios from 'axios';
 
 import { RootState } from '../../store/store';
-import { submitSurveyResponse } from '../../store/survey-slice';
-import { completeSurvey } from '../../store/progress-slice';
+import { submitSurveyResponse } from '../../store/surveySlice';
+import { completeSurvey } from '../../store/progressSlice';
 import { SurveyJSON } from '../../types/survey';
 import { useSurveyAnalytics } from './survey-hooks/use-survey-analytics';
 import { useSurveyTheme } from './survey-hooks/use-survey-theme';

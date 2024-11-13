@@ -1,7 +1,7 @@
 // src/routes/Routes.tsx
 
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { HomePage } from '../components/pages/home';
 import AboutUsPage from '../components/pages/about-us';
 import OurApproachPage from '../components/pages/our-approach';
@@ -15,7 +15,7 @@ import Dashboard from '../components/dashboard/dashboard';
 import AccountPage from '../components/pages/account';
 import SecurityPage from '../components/pages/account/SecurityPage';
 import FinalResults from '../components/dashboard/final-ai-results/final-results';
-import PrivateRoute from './private-routes'; // Update the import path
+import PrivateRoute from './private-routes';
 import { NoPageFound } from '../components/pages/no-page-found';
 
 // Game imports
@@ -59,45 +59,49 @@ const AppRoutes = () => {
         }
       />
 
-      {/* Member Only Routes */}
+      {/* Member Area */}
+      <Route
+        path="/app"
+        element={
+          <PrivateRoute requiresMember={true}>
+            <Routes>
+              {/* Dashboard */}
+              <Route index element={<Dashboard />} />
+              
+              {/* Games Section */}
+              <Route path="games">
+                <Route path="color-dots" element={<ColorDotsPage />} />
+                <Route path="color-shapes" element={<ColorShapesPage />} />
+                <Route path="grid-memory" element={<GridMemoryPage />} />
+                <Route path="symbol-search" element={<SymbolSearchPage />} />
+              </Route>
+
+              {/* Surveys Section */}
+              <Route path="surveys/:surveyId" element={<GenericSurvey surveyId="AttentionSurvey" />} />
+
+              {/* Results */}
+              <Route path="final-results" element={<FinalResults />} />
+            </Routes>
+          </PrivateRoute>
+        }
+      />
+
+      {/* Legacy Routes - Redirect to new structure */}
       <Route
         path="/dashboard"
-        element={
-          <PrivateRoute requiresMember={true}>
-            <Dashboard />
-          </PrivateRoute>
-        }
+        element={<Navigate to="/app" replace />}
       />
-
-      {/* Game Routes */}
       <Route
-        path="/games/color-dots"
-        element={
-          <PrivateRoute requiresMember={true}>
-            <ColorDotsPage />
-          </PrivateRoute>
-        }
+        path="/games/*"
+        element={<Navigate to="/app/games" replace />}
       />
-      {/* ... other game routes ... */}
-
-      {/* Survey Routes */}
       <Route
-        path="/surveys/:surveyId"
-        element={
-          <PrivateRoute requiresMember={true}>
-            <GenericSurvey surveyId="AttentionSurvey" />
-          </PrivateRoute>
-        }
+        path="/surveys/*"
+        element={<Navigate to="/app/surveys" replace />}
       />
-
-      {/* Results Route */}
       <Route
         path="/final-results"
-        element={
-          <PrivateRoute requiresMember={true}>
-            <FinalResults />
-          </PrivateRoute>
-        }
+        element={<Navigate to="/app/final-results" replace />}
       />
 
       {/* 404 Route */}

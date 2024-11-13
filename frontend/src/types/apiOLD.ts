@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/api/games/config": {
+    "/api/games/config/": {
         parameters: {
             query?: never;
             header?: never;
@@ -21,7 +21,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/games/config/{id}": {
+    "/api/games/config/{id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -38,7 +38,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/games/{id}": {
+    "/api/games/games/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List all available games
+         * @description Returns a list of all active cognitive assessment games
+         */
+        get: operations["api_games_games_list"];
+        put?: never;
+        /** @description ViewSet for managing cognitive assessment games. */
+        post: operations["api_games_games_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/games/games/{id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -58,7 +79,7 @@ export interface paths {
         patch: operations["api_games_games_partial_update"];
         trace?: never;
     };
-    "/api/games/{id}/record_score": {
+    "/api/games/games/{id}/record_score/": {
         parameters: {
             query?: never;
             header?: never;
@@ -78,7 +99,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/games/progress": {
+    "/api/games/progress/": {
         parameters: {
             query?: never;
             header?: never;
@@ -88,14 +109,15 @@ export interface paths {
         /** @description Handle game progress operations. */
         get: operations["api_games_progress_list"];
         put?: never;
-        post?: never;
+        /** @description Handle game progress operations. */
+        post: operations["api_games_progress_create"];
         delete?: never;
         options?: never;
         head?: never;
         patch?: never;
         trace?: never;
     };
-    "/api/games/progress/{id}": {
+    "/api/games/progress/{id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -115,7 +137,7 @@ export interface paths {
         patch: operations["api_games_progress_partial_update"];
         trace?: never;
     };
-    "/api/surveys": {
+    "/api/surveys/": {
         parameters: {
             query?: never;
             header?: never;
@@ -132,7 +154,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/surveys/{id}": {
+    "/api/surveys/{id}/": {
         parameters: {
             query?: never;
             header?: never;
@@ -149,7 +171,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/surveys/{id}/submit": {
+    "/api/surveys/{id}/submit/": {
         parameters: {
             query?: never;
             header?: never;
@@ -166,24 +188,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/2fa": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Enable/disable two-factor authentication */
-        post: operations["api_users_auth_2fa_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/users/auth/2fa/disable": {
+    "/api/users/auth/2fa/disable/": {
         parameters: {
             query?: never;
             header?: never;
@@ -203,7 +208,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/2fa/enable": {
+    "/api/users/auth/2fa/enable/": {
         parameters: {
             query?: never;
             header?: never;
@@ -223,7 +228,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/google": {
+    "/api/users/auth/auth/google/": {
         parameters: {
             query?: never;
             header?: never;
@@ -243,7 +248,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/login": {
+    "/api/users/auth/auth/login/": {
         parameters: {
             query?: never;
             header?: never;
@@ -263,7 +268,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/logout": {
+    "/api/users/auth/auth/logout/": {
         parameters: {
             query?: never;
             header?: never;
@@ -283,7 +288,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/refresh": {
+    "/api/users/auth/auth/refresh/": {
         parameters: {
             query?: never;
             header?: never;
@@ -301,7 +306,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/register": {
+    "/api/users/auth/auth/register/": {
         parameters: {
             query?: never;
             header?: never;
@@ -321,7 +326,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/change-email": {
+    "/api/users/auth/change-email/": {
         parameters: {
             query?: never;
             header?: never;
@@ -341,7 +346,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/change-password": {
+    "/api/users/auth/change-password/": {
         parameters: {
             query?: never;
             header?: never;
@@ -361,7 +366,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/me": {
+    "/api/users/auth/me/": {
         parameters: {
             query?: never;
             header?: never;
@@ -378,7 +383,42 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/profile": {
+    "/api/users/auth/member/profile/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Handle member profile operations */
+        get: operations["api_users_auth_member_profile_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** @description Handle member profile operations */
+        patch: operations["api_users_auth_member_profile_partial_update"];
+        trace?: never;
+    };
+    "/api/users/auth/member/register/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Handle member registration/upgrade */
+        post: operations["api_users_auth_member_register_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/auth/profile/": {
         parameters: {
             query?: never;
             header?: never;
@@ -402,7 +442,7 @@ export interface paths {
         patch: operations["api_users_auth_profile_partial_update"];
         trace?: never;
     };
-    "/api/users/auth/resend-verification": {
+    "/api/users/auth/resend-verification/": {
         parameters: {
             query?: never;
             header?: never;
@@ -411,7 +451,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Resend email verification token to user's email address */
+        /** @description Resend verification email */
         post: operations["api_users_auth_resend_verification_create"];
         delete?: never;
         options?: never;
@@ -419,7 +459,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/auth/verify-email": {
+    "/api/users/auth/verify-email/": {
         parameters: {
             query?: never;
             header?: never;
@@ -428,7 +468,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** @description Verify user email address with verification token */
+        /** @description Handle email verification */
         post: operations["api_users_auth_verify_email_create"];
         delete?: never;
         options?: never;
@@ -436,148 +476,164 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/users/member/register": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** @description Upgrade regular user account to member status */
-        post: operations["api_users_member_register_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/users/member/me": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Retrieve current member profile details */
-        get: operations["api_users_member_me"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        /** @description Update current member profile details */
-        patch: operations["api_users_member_profile_update"];
-        trace?: never;
-    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        BaseResponse: {
-            success: boolean;
-            message?: string;
+        /**
+         * @description * `easy` - Easy
+         *     * `medium` - Medium
+         *     * `hard` - Hard
+         * @enum {string}
+         */
+        DifficultyEnum: "easy" | "medium" | "hard";
+        EmailTokenObtainPairRequest: {
+            email: string;
+            password: string;
         };
-        SuccessResponse: {
-            /** @default true */
-            success: boolean;
-            message?: string;
-            data?: Record<string, never>;
-        };
-        PaginatedResponse: components["schemas"]["SuccessResponse"] & {
-            data?: {
-                count?: number;
-                /** Format: uri */
-                next?: string | null;
-                /** Format: uri */
-                previous?: string | null;
-                results?: Record<string, never>[];
-            };
-        };
-        ErrorResponse: {
-            /** @default false */
-            success: boolean;
-            message: string;
-            error?: {
-                /** @enum {string} */
-                code?: "invalid_credentials" | "token_invalid" | "token_expired" | "validation_error" | "email_not_verified" | "not_authenticated" | "permission_denied" | "rate_limit_exceeded";
-                details?: Record<string, never>;
-            };
-        };
+        /** @description Serializer for Game model with complete game information. */
         Game: {
-            readonly id?: number;
+            readonly id: number;
             title: string;
             description?: string;
-            config?: {
-                [key: string]: unknown;
-            };
+            config?: unknown;
             is_active?: boolean;
             /** Format: date-time */
-            readonly created_at?: string;
+            created_at?: string;
             /** Format: date-time */
-            readonly updated_at?: string;
+            readonly updated_at: string;
         };
-        GameRequest: {
+        /** @description Serializer for GameConfig model to handle game settings. */
+        GameConfig: {
+            readonly id: number;
+            game_id: string;
             title: string;
-            description?: string;
-            config?: {
-                [key: string]: unknown;
-            };
-            is_active?: boolean;
+            description: string;
+            instructions: string;
+            min_score?: number;
+            max_score: number;
+            time_limit?: number | null;
+            difficulty: components["schemas"]["DifficultyEnum"];
+            category: string;
+            required_for_completion?: boolean;
         };
-        /** @description Serializer for GameProgress model to track user progress */
+        /** @description Serializer for GameProgress model to track user progress. */
         GameProgress: {
-            readonly id?: number;
-            readonly user?: number;
+            readonly id: number;
+            user: number;
             game_id: string;
-            current_level: number;
-            current_score: number;
-            /** @description Time spent in seconds */
-            time_spent: number;
+            current_level?: number;
+            current_score?: number;
+            time_spent?: number;
             /** Format: date-time */
-            readonly last_played?: string;
-            completed: boolean;
-        };
-        GameProgressRequest: {
-            game_id: string;
-            current_level: number;
-            current_score: number;
-            /** @description Time spent in seconds */
-            time_spent: number;
-            completed: boolean;
-        };
-        /** @description Serializer for GameScore model */
-        GameScore: {
-            readonly id?: number;
-            readonly user?: number;
-            game: number;
-            score: number;
-            /** Format: duration */
-            completion_time?: string | null;
-            metadata?: components["schemas"]["MetadataObject"];
-            completed?: boolean;
-            /** Format: date-time */
-            readonly played_at?: string;
-        };
-        GameScoreRequest: {
-            metadata?: components["schemas"]["MetadataObject"];
-            game: number;
-            score: number;
-            /**
-             * Format: duration
-             * @description Duration in ISO 8601 format (e.g. PT1H30M)
-             */
-            completion_time?: string | null;
+            readonly last_played: string;
             completed?: boolean;
         };
         /** @description Serializer for GameProgress model to track user progress. */
-        PatchedGameProgressRequest: {
+        GameProgressRequest: {
             user: number;
             game_id: string;
-            current_level: number;
-            current_score: number;
-            time_spent: number;
+            current_level?: number;
+            current_score?: number;
+            time_spent?: number;
+            completed?: boolean;
+        };
+        /** @description Serializer for Game model with complete game information. */
+        GameRequest: {
+            title: string;
+            description?: string;
+            config?: unknown;
+            is_active?: boolean;
+            /** Format: date-time */
+            created_at?: string;
+        };
+        /** @description Serializer for GameScore model to handle game results. */
+        GameScore: {
+            readonly id: number;
+            readonly user: number;
+            game: number;
+            score: number;
+            completion_time?: string | null;
+            metadata?: unknown;
+            completed?: boolean;
+            /** Format: date-time */
+            readonly played_at: string;
+        };
+        /** @description Serializer for GameScore model to handle game results. */
+        GameScoreRequest: {
+            game: number;
+            score: number;
+            completion_time?: string | null;
+            metadata?: unknown;
+            completed?: boolean;
+        };
+        PaginatedGameConfigList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["GameConfig"][];
+        };
+        PaginatedGameList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Game"][];
+        };
+        PaginatedGameProgressList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["GameProgress"][];
+        };
+        PaginatedSurveyList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["Survey"][];
+        };
+        /** @description Serializer for GameProgress model to track user progress. */
+        PatchedGameProgressRequest: {
+            user?: number;
+            game_id?: string;
+            current_level?: number;
+            current_score?: number;
+            time_spent?: number;
             completed?: boolean;
         };
         /** @description Serializer for Game model with complete game information. */
@@ -601,15 +657,14 @@ export interface components {
             readonly updated_at: string;
         };
         SurveyResponse: {
-            readonly id?: number;
-            survey?: number;
-            responses?: unknown;
+            readonly id: number;
+            survey: number;
+            responses: unknown;
             completed?: boolean;
             /** Format: date-time */
-            readonly submitted_at?: string;
+            readonly submitted_at: string;
             /** Format: date-time */
-            readonly updated_at?: string;
-            metadata?: components["schemas"]["MetadataObject"];
+            readonly updated_at: string;
         };
         SurveyResponseRequest: {
             survey: number;
@@ -623,78 +678,9 @@ export interface components {
         TokenRefreshRequest: {
             refresh: string;
         };
-        UserProfile: {
-            readonly id: number;
-            username: string;
-            /** Format: email */
-            email: string;
-            first_name?: string | null;
-            last_name?: string | null;
-            /** Format: date-time */
-            readonly date_joined?: string;
-            readonly is_active?: boolean;
-        };
-        UserProfileRequest: {
-            username: string;
-            /** Format: email */
-            email: string;
-            first_name?: string | null;
-            last_name?: string | null;
-        };
-        Pagination: {
-            count: number;
-            total_pages: number;
-            /** Format: uri */
-            next?: string | null;
-            /** Format: uri */
-            previous?: string | null;
-        };
-        /** @example {
-         *       "items": [],
-         *       "pagination": {
-         *         "count": 0,
-         *         "total_pages": 0,
-         *         "next": null,
-         *         "previous": null
-         *       }
-         *     } */
-        PaginatedList: {
-            items: {
-                [key: string]: unknown;
-            }[];
-            pagination: components["schemas"]["Pagination"];
-        };
-        MetadataObject: {
-            [key: string]: unknown;
-        } | null;
-        TokenResponse: components["schemas"]["SuccessResponse"] & {
-            data?: {
-                access: string;
-                refresh: string;
-                user: components["schemas"]["UserProfile"];
-            };
-        };
-        AuthResponse: components["schemas"]["SuccessResponse"] & {
-            data?: {
-                access: string;
-                refresh: string;
-                user?: components["schemas"]["UserProfile"];
-            };
-        };
-        EmailTokenObtainPairRequest: {
-            /** Format: email */
-            email: string;
-            /** Format: password */
-            password: string;
-        };
     };
     responses: never;
-    parameters: {
-        /** @description Page number within the paginated result set. */
-        PageNumber: number;
-        /** @description Number of results to return per page. */
-        PageSize: number;
-    };
+    parameters: never;
     requestBodies: never;
     headers: never;
     pathItems: never;
@@ -704,10 +690,8 @@ export interface operations {
     api_games_config_list: {
         parameters: {
             query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
+                /** @description A page number within the paginated result set. */
+                page?: number;
             };
             header?: never;
             path?: never;
@@ -715,27 +699,19 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved game configurations */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["PaginatedList"];
-                    };
+                    "application/json": components["schemas"]["PaginatedGameConfigList"];
                 };
             };
         };
     };
     api_games_config_retrieve: {
         parameters: {
-            query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
-            };
+            query?: never;
             header?: never;
             path: {
                 /** @description A unique integer value identifying this game config. */
@@ -745,27 +721,68 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved specific game configuration */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["Game"];
-                    };
+                    "application/json": components["schemas"]["GameConfig"];
+                };
+            };
+        };
+    };
+    api_games_games_list: {
+        parameters: {
+            query?: {
+                /** @description Filter games by category */
+                category?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedGameList"];
+                };
+            };
+        };
+    };
+    api_games_games_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GameRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["GameRequest"];
+                "multipart/form-data": components["schemas"]["GameRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Game"];
                 };
             };
         };
     };
     api_games_games_retrieve: {
         parameters: {
-            query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
-            };
+            query?: never;
             header?: never;
             path: {
                 /** @description A unique integer value identifying this game. */
@@ -775,27 +792,19 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved game details */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["Game"];
-                    };
+                    "application/json": components["schemas"]["Game"];
                 };
             };
         };
     };
     api_games_games_update: {
         parameters: {
-            query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
-            };
+            query?: never;
             header?: never;
             path: {
                 /** @description A unique integer value identifying this game. */
@@ -805,39 +814,25 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["GameRequest"];
-                };
-                "multipart/form-data": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["GameRequest"];
-                };
-                "application/x-www-form-urlencoded": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["GameRequest"];
-                };
+                "application/json": components["schemas"]["GameRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["GameRequest"];
+                "multipart/form-data": components["schemas"]["GameRequest"];
             };
         };
         responses: {
-            /** @description Successfully updated game */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["Game"];
-                    };
+                    "application/json": components["schemas"]["Game"];
                 };
             };
         };
     };
     api_games_games_destroy: {
         parameters: {
-            query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
-            };
+            query?: never;
             header?: never;
             path: {
                 /** @description A unique integer value identifying this game. */
@@ -858,12 +853,7 @@ export interface operations {
     };
     api_games_games_partial_update: {
         parameters: {
-            query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
-            };
+            query?: never;
             header?: never;
             path: {
                 /** @description A unique integer value identifying this game. */
@@ -874,12 +864,11 @@ export interface operations {
         requestBody?: {
             content: {
                 "application/json": components["schemas"]["PatchedGameRequest"];
-                "multipart/form-data": components["schemas"]["PatchedGameRequest"];
                 "application/x-www-form-urlencoded": components["schemas"]["PatchedGameRequest"];
+                "multipart/form-data": components["schemas"]["PatchedGameRequest"];
             };
         };
         responses: {
-            /** @description Successfully patched game */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -892,12 +881,7 @@ export interface operations {
     };
     api_games_games_record_score_create: {
         parameters: {
-            query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
-            };
+            query?: never;
             header?: never;
             path: {
                 /** @description A unique integer value identifying this game. */
@@ -907,23 +891,18 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["GameScoreRequest"];
-                };
-                "multipart/form-data": components["schemas"]["GameScoreRequest"];
+                "application/json": components["schemas"]["GameScoreRequest"];
                 "application/x-www-form-urlencoded": components["schemas"]["GameScoreRequest"];
+                "multipart/form-data": components["schemas"]["GameScoreRequest"];
             };
         };
         responses: {
-            /** @description Successfully recorded game score */
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["GameScore"];
-                    };
+                    "application/json": components["schemas"]["GameScore"];
                 };
             };
         };
@@ -931,10 +910,8 @@ export interface operations {
     api_games_progress_list: {
         parameters: {
             query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
+                /** @description A page number within the paginated result set. */
+                page?: number;
             };
             header?: never;
             path?: never;
@@ -942,17 +919,37 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved game progress list */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["PaginatedList"] & {
-                            items?: components["schemas"]["GameProgress"][];
-                        };
-                    };
+                    "application/json": components["schemas"]["PaginatedGameProgressList"];
+                };
+            };
+        };
+    };
+    api_games_progress_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GameProgressRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["GameProgressRequest"];
+                "multipart/form-data": components["schemas"]["GameProgressRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GameProgress"];
                 };
             };
         };
@@ -962,21 +959,19 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                /** @description A unique integer value identifying this game progress. */
+                id: number;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved game progress */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["GameProgress"];
-                    };
+                    "application/json": components["schemas"]["GameProgress"];
                 };
             };
         };
@@ -986,27 +981,25 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                /** @description A unique integer value identifying this game progress. */
+                id: number;
             };
             cookie?: never;
         };
-        requestBody?: {
+        requestBody: {
             content: {
-                "application/json": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["GameProgressRequest"];
-                };
+                "application/json": components["schemas"]["GameProgressRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["GameProgressRequest"];
+                "multipart/form-data": components["schemas"]["GameProgressRequest"];
             };
         };
         responses: {
-            /** @description Successfully updated game progress */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["GameProgress"];
-                    };
+                    "application/json": components["schemas"]["GameProgress"];
                 };
             };
         };
@@ -1016,7 +1009,8 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                /** @description A unique integer value identifying this game progress. */
+                id: number;
             };
             cookie?: never;
         };
@@ -1036,33 +1030,25 @@ export interface operations {
             query?: never;
             header?: never;
             path: {
-                id: string;
+                /** @description A unique integer value identifying this game progress. */
+                id: number;
             };
             cookie?: never;
         };
         requestBody?: {
             content: {
-                "application/json": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["GameProgressRequest"];
-                };
-                "multipart/form-data": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["GameProgressRequest"];
-                };
-                "application/x-www-form-urlencoded": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["GameProgressRequest"];
-                };
+                "application/json": components["schemas"]["PatchedGameProgressRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedGameProgressRequest"];
+                "multipart/form-data": components["schemas"]["PatchedGameProgressRequest"];
             };
         };
         responses: {
-            /** @description Successfully patched game progress */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["GameProgress"];
-                    };
+                    "application/json": components["schemas"]["GameProgress"];
                 };
             };
         };
@@ -1070,10 +1056,8 @@ export interface operations {
     api_surveys_list: {
         parameters: {
             query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
+                /** @description A page number within the paginated result set. */
+                page?: number;
             };
             header?: never;
             path?: never;
@@ -1081,25 +1065,19 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved surveys list */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["PaginatedList"];
+                    "application/json": components["schemas"]["PaginatedSurveyList"];
                 };
             };
         };
     };
     api_surveys_retrieve: {
         parameters: {
-            query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
-            };
+            query?: never;
             header?: never;
             path: {
                 id: number;
@@ -1108,7 +1086,6 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved survey details */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1121,59 +1098,27 @@ export interface operations {
     };
     api_surveys_submit_create: {
         parameters: {
-            query?: {
-                /** @description Page number within the paginated result set. */
-                page?: components["parameters"]["PageNumber"];
-                /** @description Number of results to return per page. */
-                page_size?: components["parameters"]["PageSize"];
-            };
+            query?: never;
             header?: never;
             path: {
                 id: number;
             };
             cookie?: never;
         };
-        requestBody?: {
+        requestBody: {
             content: {
-                "application/json": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["SurveyResponseRequest"];
-                };
+                "application/json": components["schemas"]["SurveyResponseRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["SurveyResponseRequest"];
+                "multipart/form-data": components["schemas"]["SurveyResponseRequest"];
             };
         };
         responses: {
-            /** @description Successfully submitted survey response */
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["SurveyResponse"];
-                    };
-                };
-            };
-        };
-    };
-    api_users_auth_2fa_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully toggled 2FA status */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: {
-                            enabled?: boolean;
-                        };
-                    };
+                    "application/json": components["schemas"]["SurveyResponse"];
                 };
             };
         };
@@ -1187,13 +1132,32 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully disabled two-factor authentication */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
+                    };
                 };
             };
         };
@@ -1207,13 +1171,32 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully enabled two-factor authentication */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
+                    };
                 };
             };
         };
@@ -1227,13 +1210,30 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully authenticated with Google */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["AuthResponse"];
+                    "application/json": {
+                        [key: string]: unknown;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
                 };
             };
         };
@@ -1245,19 +1245,48 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: {
+        requestBody: {
             content: {
                 "application/json": components["schemas"]["EmailTokenObtainPairRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["EmailTokenObtainPairRequest"];
+                "multipart/form-data": components["schemas"]["EmailTokenObtainPairRequest"];
             };
         };
         responses: {
-            /** @description Successfully authenticated user */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["TokenResponse"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                        data?: {
+                            /** @description JWT access token */
+                            access?: string;
+                            /** @description JWT refresh token */
+                            refresh?: string;
+                            /** @description User details */
+                            user?: Record<string, never>;
+                        };
+                    };
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
+                    };
                 };
             };
         };
@@ -1271,13 +1300,32 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully logged out user */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
+                    };
                 };
             };
         };
@@ -1292,20 +1340,17 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["TokenRefreshRequest"];
-                "multipart/form-data": components["schemas"]["TokenRefreshRequest"];
                 "application/x-www-form-urlencoded": components["schemas"]["TokenRefreshRequest"];
+                "multipart/form-data": components["schemas"]["TokenRefreshRequest"];
             };
         };
         responses: {
-            /** @description Successfully refreshed access token */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["TokenRefresh"];
-                    };
+                    "application/json": components["schemas"]["TokenRefresh"];
                 };
             };
         };
@@ -1319,23 +1364,47 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": {
-                    /** Format: email */
-                    email: string;
-                    username: string;
-                    /** Format: password */
-                    password: string;
+                type: {
+                    [key: string]: unknown;
+                };
+                properties: unknown;
+                required: {
+                    [key: string]: unknown;
                 };
             };
         };
         responses: {
-            /** @description Successfully registered new user account */
             201: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                        data?: {
+                            user?: Record<string, never>;
+                            access?: string;
+                            refresh?: string;
+                        };
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
+                    };
                 };
             };
         };
@@ -1349,22 +1418,42 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": {
-                    /** Format: email */
-                    new_email: string;
-                    /** Format: password */
-                    password: string;
+                type: {
+                    [key: string]: unknown;
+                };
+                properties: unknown;
+                required: {
+                    [key: string]: unknown;
                 };
             };
         };
         responses: {
-            /** @description Successfully changed user email */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
+                    };
                 };
             };
         };
@@ -1378,22 +1467,42 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": {
-                    /** Format: password */
-                    old_password: string;
-                    /** Format: password */
-                    new_password: string;
+                type: {
+                    [key: string]: unknown;
+                };
+                properties: unknown;
+                required: {
+                    [key: string]: unknown;
                 };
             };
         };
         responses: {
-            /** @description Successfully changed user password */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
+                    };
                 };
             };
         };
@@ -1407,14 +1516,66 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved authenticated user profile */
+            /** @description No response body */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["UserProfile"];
+                content?: never;
+            };
+        };
+    };
+    api_users_auth_member_profile_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
                 };
+                content?: never;
+            };
+        };
+    };
+    api_users_auth_member_profile_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    api_users_auth_member_register_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
@@ -1427,14 +1588,32 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully retrieved user profile */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["UserProfile"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                        data?: Record<string, never>;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
                     };
                 };
             };
@@ -1449,24 +1628,42 @@ export interface operations {
         };
         requestBody?: {
             content: {
-                "application/json": {
-                    username: string;
-                    /** Format: email */
-                    email: string;
-                    first_name: string;
-                    last_name: string;
+                type: {
+                    [key: string]: unknown;
+                };
+                properties: unknown;
+                required: {
+                    [key: string]: unknown;
                 };
             };
         };
         responses: {
-            /** @description Successfully updated user profile */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["UserProfile"];
+                    "application/json": {
+                        /** @default true */
+                        success: boolean;
+                        message?: string;
+                        data?: Record<string, never>;
+                    };
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        /** @default false */
+                        success: boolean;
+                        message?: string;
+                        error?: {
+                            code?: string;
+                            details?: Record<string, never>;
+                        };
                     };
                 };
             };
@@ -1481,14 +1678,12 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully resent verification email */
+            /** @description No response body */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
-                };
+                content?: never;
             };
         };
     };
@@ -1501,84 +1696,12 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Successfully verified email address */
+            /** @description No response body */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
-                };
-            };
-        };
-    };
-    api_users_member_register_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully registered/upgraded member account */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponse"];
-                };
-            };
-        };
-    };
-    api_users_member_me: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully retrieved current user profile */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["UserProfile"];
-                    };
-                };
-            };
-        };
-    };
-    api_users_member_profile_update: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SuccessResponse"] & {
-                    data?: components["schemas"]["UserProfileRequest"];
-                };
-            };
-        };
-        responses: {
-            /** @description Successfully updated member profile */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SuccessResponse"] & {
-                        data?: components["schemas"]["UserProfile"];
-                    };
-                };
+                content?: never;
             };
         };
     };

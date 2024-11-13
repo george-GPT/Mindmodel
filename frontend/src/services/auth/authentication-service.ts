@@ -1,17 +1,18 @@
 import { store } from '../../store/store';
-import { setError } from '../../store/auth-slice';
+import { setError } from '../../store/authSlice';
 import TokenService from '../api/token-service';
 import SessionSyncService from '../session/session-sync-service';
-import ActivityTrackingService from '../session/activity-tracking-service';
-import PersistenceService from '../session/persistence-service';
-import OAuthMonitoringService from '../monitoring/oauth-monitoring-service';
-import RateLimitService from '../security/rate-limit';
-import TokenSecurityService from '../security/token-security';
+import ActivityTrackingService from '../session/activityTrackingService';
+import PersistenceService from '../session/persistenceService';
+import OAuthMonitoringService from '../monitoring/oauthMonitoring-service';
+import RateLimitService from '../security/rateLimit';
+import TokenSecurityService from '../security/tokenSecurity';
 import { 
-    SessionStatus, 
-    AuthResponse, 
-    LoginCredentials 
-} from '../../types/auth.types';
+    AuthState,
+    AuthProvider,
+    AuthResponse,
+    LoadingStateType
+} from 'types/auth';
 
 class AuthenticationService {
     private static instance: AuthenticationService;

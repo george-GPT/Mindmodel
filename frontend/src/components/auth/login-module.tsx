@@ -14,10 +14,11 @@ import Input from '../input';
 import { 
   setError, 
   clearError 
-} from '../../store/auth-slice';
+} from '../../store/authSlice';
 import { validateEmail, validatePassword } from '../../utils/validation';
 import EmailInput from '../input/email-input';
 import BrainIconPurple from '../assets/icons/brainIconPurlple';
+import { AuthProvider } from '../../types';
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({

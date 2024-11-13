@@ -5,8 +5,8 @@ import { Box, Typography, CircularProgress, Alert, Button } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store/store';
-import { submitGameScore } from '../../store/game-slice';
-import { completeGame } from '../../store/progress-slice';
+import { submitGameScore } from '../../store/gameSlice';
+import { completeGame } from '../../store/progressSlice';
 import { gamesAPI } from '../../services';
 import ErrorBoundary from '../common/error-boundary';
 import Loading from '../common/loading';

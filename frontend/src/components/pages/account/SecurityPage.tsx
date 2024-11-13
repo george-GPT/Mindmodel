@@ -29,7 +29,7 @@ import { AppDispatch } from '../../../store/store';
 import { AuthService } from '../../../services';
 import { validatePassword, validatePasswordMatch } from '../../../utils/validation';
 import EmailInput from '../../input/email-input';
-import { clearError } from '../../../store/auth-slice';
+import { clearError } from '../../../store/authSlice';
 
 const SecurityPage = () => {
   const navigate = useNavigate();

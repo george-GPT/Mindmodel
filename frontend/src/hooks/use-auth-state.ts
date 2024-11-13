@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store/store';
-import { LoadingStateType } from '../store/auth-slice';
+import { LoadingStateType } from '../store/authSlice';
 
 export const useAuthState = () => {
   const dispatch = useDispatch<AppDispatch>();

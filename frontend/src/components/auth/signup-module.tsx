@@ -12,9 +12,13 @@ import GoogleIcon from '../assets/icons/google-Icon';
 import BrainIconPurple from '../assets/icons/brainIconPurlple';
 import Button from '../button/button';
 import Input from '../input';
-import { setError, clearError } from '../../store/auth-slice';
+import { setError, clearError } from '../../store/authSlice';
 import { validateEmail, validatePassword, validateUsername, validatePasswordMatch } from '../../utils/validation';
 import EmailInput from '../input/email-input';
+import { 
+  RegisterRequest, 
+  AuthProvider 
+} from '../../types'; // Updated imports
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
