@@ -1,0 +1,43 @@
+// src/components/Surveys/surveyLogic/__tests__/baseline-survey.test.tsx
+import { render, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from '../../../store/store';
+import GenericSurvey from '../generic-survey';
+
+describe('Baseline Survey', () => {
+  it('loads baseline survey correctly', () => {
+    render(
+      <Provider store={store}>
+        <MemoryRouter>
+          <GenericSurvey surveyId="BaselineSurvey" />
+        </MemoryRouter>
+      </Provider>
+    );
+    
+    // Check if survey loads
+    expect(screen.getByTestId('survey-container')).toBeInTheDocument();
+  });
+});
+
+// Manual test steps
+const testFlow = {
+  steps: [
+    '1. Login as member',
+    '2. Navigate to dashboard (/app)',
+    '3. Click "Start Baseline Survey"',
+    '4. Verify baseline survey loads',
+    '5. Complete survey',
+    '6. Verify redirect to dashboard'
+  ],
+  expectedOutcome: {
+    beforeBaseline: {
+      buttonText: 'Start Baseline Survey',
+      route: '/app/surveys/baseline'
+    },
+    afterBaseline: {
+      buttonText: 'View All Surveys',
+      route: '/app/surveys'
+    }
+  }
+};

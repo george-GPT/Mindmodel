@@ -85,3 +85,54 @@ declare module "*.png" {
   export default content;
 }
 
+// Google OAuth Types
+declare namespace google.accounts.id {
+  interface PromptNotification {
+    isDisplayed(): boolean;
+    isNotDisplayed(): boolean;
+    isSkippedMoment(): boolean;
+    getDismissedReason(): string;
+    getMomentType(): string;
+  }
+
+  interface GsiButtonConfiguration {
+    type: 'standard' | 'icon';
+    theme?: 'outline' | 'filled_blue' | 'filled_black';
+    size?: 'large' | 'medium' | 'small';
+    text?: string;
+    shape?: 'rectangular' | 'pill' | 'circle' | 'square';
+    logo_alignment?: 'left' | 'center';
+    width?: string;
+    local?: string;
+  }
+
+  interface IdConfiguration {
+    client_id: string;
+    auto_select?: boolean;
+    callback: (response: { credential: string }) => void;
+    context?: string;
+    ux_mode?: 'popup' | 'redirect';
+    allowed_parent_origin?: string | string[];
+    intermediate_iframe_close_callback?: () => void;
+  }
+
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: IdConfiguration) => void;
+          prompt: (notification?: (notification: PromptNotification) => void) => void;
+          renderButton: (element: HTMLElement, config: GsiButtonConfiguration) => void;
+          disableAutoSelect: () => void;
+          storeCredential: (credential: { id: string; password: string }, callback: () => void) => void;
+          cancel: () => void;
+          revoke: (userId: string, callback: () => void) => void;
+        };
+      };
+    };
+  }
+}
+
+// Ensure this file is treated as a module
+export {};
+

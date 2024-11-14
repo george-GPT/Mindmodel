@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { AuthState, User, LoadingStateType } from '@/types/auth';
+import type { AuthState, LoadingStateType, UserProfile } from '@/types/auth';
 import type { ApiError } from '@/types/error';
 import { ErrorCodes } from '@/types/error';
 
@@ -20,10 +20,20 @@ const initialState: AuthState = {
     verification: false,
     social: false
   },
+  session: {
+    expiresAt: 0,
+    refreshExpiresAt: 0,
+    lastActivity: 0
+  },
+  verification: {
+    isVerified: false,
+    verificationSent: false,
+    verificationExpiry: 0
+  }
 };
 
 interface LoginPayload {
-    user: User;
+    user: UserProfile;
     isMember: boolean;
     isAdmin?: boolean;
 }
@@ -54,7 +64,7 @@ export const authSlice = createSlice({
           success: false,
           message: action.payload,
           error: {
-            code: ErrorCodes.VALIDATION_ERROR
+            code: ErrorCodes.validation_error
           }
         };
       } else {

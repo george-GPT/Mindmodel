@@ -1,13 +1,13 @@
+import { tokenService, type TokenService } from './tokenService';
 import { store } from '@/store/store';
 import { setError } from '@/store/authSlice';
-import TokenService from '@/services/security/tokenService';
 import type { TokenResponse } from '@/types/auth';
 
 interface TokenSecurityConfig {
-    refreshThreshold: number;      // Time in ms before expiry to trigger refresh
-    blacklistEnabled: boolean;     // Enable token blacklisting
-    tokenValidityWindow: number;   // Maximum allowed clock skew in ms
-    maxRefreshAttempts: number;    // Maximum number of refresh attempts
+    refreshThreshold: number;
+    blacklistEnabled: boolean;
+    tokenValidityWindow: number;
+    maxRefreshAttempts: number;
 }
 
 class TokenSecurityService {
@@ -15,6 +15,7 @@ class TokenSecurityService {
     private blacklistedTokens: Set<string>;
     private refreshAttempts: Map<string, number>;
     private config: TokenSecurityConfig;
+    private tokenService: TokenService;
 
     private readonly DEFAULT_CONFIG: TokenSecurityConfig = {
         refreshThreshold: 5 * 60 * 1000,  // 5 minutes
@@ -24,6 +25,7 @@ class TokenSecurityService {
     };
 
     private constructor(config?: Partial<TokenSecurityConfig>) {
+        this.tokenService = tokenService;
         this.config = { ...this.DEFAULT_CONFIG, ...config };
         this.blacklistedTokens = new Set();
         this.refreshAttempts = new Map();
@@ -94,7 +96,7 @@ class TokenSecurityService {
     }
 
     private async handleTokenRefresh(): Promise<void> {
-        const currentToken = TokenService.getAccessToken();
+        const currentToken = this.tokenService.getAccessToken();
         if (!currentToken) return;
 
         const attempts = this.refreshAttempts.get(currentToken) || 0;
@@ -105,7 +107,7 @@ class TokenSecurityService {
         }
 
         try {
-            await TokenService.refreshAccessToken();
+            await this.tokenService.refreshAccessToken();
             this.refreshAttempts.delete(currentToken);
         } catch (error) {
             this.refreshAttempts.set(currentToken, attempts + 1);

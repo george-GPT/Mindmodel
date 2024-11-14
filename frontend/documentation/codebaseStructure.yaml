@@ -1,0 +1,151 @@
+frontend_structure:
+  root: "src/"
+  purpose: "Frontend application source code with feature-based organization"
+
+  core_directories:
+    components:
+      purpose: "React components organized by feature"
+      structure:
+        assets:
+          purpose: "Static assets and icons"
+          subdirectories:
+            animations:
+              purpose: "Lottie animations and JSON files"
+              files:
+                - "brain-lottie.tsx: Brain animation component"
+                - "brain-tech.json: Animation configuration"
+            
+            icons:
+              purpose: "SVG icons and icon components"
+              subdirectories:
+                flaticon:
+                  purpose: "Third-party icons from Flaticon"
+                  contents:
+                    - "artificial-intelligence.svg"
+                    - "brain.svg"
+                    - "creativity.svg"
+                    # ... other icons
+              components:
+                - "appleIcon.tsx: Apple sign-in icon"
+                - "brainIconPurple.tsx: Brand icon in purple"
+                - "google-Icon.tsx: Google sign-in icon"
+            
+            images:
+              purpose: "Static images and logos"
+              contents:
+                - "favicon.png: Site favicon"
+                - "logo_text.svg: Text logo"
+                - "logo.png: Main logo"
+
+        auth:
+          purpose: "Authentication-related components"
+          key_files:
+            - "emailVerification.tsx: Email verification flow"
+            - "LoginForm.tsx: Reusable login form"
+            - "loginModule.tsx: Main login page"
+            - "signupModule.tsx: Registration page"
+
+        dashboard:
+          purpose: "Dashboard and analytics components"
+          components:
+            - "Dashboard.tsx: Main dashboard"
+            ai_insight:
+              - "final-results.tsx: AI analysis results"
+
+        games:
+          purpose: "Cognitive assessment games"
+          structure:
+            game_pages:
+              - "color-dots-page.tsx"
+              - "color-shapes-page.tsx"
+              - "grid-memory-page.tsx"
+            shared:
+              - "generic-game.tsx: Base game component"
+
+        surveys:
+          purpose: "Survey components and logic"
+          organization:
+            surveyApi:
+              - "endpoints.ts: Survey API endpoints"
+            surveyHooks:
+              - "design-tokens.ts: Theme constants"
+              - "survey-theme.ts: Theme configuration"
+            surveyJson:
+              - "attention-survey.json: Survey definitions"
+            surveyLogic:
+              - "attention-page.tsx: Survey pages"
+              - "survey-endscreen-analytics.tsx: Results"
+
+    services:
+      purpose: "API and service layer"
+      key_directories:
+        api:
+          purpose: "API client implementations"
+          files:
+            - "aiApi.ts: AI analysis endpoints"
+            - "authApi.ts: Authentication endpoints"
+            - "axiosInstance.ts: Shared axios config"
+        
+        monitoring:
+          purpose: "Monitoring and analytics"
+          files:
+            - "oauthMonitor.ts: OAuth tracking"
+            - "oauthMonitoringService.ts: Monitoring service"
+        
+        security:
+          purpose: "Security utilities"
+          files:
+            - "tokenSecurity.ts: Token management"
+
+    store:
+      purpose: "Redux state management"
+      key_files:
+        - "store.ts: Redux store configuration"
+        - "authSlice.ts: Authentication state"
+        - "progressSlice.ts: Progress tracking"
+        - "surveySlice.ts: Survey state"
+        - "analysisSlice.ts: Analysis results"
+
+    types:
+      purpose: "TypeScript type definitions"
+      key_files:
+        - "auth.d.ts: Authentication types"
+        - "dashboard.d.ts: Dashboard types"
+        - "game.d.ts: Game types"
+        - "ai.types.ts: AI analysis types"
+
+    hooks:
+      purpose: "Custom React hooks"
+      key_files:
+        - "useAuth.ts: Authentication hook"
+        - "useProgress.ts: Progress tracking"
+
+    utils:
+      purpose: "Shared utilities"
+      files:
+        - "constants.ts: Application constants"
+        - "errorHandler.ts: Error handling"
+
+  key_patterns:
+    component_organization:
+      - "Feature-based directory structure"
+      - "Shared components in root components/"
+      - "Feature-specific components in feature directories"
+    
+    type_management:
+      - "Domain-specific types in types/"
+      - ".d.ts files for type declarations"
+      - "Shared types in api.d.ts"
+    
+    state_management:
+      - "Redux slices by feature"
+      - "Centralized store configuration"
+      - "Type-safe actions and reducers"
+
+  notes:
+    - "Clear separation between features"
+    - "Consistent file naming conventions"
+    - "Modular component structure"
+    - "Type-safe implementation"
+    - "Centralized state management"
+    - "Reusable utility functions" 

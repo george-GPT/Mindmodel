@@ -1,42 +1,39 @@
-// src/surveys/generic-survey.tsx
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { SurveyModel } from 'survey-core';
+import { Model as SurveyModel } from 'survey-core';
 import { Survey } from 'survey-react-ui';
-import { Box, Typography, CircularProgress, Alert, Button } from '@mui/material';
+import { Box, Typography, Alert, Button } from '@mui/material';
 import { StylesManager } from 'survey-core';
-import axios from 'axios';
 
-import { RootState } from '../../store/store';
-import { submitSurveyResponse } from '../../store/surveySlice';
-import { completeSurvey } from '../../store/progressSlice';
-import { SurveyJSON } from '../../types/survey';
-import { useSurveyAnalytics } from './survey-hooks/use-survey-analytics';
-import { useSurveyTheme } from './survey-hooks/use-survey-theme';
+// Import SurveyJS CSS
+import "survey-core/defaultV2.min.css";
+
+import { RootState } from '../../../store/store';
+import { submitSurveyResponse } from '../../../store/surveySlice';
+import { completeSurvey } from '../../../store/progressSlice';
+import type { 
+  SurveyJSON, 
+  SurveyResponse, 
+  SurveyAnalytics,
+  Survey as SurveyType,
+  SurveyPage,
+  SurveyAnalyticsDisplayProps
+} from '@/types/survey';
+import { useSurveyAnalytics } from '../surveyHooks/use-survey-analytics';
+import { useSurveyTheme } from '../surveyHooks/use-survey-theme';
 import SurveyAnalyticsDisplay from './survey-endscreen-analytics';
-import ErrorBoundary from '../dashboard/common/error-boundary';
+import ErrorBoundary from '../../dashboard/common/error-boundary';
+import Loading from '../../dashboard/common/loading';
 
-// Import all survey JSON files
-import AttentionSurvey from './attention-survey.json';
-import BaselineSurvey from './baseline-survey.json';
-import ExecutiveFunctionSurvey from './executive-function-survey.json';
-import MemorySurvey from './memory-survey.json';
-import PersonalitySurvey from './personality-survey.json';
-import ProcessingSurvey from './processing-survey.json';
+// Import surveys from a centralized location
+import { surveys } from '../surveyJson';
+
+// Import survey API
+import { surveyAPI } from '../surveyApi/endpoints';
 
 // Apply SurveyJS theme
 StylesManager.applyTheme('modern');
-
-const surveys: { [key: string]: SurveyJSON } = {
-  AttentionSurvey,
-  BaselineSurvey,
-  ExecutiveFunctionSurvey,
-  MemorySurvey,
-  PersonalitySurvey,
-  ProcessingSurvey,
-};
 
 interface GenericSurveyProps {
   surveyId: string;
@@ -49,14 +46,15 @@ const GenericSurvey: React.FC<GenericSurveyProps> = ({ surveyId, surveyJson }) =
   const { isAuthenticated, isMember } = useSelector((state: RootState) => state.auth);
   const [loadedSurveyJson, setLoadedSurveyJson] = useState<SurveyJSON | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [showAnalytics, setShowAnalytics] = useState(false);
-  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [analyticsData, setAnalyticsData] = useState<SurveyAnalytics | null>(null);
   
-  const { generateAnalytics, getChartData } = useSurveyAnalytics();
+  const { generateAnalytics } = useSurveyAnalytics();
   const { surveyRootClass } = useSurveyTheme();
 
-  // Check auth and membership
+  // Auth check effect
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
@@ -68,62 +66,75 @@ const GenericSurvey: React.FC<GenericSurveyProps> = ({ surveyId, surveyJson }) =
     }
   }, [isAuthenticated, isMember, navigate]);
 
-  // Load survey
+  // Survey loading effect
   useEffect(() => {
-    try {
-      if (surveyJson) {
-        setLoadedSurveyJson(surveyJson);
-      } else if (surveys[surveyId]) {
-        setLoadedSurveyJson(surveys[surveyId]);
-      } else {
-        throw new Error('Survey not found');
+    const loadSurvey = async () => {
+      try {
+        if (surveyJson) {
+          setLoadedSurveyJson(surveyJson);
+        } else {
+          const response = await surveyAPI.getSurveyDetails(parseInt(surveyId, 10));
+          const surveyData: SurveyJSON = {
+            ...response.data.data,
+            pages: response.data.data.questions as SurveyPage[]
+          };
+          setLoadedSurveyJson(surveyData);
+        }
+      } catch (err) {
+        setError('Failed to load survey');
+        console.error('Survey load error:', err);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError('Failed to load survey');
-      console.error('Survey load error:', err);
-    } finally {
-      setLoading(false);
-    }
+    };
+
+    loadSurvey();
   }, [surveyId, surveyJson]);
 
   const onComplete = async (survey: SurveyModel) => {
+    setIsSubmitting(true);
     try {
       const responses = survey.data;
       
-      // Generate analytics for non-baseline surveys
       if (surveyId !== 'BaselineSurvey') {
-        const analytics = generateAnalytics({
-          responses,
-          questions: loadedSurveyJson?.pages.flatMap(page => page.elements) || []
-        });
+        const analytics = await generateAnalytics(
+          loadedSurveyJson as SurveyType, 
+          responses as SurveyResponse
+        );
         setAnalyticsData(analytics);
       }
 
-      // Submit to backend
-      await axios.post(
-        '/api/surveys/',
-        { surveyId, responses },
-        {
-          headers: { 
-            Authorization: `Bearer ${localStorage.getItem('accessToken')}` 
-          },
-        }
-      );
+      const response = await surveyAPI.submitSurveyResponse({
+        survey_id: Number(surveyId),
+        responses: survey.data,
+        completed: true,
+        completion_rate: 100,
+        submitted_at: new Date().toISOString()
+      });
 
-      // Update Redux state
-      dispatch(submitSurveyResponse({ surveyId, responses }));
+      if (!response.data.success) {
+        throw new Error('Survey submission failed');
+      }
+
+      dispatch(submitSurveyResponse({
+        survey_id: Number(surveyId),
+        responses: survey.data,
+        completed: true,
+        completion_rate: 100,
+        submitted_at: new Date().toISOString()
+      }));
       dispatch(completeSurvey(surveyId));
 
-      // Show analytics or navigate
       if (surveyId === 'BaselineSurvey') {
         navigate('/dashboard');
       } else {
         setShowAnalytics(true);
       }
-
     } catch (err) {
-      console.error('Error submitting survey:', err);
       setError('Failed to submit survey. Please try again.');
+      console.error('Error submitting survey:', err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -131,12 +142,8 @@ const GenericSurvey: React.FC<GenericSurveyProps> = ({ surveyId, surveyJson }) =
     navigate('/dashboard');
   };
 
-  if (loading) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" height="80vh">
-        <CircularProgress />
-      </Box>
-    );
+  if (loading || isSubmitting) {
+    return <Loading />;
   }
 
   if (error) {
@@ -174,9 +181,9 @@ const GenericSurvey: React.FC<GenericSurveyProps> = ({ surveyId, surveyJson }) =
         ) : (
           <>
             <SurveyAnalyticsDisplay 
-              surveyJson={loadedSurveyJson}
-              surveyData={[analyticsData]}
-              insights={analyticsData?.insightSummary || []}
+              survey={loadedSurveyJson as SurveyType}
+              response={analyticsData}
+              completionRate={100}
             />
             <Box mt={4} display="flex" justifyContent="center">
               <Button 

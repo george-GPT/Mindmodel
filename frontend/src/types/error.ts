@@ -1,75 +1,65 @@
-import type { components } from './api';
+import type { components } from './api.d';
+
+type BaseErrorResponse = components['schemas']['BaseResponse'] & {
+  success: false;
+};
 
 /**
- * @description Error codes supported by the backend API
+ * @description Error codes from OpenAPI schema
  * @see backend/mindmodel/core/schema.yaml
  */
 export const ErrorCodes = {
-    // Auth errors
-    AUTHENTICATION_ERROR: 'authentication_error' as const,
-    TOKEN_INVALID: 'token_invalid' as const,
-    TOKEN_EXPIRED: 'token_expired' as const,
-    EMAIL_NOT_VERIFIED: 'email_not_verified' as const,
-    
-    // Validation errors
-    VALIDATION_ERROR: 'validation_error' as const,
-    
-    // Permission errors
-    PERMISSION_DENIED: 'permission_denied' as const,
-    NOT_AUTHENTICATED: 'not_authenticated' as const,
-    
-    // Resource errors
-    NOT_FOUND: 'not_found' as const,
-    
-    // Server errors
-    SERVER_ERROR: 'server_error' as const,
-    NETWORK_ERROR: 'network_error' as const,
-    
-    // Rate limiting
-    RATE_LIMIT_EXCEEDED: 'rate_limit_exceeded' as const
+    'invalid_credentials': 'invalid_credentials',
+    'token_invalid': 'token_invalid',
+    'token_expired': 'token_expired',
+    'validation_error': 'validation_error',
+    'email_not_verified': 'email_not_verified',
+    'not_authenticated': 'not_authenticated',
+    'permission_denied': 'permission_denied',
+    'server_error': 'server_error'
 } as const;
 
+// Update type to match usage
 export type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
 
 /**
- * @description Base API error response type
+ * @description API error interface matching backend schema
  */
-export interface ApiError {
-    success: false;
+export interface ApiError extends BaseErrorResponse {
     message: string;
     error: {
         code: ErrorCode;
         details?: Record<string, unknown>;
+        context?: string;
     };
 }
 
 export const isApiError = (error: unknown): error is ApiError => {
     if (!error || typeof error !== 'object') return false;
     
-    const candidate = error as { success?: boolean; message?: string; error?: { code?: string } };
+    const candidate = error as Partial<ApiError>;
     
     return (
         candidate.success === false &&
         typeof candidate.message === 'string' &&
-        !!candidate.error &&
-        typeof candidate.error === 'object' &&
-        typeof candidate.error.code === 'string' &&
+        candidate.error?.code !== undefined &&
         Object.values(ErrorCodes).includes(candidate.error.code as ErrorCode)
     );
 };
 
-/**
- * @description Creates a standardized API error from any error type
- */
-export const createApiError = (error: unknown, defaultMessage = 'An error occurred'): ApiError => {
-    if (isApiError(error)) return error;
-    
+export const createApiError = (params: {
+    code: ErrorCode;
+    message: string;
+    details?: Record<string, unknown>;
+    context?: string;
+}): ApiError => {
     return {
         success: false,
-        message: error instanceof Error ? error.message : defaultMessage,
+        message: params.message,
         error: {
-            code: ErrorCodes.SERVER_ERROR,
-            details: { originalError: error }
+            code: params.code,
+            details: params.details,
+            context: params.context
         }
     };
 }; 

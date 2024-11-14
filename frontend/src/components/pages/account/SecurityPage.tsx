@@ -26,10 +26,17 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../../../store/store';
-import { AuthService } from '../../../services';
+import { authApi, API_PATHS } from '@/services';
 import { validatePassword, validatePasswordMatch } from '../../../utils/validation';
-import EmailInput from '../../input/email-input';
+import EmailInput from '@/components/Input/email-input';
 import { clearError } from '../../../store/authSlice';
+import { axiosInstance } from '@/services';
+import type { components } from '@/types/api';
+
+type ChangeEmailRequest = {
+  new_email: string;
+  password: string;
+};
 
 const SecurityPage = () => {
   const navigate = useNavigate();
@@ -55,7 +62,8 @@ const SecurityPage = () => {
 
   const [isEmailValid, setIsEmailValid] = useState(false);
 
-  const handlePasswordChange = async () => {
+  const handlePasswordChange = async (e: React.MouseEvent) => {
+    e.preventDefault();
     dispatch(clearError());
 
     const newPasswordError = validatePassword(passwordData.new_password);
@@ -71,7 +79,10 @@ const SecurityPage = () => {
     }
 
     try {
-      await dispatch(AuthService.changePassword(passwordData));
+      await authApi.changePassword({
+        old_password: passwordData.old_password,
+        new_password: passwordData.new_password
+      });
       setSuccess('Password updated successfully');
       setShowPasswordDialog(false);
       setPasswordData({ 
@@ -84,7 +95,8 @@ const SecurityPage = () => {
     }
   };
 
-  const handleEmailChange = async () => {
+  const handleEmailChange = async (e: React.MouseEvent) => {
+    e.preventDefault();
     const emailError = validatePassword(emailData.newEmail);
     if (emailError) {
       setError(emailError);
@@ -92,7 +104,13 @@ const SecurityPage = () => {
     }
 
     try {
-      await AuthService.changeEmail(emailData);
+      await axiosInstance.post<components['schemas']['SuccessResponse']>(
+        API_PATHS.AUTH.CHANGE_EMAIL,
+        {
+          new_email: emailData.newEmail,
+          password: emailData.password
+        } as ChangeEmailRequest
+      );
       setSuccess('Email update request sent. Please check your new email for verification.');
       setShowEmailDialog(false);
       setEmailData({ newEmail: '', password: '' });
@@ -101,15 +119,13 @@ const SecurityPage = () => {
     }
   };
 
-  const handleTwoFactorToggle = async () => {
+  const handleTwoFactorToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
     try {
-      if (!twoFactorEnabled) {
-        // Enable 2FA flow
-        await AuthService.enableTwoFactor();
-      } else {
-        // Disable 2FA flow
-        await AuthService.disableTwoFactor();
-      }
+      const endpoint = !twoFactorEnabled ? 
+        API_PATHS.AUTH.TWO_FACTOR.ENABLE :
+        API_PATHS.AUTH.TWO_FACTOR.DISABLE;
+        
+      await axiosInstance.post(endpoint);
       setTwoFactorEnabled(!twoFactorEnabled);
     } catch (err) {
       setError('Failed to update 2FA settings');
@@ -183,7 +199,8 @@ const SecurityPage = () => {
               <Switch
                 edge="end"
                 checked={twoFactorEnabled}
-                onChange={handleTwoFactorToggle}
+                onChange={(e) => void handleTwoFactorToggle(e)}
+                onClick={(e) => e.stopPropagation()}
               />
             </ListItemSecondaryAction>
           </ListItem>
@@ -220,7 +237,7 @@ const SecurityPage = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setShowPasswordDialog(false)}>Cancel</Button>
-          <Button onClick={handlePasswordChange} variant="contained">Update</Button>
+          <Button onClick={(e) => void handlePasswordChange(e)} variant="contained">Update</Button>
         </DialogActions>
       </Dialog>
 
@@ -248,7 +265,7 @@ const SecurityPage = () => {
         <DialogActions>
           <Button onClick={() => setShowEmailDialog(false)}>Cancel</Button>
           <Button 
-            onClick={handleEmailChange} 
+            onClick={(e) => void handleEmailChange(e)} 
             variant="contained"
             disabled={!isEmailValid}
           >

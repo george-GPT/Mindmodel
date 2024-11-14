@@ -1,0 +1,106 @@
+api_refactor_plan:
+  purpose: "Streamline API layer by removing class hierarchy and standardizing functional approach"
+
+  current_issues:
+    - "Multiple competing implementations (class vs functional)"
+    - "Duplicate axios instances"
+    - "Inconsistent patterns across API files"
+    - "Unnecessary complexity from inheritance"
+
+  target_architecture:
+    core_components:
+      axiosInstance:
+        purpose: "Single shared axios instance with interceptors"
+        location: "services/api/axiosInstance.ts"
+        exports: "{ axiosInstance }"
+        
+      apiPaths: 
+        purpose: "Central source of truth for API endpoints"
+        location: "services/api/apiPaths.ts"
+        exports: "{ API_PATHS }"
+        
+      featureApis:
+        pattern: "Feature-specific API files using axiosInstance + apiPaths"
+        examples:
+          - "authApi.ts"
+          - "gamesApi.ts" 
+          - "surveysApi.ts"
+          - "aiApi.ts"
+
+  implementation_steps:
+    1: "✓ Audit Current Usage"
+      tasks:
+        - "✓ Identify all files importing BaseApiService/AuthApiService"
+        - "✓ List all API endpoints currently in use"
+        - "✓ Document any custom functionality in class implementations"
+    
+    2: "✓ Setup Core Infrastructure"
+      tasks:
+        - "✓ Implement single axiosInstance with proper interceptors"
+        - "✓ Create comprehensive apiPaths.ts with all endpoints"
+        - "✓ Add type definitions for API responses"
+    
+    3: "✓ Create Feature API Files"
+      tasks:
+        - "✓ Create new functional API files for each feature"
+        - "✓ Use consistent pattern across all files"
+        - "✓ Import shared axiosInstance and API_PATHS"
+    
+    4: "→ Migrate Existing Code"
+      tasks:
+        - "→ Update Auth Implementation"
+          subtasks:
+            - "✓ Fix Type Issues"
+            - "✓ Update auth components to use new authApi"
+            - "✓ Fix useAuth location and imports"
+            - "→ Remove old AuthService class"
+              tasks:
+                - "✓ Remove from services/index.ts"
+                - "→ Update auth tests to use new authApi"
+                - "→ Delete AuthService class file"
+            - "Verify all auth functionality works"
+    
+    5: "Type Safety Updates"
+      tasks:
+        - "Ensure all API methods use proper types from api.d.ts"
+        - "Add response type annotations to all API calls"
+        - "Verify error handling types are consistent"
+    
+    6: "Testing & Validation"
+      tasks:
+        - "Test all migrated endpoints"
+        - "Verify error handling works as expected"
+        - "Check token management functionality"
+        - "Validate type safety across the system"
+
+  code_patterns:
+    api_file_template: |
+      import { axiosInstance } from './axiosInstance';
+      import { API_PATHS } from './apiPaths';
+      import type { components } from '../../types/api.d';
+      
+      export const featureApi = {
+        // Methods using axiosInstance + API_PATHS
+      };
+    
+    error_handling: |
+      try {
+        const response = await axiosInstance.method(path, data);
+        return response.data;
+      } catch (error) {
+        throw handleError(error);
+      }
+
+  validation_checklist:
+    - "All API calls use shared axiosInstance"
+    - "No direct axios imports outside axiosInstance.ts"
+    - "All endpoints referenced from API_PATHS"
+    - "Proper type annotations on all methods"
+    - "Consistent error handling pattern"
+    - "No remaining class-based service usage"
+
+  notes:
+    - "This refactor simplifies the codebase by removing unnecessary abstraction layers"
+    - "Functional approach makes testing and maintenance easier"
+    - "Centralized paths and single axios instance reduce potential inconsistencies"
+    - "Type safety is maintained through consistent use of generated types" 

@@ -7,18 +7,13 @@ import {
     Alert,
 } from '@mui/material';
 import type { AppDispatch, RootState } from '@/store/store';
-import authService from '@/services/auth/authService';
+import { authApi } from '@/services/api/authApi';
 import Button from '@/components/button/button';
-import Input from '@/components/input';
+import Input from '@/components/Input';
 import { validatePassword, validatePasswordMatch } from '@/utils/validation';
 import { setError, clearError } from '@/store/authSlice';
-import type { ApiError } from '@/types';
-
-interface PasswordChangeRequest {
-    old_password: string;
-    new_password: string;
-    new_password2: string;
-}
+import { isApiError } from '@/types/error';
+import { useAuth } from '@/hooks/useAuth';
 
 const PasswordChange = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -29,6 +24,7 @@ const PasswordChange = () => {
     const [success, setSuccess] = useState(false);
     
     const authError = useSelector((state: RootState) => state.auth.error);
+    const { changePassword, isLoading: authLoading } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -45,10 +41,9 @@ const PasswordChange = () => {
 
         setIsLoading(true);
         try {
-            await authService.changePassword({
+            await changePassword({
                 old_password: oldPassword,
-                new_password: newPassword,
-                new_password2: confirmPassword
+                new_password: newPassword
             });
             setSuccess(true);
             // Clear form
@@ -57,7 +52,11 @@ const PasswordChange = () => {
             setConfirmPassword('');
         } catch (error) {
             console.error('Password change failed:', error);
-            dispatch(setError(error as ApiError));
+            if (isApiError(error)) {
+                dispatch(setError(error));
+            } else {
+                dispatch(setError('Password change failed. Please try again.'));
+            }
         } finally {
             setIsLoading(false);
         }

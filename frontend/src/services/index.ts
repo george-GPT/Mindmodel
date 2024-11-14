@@ -1,14 +1,24 @@
-import type { components } from '@/types/api';
+import type { components } from '../types/api';
 
-// API exports
-export { authAPI } from './api/authApi';
-export { aiAPI } from './api/aiApi';
-export { surveyAPI } from './surveys/surveyApi';
-export { gamesAPI } from './games/gamesApi';
+// API layer exports
+export { axiosInstance } from './api/axiosInstance';
+export { API_PATHS } from './api/apiPaths';
+export { authApi } from './api/authApi';
+export { aiApi } from './api/aiApi';
+export { gamesApi } from './api/gamesApi';
 
-// Service exports
-export { default as AuthService } from './auth/authService';
-export { default as TokenService } from './security/tokenService';
+// Monitoring exports
+export { default as OAuthMonitor } from './monitoring/oauthMonitor';
+export { oAuthMonitoringService } from './monitoring/oauthMonitoringService';
+export type { OAuthEvent } from './monitoring/oauthMonitor';
 
-// Type exports from API schema
-export type { LoginCredentials } from '@/types/auth';
+// Security service exports
+export { tokenService } from './security/tokenService';
+export { TokenSecurity } from './security/tokenSecurity';
+
+// Export commonly used types
+export type { 
+  LoginCredentials,
+  AuthResponse,
+  TokenResponse 
+} from '../types/auth';

@@ -17,6 +17,9 @@ frontend_types_system:
               - GameConfig
               - AIAnalysis
               - SurveyResponse
+              - SurveyAnalytics
+              - AnalyticsData
+              - QuestionStats
           operations:
             auth:
               - api_users_auth_login_create
@@ -35,10 +38,24 @@ frontend_types_system:
           - components.schemas.LoginCredentials
           - components.schemas.TokenResponse
           - components.schemas.SessionStatus
+          - components.schemas.UserProfile
         frontend_specific:
           - AuthState
           - LoadingStateType
           - TokenPair
+          - SessionState
+          - VerificationState
+          - AuthErrorType
+          - RegisterData
+          - ChangePasswordData
+          - GoogleSDKResponse
+        constants:
+          TOKEN_EXPIRY:
+            VERIFICATION: 86400
+            EMAIL_CHANGE: 3600
+            PASSWORD_RESET: 3600
+            REFRESH: 604800
+            ACCESS: 900
 
       game.d.ts:
         purpose: "Game types and state"
@@ -55,9 +72,43 @@ frontend_types_system:
         maps_to:
           - components.schemas.Survey
           - components.schemas.SurveyResponse
+          - components.schemas.SurveyAnalytics
         frontend_specific:
           - SurveyState
           - SurveyProgress
+          - SurveyVisualization
+          - ChartData
+          - VisualizerType
+          - ResponseDistribution
+          - CompletionMetrics
+
+      analytics.d.ts:
+        purpose: "Analytics types and visualization"
+        maps_to:
+          - components.schemas.AnalyticsData
+          - components.schemas.QuestionStats
+        frontend_specific:
+          - AnalyticsData
+          - QuestionStats
+          - ResponseDistribution
+          - ChartData
+          - VisualizationOptions
+          - GameSurveyAnalytics
+          - ProgressAnalytics
+
+      dashboard.d.ts:
+        purpose: "Dashboard types and sections"
+        maps_to:
+          - components.schemas.SurveyAnalytics
+        frontend_specific:
+          - DashboardSection
+          - AssessmentItem
+        icon_types:
+          - SvgIconComponent
+        color_options:
+          - primary
+          - secondary
+          - success
 
       error.ts:
         purpose: "Error handling types and utilities"
@@ -71,6 +122,23 @@ frontend_types_system:
         utilities:
           - "isApiError: Type guard for API errors"
           - "createApiError: Error factory function"
+
+      ai.types.ts:
+        purpose: "AI analysis types and utilities"
+        maps_to:
+          - components.schemas.AIAnalysis
+        frontend_specific:
+          - AIAnalysisState
+          - AIAnalysisResult
+
+      google.d.ts:
+        purpose: "Google OAuth integration types"
+
+      env.d.ts:
+        purpose: "Environment variable type definitions"
+
+      declarations.d.ts:
+        purpose: "Global type declarations and module augmentations"
 
   type_patterns:
     api_imports: |
@@ -98,6 +166,42 @@ frontend_types_system:
         previous?: string;
       }
 
+    analytics_patterns: |
+      interface AnalyticsData {
+        survey_id: string;
+        response_count: number;
+        completion_rate: number;
+        average_time: number;
+        question_stats: {
+          [questionId: string]: {
+            response_distribution: Record<string, number>;
+            average_score?: number;
+            completion_time: number;
+          };
+        };
+      }
+
+    visualization_patterns: |
+      interface VisualizationOptions {
+        allowHideQuestions: boolean;
+        allowShowPercentages: boolean;
+        allowShowMean: boolean;
+        allowShowMedian: boolean;
+      }
+
+    dashboard_patterns: |
+      interface DashboardSection {
+        icon: SvgIconComponent;
+        title: string;
+        progress: number;
+        total: number;
+        buttonText: string;
+        route: string;
+        tooltipText: string;
+        color: 'primary' | 'secondary' | 'success';
+        analytics?: SurveyAnalytics;
+      }
+
   security:
     auth_types:
       jwt: "components['securitySchemes']['jwtAuth']"
@@ -111,22 +215,10 @@ frontend_types_system:
       - "No duplicate type definitions"
       - "Frontend-only types must be marked"
       - "Extended types must document base type"
-
-          domain:
-      auth.d.ts:
-        purpose: "Authentication types and state"
-        maps_to: 
-          - components.schemas.LoginCredentials
-          - components.schemas.TokenResponse
-          - components.schemas.SessionStatus
-        frontend_specific:
-          - AuthState
-          - LoadingStateType
-          - TokenPair
-        constants:
-          TOKEN_EXPIRY:
-            VERIFICATION: 86400
-            EMAIL_CHANGE: 3600
-            PASSWORD_RESET: 3600
-            REFRESH: 604800
-            ACCESS: 900
+      - "Analytics types must follow SurveyJS patterns"
+      - "Dashboard types must be modular"
+      - "Use SurveyJS built-in analytics for basic metrics"
+      - "Implement custom visualization panels for specific survey types"
+      - "Cache analytics data with appropriate stale times"
+      - "Use lazy loading for visualization components"
+      - "Maintain separation between survey logic and analytics display"

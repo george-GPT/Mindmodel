@@ -5,16 +5,16 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { HomePage } from '../components/pages/home';
 import AboutUsPage from '../components/pages/about-us';
 import OurApproachPage from '../components/pages/our-approach';
-import ResearchPage from '../components/pages/research';
+import ResearchPage from '../components/pages/Research';
 import PrivacyPolicyPage from '../components/pages/privacy-policy';
-import ContactPage from '../components/pages/contact';
+import ContactPage from '../components/pages/Contact';
 import LoginModule from '../components/auth/loginModule';
 import SignupModule from '../components/auth/signupModule';
 import EmailVerification from '../components/auth/emailVerification';
-import Dashboard from '../components/dashboard/dashboard';
+import Dashboard from '../components/dashboard/Dashboard';
 import AccountPage from '../components/pages/account';
 import SecurityPage from '../components/pages/account/SecurityPage';
-import FinalResults from '../components/dashboard/final-ai-results/final-results';
+import FinalResults from '../components/dashboard/ai-insight/final-results';
 import PrivateRoute from './privateRoutes';
 import { NoPageFound } from '../components/pages/no-page-found';
 
@@ -25,7 +25,8 @@ import GridMemoryPage from '../components/games/game-pages/grid-memory-page';
 import SymbolSearchPage from '../components/games/game-pages/symbol-search-page';
 
 // Survey imports
-import GenericSurvey from '../components/surveys/generic-survey';
+import GenericSurvey from '../components/Surveys/surveyLogic/generic-survey';
+import SurveyRoutes from './surveyRoutes';
 
 const AppRoutes = () => {
   return (
@@ -65,22 +66,9 @@ const AppRoutes = () => {
         element={
           <PrivateRoute requiresMember={true}>
             <Routes>
-              {/* Dashboard */}
               <Route index element={<Dashboard />} />
-              
-              {/* Games Section */}
-              <Route path="games">
-                <Route path="color-dots" element={<ColorDotsPage />} />
-                <Route path="color-shapes" element={<ColorShapesPage />} />
-                <Route path="grid-memory" element={<GridMemoryPage />} />
-                <Route path="symbol-search" element={<SymbolSearchPage />} />
-              </Route>
-
-              {/* Surveys Section */}
-              <Route path="surveys/:surveyId" element={<GenericSurvey surveyId="AttentionSurvey" />} />
-
-              {/* Results */}
-              <Route path="final-results" element={<FinalResults />} />
+              <Route path="surveys/*" element={<SurveyRoutes />} />
+              {/* ... other routes ... */}
             </Routes>
           </PrivateRoute>
         }

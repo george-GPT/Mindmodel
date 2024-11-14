@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { CheckCircleOutline, ErrorOutline, MailOutline } from '@mui/icons-material';
 import { AppDispatch } from '@/store/store';
-import { authAPI } from '@/services/api/authPath';
+import { authApi } from '@/services/api/authApi';
 import Button from '@/components/button/button';
 import { isApiError } from '@/types/error';
 import type { components } from '@/types/api';
@@ -41,7 +41,7 @@ const EmailVerification: React.FC = () => {
             }
 
             try {
-                await authAPI.verifyEmail(token);
+                await authApi.verifyEmail(token);
                 setSuccess(true);
             } catch (err) {
                 if (isApiError(err)) {
@@ -65,7 +65,7 @@ const EmailVerification: React.FC = () => {
                 setError('Email not found. Please try signing up again.');
                 return;
             }
-            await authAPI.resendVerification(email);
+            await authApi.resendVerification();
             setError(null);
             setSuccess(true);
         } catch (err) {

@@ -1,87 +1,37 @@
-import { AppDispatch } from '@/store/store';
-import { setError } from '@/store/authSlice';
-import { ApiError, ErrorCodes } from '@/types';
+import type { components } from '../types/api.d';
+import { ApiError, createApiError, ErrorCodes } from '../types/error';
 
-export const handleAuthError = (error: unknown, dispatch: AppDispatch): ApiError => {
-    let apiError: ApiError;
-
-    if (!error || !(error instanceof Error)) {
-        apiError = {
-            success: false,
-            message: 'An unknown error occurred',
-            error: {
-                code: ErrorCodes.SERVER_ERROR,
-                details: { originalError: error }
-            }
-        };
-    } else if (!('response' in error)) {
-        apiError = {
-            success: false,
-            message: 'Network error. Please check your connection.',
-            error: {
-                code: ErrorCodes.NETWORK_ERROR,
-                details: { originalError: error }
-            }
-        };
-    } else {
-        const { status, data } = (error as any).response;
-
-        switch (status) {
-            case 400:
-                apiError = {
-                    success: false,
-                    message: 'Invalid input data',
-                    error: {
-                        code: ErrorCodes.VALIDATION_ERROR,
-                        details: { fieldErrors: data.errors }
-                    }
-                };
-                break;
-            case 401:
-                apiError = {
-                    success: false,
-                    message: 'Authentication required. Please log in.',
-                    error: {
-                        code: ErrorCodes.AUTHENTICATION_ERROR
-                    }
-                };
-                break;
-            case 403:
-                apiError = {
-                    success: false,
-                    message: 'You do not have permission to perform this action.',
-                    error: {
-                        code: ErrorCodes.PERMISSION_DENIED
-                    }
-                };
-                break;
-            case 404:
-                apiError = {
-                    success: false,
-                    message: 'The requested resource was not found.',
-                    error: {
-                        code: ErrorCodes.NOT_FOUND
-                    }
-                };
-                break;
-            default:
-                apiError = {
-                    success: false,
-                    message: 'An unexpected error occurred.',
-                    error: {
-                        code: ErrorCodes.SERVER_ERROR,
-                        details: { status, data }
-                    }
-                };
-        }
-    }
-
-    if (process.env.NODE_ENV === 'development') {
-        console.error('Error:', apiError);
-    }
-
-    dispatch(setError(apiError));
-    return apiError;
+// Use the BaseResponse type from our OpenAPI schema with error specifics
+type ErrorResponseData = components['schemas']['BaseResponse'] & {
+  success: false;
+  error: {
+    code: keyof typeof ErrorCodes;
+    details?: Record<string, unknown>;
+  };
 };
 
-export const handleError = handleAuthError;
+export function handleError(error: unknown, context: string = 'API'): ApiError {
+  // If it's already an ApiError, return it
+  if (error && typeof error === 'object' && 'error' in error && 'success' in error) {
+    const apiError = error as ApiError;
+    return apiError;
+  }
+
+  // Handle axios error response containing our API error format
+  if (error && typeof error === 'object' && 'response' in error && 'data' in (error as any).response) {
+    const responseData = (error as any).response.data as ErrorResponseData;
+    return createApiError({
+      code: responseData?.error?.code || ErrorCodes['server_error'],
+      message: responseData?.message || 'An unknown error occurred',
+      details: responseData?.error?.details,
+      context
+    });
+  }
+
+  // Default error when we can't determine the type
+  return createApiError({
+    code: ErrorCodes['server_error'],
+    message: error instanceof Error ? error.message : 'An unknown error occurred',
+    context
+  });
+}

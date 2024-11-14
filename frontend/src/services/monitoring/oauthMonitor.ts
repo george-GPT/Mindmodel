@@ -1,6 +1,6 @@
 import { captureException } from '@sentry/react';
 
-interface OAuthEvent {
+export interface OAuthEvent {
     provider: 'google';
     status: 'initiated' | 'success' | 'failed';
     error?: string;
@@ -27,7 +27,12 @@ class OAuthMonitor {
         // Track in Sentry
         if (event.status === 'failed') {
             captureException(new Error(`OAuth ${event.provider} failed: ${event.error}`), {
-                extra: event
+                extra: {
+                    provider: event.provider,
+                    status: event.status,
+                    error: event.error,
+                    duration: event.duration
+                }
             });
         }
 

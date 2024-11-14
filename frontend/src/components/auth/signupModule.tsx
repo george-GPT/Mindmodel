@@ -7,15 +7,17 @@ import {
 } from '@mui/material';
 
 import { AppDispatch, RootState } from '@/store/store';
-import { AuthService } from '@/services';
+import { authApi } from '@/services/api/authApi';
 import GoogleIcon from '@/components/assets/icons/google-Icon';
 import BrainIconPurple from '@/components/assets/icons/brainIconPurlple';
 import Button from '@/components/button/button';
-import Input from '@/components/input';
-import { setError, clearError } from '@/store/authSlice';
+import Input from '@/components/Input';
+import { setError, clearError, login } from '@/store/authSlice';
 import { validateEmail, validatePassword, validateUsername, validatePasswordMatch } from '@/utils/validation';
-import EmailInput from '@/components/input/email-input';
-import type { RegisterRequest, AuthProvider, GoogleAuthRequest } from '@/types/auth';
+import EmailInput from '@/components/Input/email-input';
+import type { AuthProvider } from '@/types/auth';
+import { isApiError } from '@/types/error';
+import { useAuth } from '@/hooks/useAuth';
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -57,8 +59,8 @@ const SignupModule = () => {
   const [isEmailValid, setIsEmailValid] = useState(false);
   const [registrationComplete, setRegistrationComplete] = useState(false);
   
-  const authError = useSelector((state: RootState) => state.auth.error);
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { register, socialLogin, isLoading: authLoading, error: authError } = useAuth();
 
   // Initialize Google OAuth
   useEffect(() => {
@@ -72,7 +74,7 @@ const SignupModule = () => {
         });
 
         window.google?.accounts.id.initialize({
-          client_id: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+          client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
           callback: handleGoogleCallback
         });
       } catch (error) {
@@ -106,23 +108,15 @@ const SignupModule = () => {
       return;
     }
 
-    setIsLoading(true);
     try {
-      await dispatch(AuthService.registerUser({ 
+      await register({ 
         username: name, 
         email, 
-        password, 
-        password2 
-      }));
-      
-      // Store email for verification resend
-      localStorage.setItem('pendingVerificationEmail', email);
+        password 
+      });
       setRegistrationComplete(true);
-      
     } catch (error) {
       console.error("Registration failed:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -143,20 +137,11 @@ const SignupModule = () => {
     window.google?.accounts.id.prompt();
   };
 
-  const handleSocialAuth = async (provider: AuthProvider, accessToken: string) => {
-    if (!accessToken) {
-      dispatch(setError(`${provider} authentication failed: No access token`));
-      return;
-    }
-
-    setIsLoading(true);
+  const handleSocialAuth = async (provider: 'google', token: string) => {
     try {
-      await dispatch(AuthService.googleLogin({ token: accessToken }));
-      navigate('/dashboard');
+      await socialLogin(provider, token);
     } catch (error) {
       console.error(`${provider} login failed:`, error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -217,7 +202,7 @@ const SignupModule = () => {
 
         {authError && (
           <Alert severity="error" sx={{ mb: 2 }}>
-            {authError}
+            {authError.message || 'An error occurred'}
           </Alert>
         )}
 

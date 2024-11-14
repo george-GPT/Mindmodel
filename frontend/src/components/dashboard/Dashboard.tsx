@@ -1,105 +1,17 @@
-// src/components/dashboard/dashboard.tsx
-
-import './dashboard.css'; // Import the CSS file
-
-import React, { useMemo, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+// src/components/dashboard/Dashboard.tsx
+import './dashboard.css';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import AssessmentIcon from '@mui/icons-material/Assessment';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
 import { Box, Button, Grid, Tooltip, Typography, Alert } from '@mui/material';
-
-import { RootState } from '../../store/store';
-
-interface DashboardSection {
-  icon: JSX.Element;
-  title: string;
-  progress: number;
-  total: number;
-  buttonText: string;
-  route: string;
-  tooltipText: string;
-  color: 'primary' | 'secondary' | 'success';
-}
+import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import { useAuth } from '../../hooks/useAuth';
+import { useDashboard } from '../../hooks/useDashboard';
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
-  
-  // Auth state
-  const { isAuthenticated, isMember } = useSelector((state: RootState) => state.auth);
-  
-  // Progress state
-  const { completedSurveys, completedGames } = useSelector(
-    (state: RootState) => state.progress
-  );
-  const surveyResponses = useSelector((state: RootState) => state.surveys.responses);
+  const { isAuthenticated, isMember } = useAuth();
+  const { sections, allCompleted } = useDashboard();
 
-  // Redirect if not authenticated or not a member
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
-    if (!isMember) {
-      navigate('/');
-      return;
-    }
-  }, [isAuthenticated, isMember, navigate]);
-  
-  // Memoized calculations
-  const { totalSurveys, totalGames, allCompleted } = useMemo(() => ({
-    totalSurveys: Object.keys(surveyResponses).length,
-    totalGames: 4,
-    get allCompleted() {
-      return completedSurveys.length === this.totalSurveys && 
-             completedGames.length === this.totalGames;
-    }
-  }), [completedSurveys.length, completedGames.length, surveyResponses]);
-
-  // Memoized sections data
-  const sections: DashboardSection[] = useMemo(() => [
-    {
-      icon: <AssessmentIcon className="icon" color="primary" />,
-      title: "Surveys Completed",
-      progress: completedSurveys.length,
-      total: totalSurveys,
-      buttonText: "View Surveys",
-      route: '/app/surveys',
-      tooltipText: "View and complete surveys",
-      color: 'primary'
-    },
-    {
-      icon: <SportsEsportsIcon className="icon" color="secondary" />,
-      title: "Games Completed",
-      progress: completedGames.length,
-      total: totalGames,
-      buttonText: "View Games",
-      route: '/app/games',
-      tooltipText: "Play and complete games",
-      color: 'secondary'
-    }
-  ], [completedSurveys.length, completedGames.length, totalSurveys, totalGames]);
-
-  // Add survey and game lists for better navigation
-  const availableSurveys = useMemo(() => [
-    { id: 'AttentionSurvey', title: 'Attention Assessment' },
-    { id: 'BaselineSurvey', title: 'Baseline Assessment' },
-    { id: 'ExecutiveFunctionSurvey', title: 'Executive Function Assessment' },
-    { id: 'MemorySurvey', title: 'Memory Assessment' },
-    { id: 'PersonalitySurvey', title: 'Personality Assessment' },
-    { id: 'ProcessingSurvey', title: 'Processing Assessment' }
-  ], []);
-
-  const availableGames = useMemo(() => [
-    { id: 'colorDots', title: 'Color Dots', route: '/app/games/color-dots' },
-    { id: 'colorShapes', title: 'Color Shapes', route: '/app/games/color-shapes' },
-    { id: 'gridMemory', title: 'Grid Memory', route: '/app/games/grid-memory' },
-    { id: 'symbolSearch', title: 'Symbol Search', route: '/app/games/symbol-search' }
-  ], []);
-
-  // If not authenticated or not a member, return null (useEffect will handle redirect)
   if (!isAuthenticated || !isMember) {
     return null;
   }
@@ -110,7 +22,6 @@ const Dashboard: React.FC = () => {
         Assessments Dashboard
       </Typography>
       
-      {/* Progress Alert */}
       {!allCompleted && (
         <Alert severity="info" sx={{ mb: 3 }}>
           Complete all surveys and games to unlock your final AI-generated insights.

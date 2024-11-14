@@ -1,30 +1,34 @@
-// src/services/auth/useAuth.ts
+// src/hooks/useAuth.ts
 
 import { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { RootState, AppDispatch } from '../../store/store';
+import { RootState, AppDispatch } from '@/store/store';
 import { 
   setError, 
   login as loginAction, 
   logout as logoutAction, 
   setLoading, 
   clearError 
-} from '../../store/authSlice';
+} from '@/store/authSlice';
 import { 
   startSession, 
   endSession, 
   updateSessionData 
-} from '../../store/sessionSlice';
+} from '@/store/sessionSlice';
 import type { 
   LoginCredentials, 
   AuthResponse, 
   LoadingStateType,
-  User,
-  GoogleAuthRequest 
-} from '../../types/auth';
-import { ApiError, ErrorCodes } from '../../types/error';
-import authService from './authService';
+  UserProfile,
+  TokenPair,
+  GoogleSDKResponse,
+  RegisterData,
+  ChangePasswordData
+} from '@/types/auth';
+import { ApiError, ErrorCodes, isApiError } from '@/types/error';
+import { authApi } from '@/services/api/authApi';
+import { tokenService } from '@/services/security/tokenService';
 
 interface UseAuthenticationOptions {
   redirectTo?: string;
@@ -35,7 +39,7 @@ interface UseAuthenticationOptions {
 interface UseAuthenticationReturn {
   isAuthenticated: boolean;
   isMember: boolean;
-  user: User | null;
+  user: UserProfile | null;
   error: ApiError | null;
   loading: Record<LoadingStateType, boolean>;
   isLoading: boolean;
@@ -43,6 +47,8 @@ interface UseAuthenticationReturn {
   login: (credentials: LoginCredentials) => Promise<void>;
   logout: () => Promise<void>;
   socialLogin: (provider: 'google', token: string) => Promise<void>;
+  register: (data: RegisterData) => Promise<void>;
+  changePassword: (data: ChangePasswordData) => Promise<void>;
 }
 
 export const useAuth = (
@@ -61,28 +67,40 @@ export const useAuth = (
         return;
       }
 
-      if (requiresMember && !isMember) {
-        navigate('/upgrade');
+      const token = tokenService.getRefreshToken();
+      if (!token) {
+        handleSessionExpired();
         return;
       }
 
-      const isValid = await authService.validateSession();
-      
-      if (!isValid) {
-        const sessionError: ApiError = {
-          success: false,
-          message: 'Session expired',
-          error: {
-            code: ErrorCodes.TOKEN_EXPIRED
-          }
-        };
-        dispatch(setError(sessionError));
-        dispatch(logoutAction());
-        dispatch(endSession());
-        navigate(redirectTo);
-      } else {
-        dispatch(updateSessionData({ lastActive: Date.now() }));
+      try {
+        const response = await authApi.refresh(token);
+        if (response?.data?.data?.access) {
+          tokenService.setTokens({
+            access: response.data.data.access,
+            refresh: token
+          });
+          dispatch(updateSessionData({ lastActive: Date.now() }));
+        } else {
+          handleSessionExpired();
+        }
+      } catch (error) {
+        handleSessionExpired();
       }
+    };
+
+    const handleSessionExpired = () => {
+      const sessionError: ApiError = {
+        success: false,
+        message: 'Session expired',
+        error: {
+          code: ErrorCodes.token_expired
+        }
+      };
+      dispatch(setError(sessionError));
+      dispatch(logoutAction());
+      dispatch(endSession());
+      navigate(redirectTo);
     };
 
     validateSession();
@@ -93,15 +111,15 @@ export const useAuth = (
       dispatch(setLoading({ type: 'login', isLoading: true }));
       dispatch(clearError());
 
-      const response = await authService.loginUser(credentials);
+      const response = await authApi.login(credentials);
 
-      if (!response?.data?.user) {
+      if (!response?.data?.data?.user) {
         throw new Error('Invalid response data');
       }
 
       dispatch(loginAction({
-        user: response.data.user,
-        isMember: response.data.user.is_member,
+        user: response.data.data.user,
+        isMember: response.data.data.user.is_member || false,
         isAdmin: false
       }));
 
@@ -115,7 +133,7 @@ export const useAuth = (
         success: false,
         message: err instanceof Error ? err.message : 'Login failed',
         error: {
-          code: ErrorCodes.AUTHENTICATION_ERROR
+          code: ErrorCodes.not_authenticated
         }
       };
       dispatch(setError(apiError));
@@ -128,7 +146,7 @@ export const useAuth = (
   const logout = useCallback(async (): Promise<void> => {
     try {
       dispatch(setLoading({ type: 'auth', isLoading: true }));
-      await authService.logout();
+      await authApi.logout();
       dispatch(logoutAction());
       dispatch(endSession());
       navigate(redirectTo);
@@ -137,7 +155,7 @@ export const useAuth = (
         success: false,
         message: err instanceof Error ? err.message : 'Logout failed',
         error: {
-          code: ErrorCodes.AUTHENTICATION_ERROR
+          code: ErrorCodes.not_authenticated
         }
       };
       dispatch(setError(apiError));
@@ -152,15 +170,15 @@ export const useAuth = (
       dispatch(setLoading({ type: 'social', isLoading: true }));
       dispatch(clearError());
 
-      const response = await authService.googleLogin({ token });
+      const response = await authApi.googleAuth(token);
 
-      if (!response?.data?.user) {
+      if (!response?.data?.data?.user) {
         throw new Error('Invalid response data');
       }
 
       dispatch(loginAction({
-        user: response.data.user,
-        isMember: response.data.user.is_member,
+        user: response.data.data.user,
+        isMember: response.data.data.user.is_member || false,
         isAdmin: false
       }));
 
@@ -174,13 +192,53 @@ export const useAuth = (
         success: false,
         message: err instanceof Error ? err.message : 'Social login failed',
         error: {
-          code: ErrorCodes.AUTHENTICATION_ERROR
+          code: ErrorCodes.not_authenticated
         }
       };
       dispatch(setError(apiError));
       throw err;
     } finally {
       dispatch(setLoading({ type: 'social', isLoading: false }));
+    }
+  }, [dispatch]);
+
+  const register = useCallback(async (data: RegisterData): Promise<void> => {
+    try {
+      dispatch(setLoading({ type: 'register', isLoading: true }));
+      dispatch(clearError());
+      await authApi.register(data);
+    } catch (err) {
+      const apiError: ApiError = {
+        success: false,
+        message: err instanceof Error ? err.message : 'Registration failed',
+        error: {
+          code: ErrorCodes.validation_error
+        }
+      };
+      dispatch(setError(apiError));
+      throw err;
+    } finally {
+      dispatch(setLoading({ type: 'register', isLoading: false }));
+    }
+  }, [dispatch]);
+
+  const changePassword = useCallback(async (data: ChangePasswordData): Promise<void> => {
+    try {
+      dispatch(setLoading({ type: 'passwordChange', isLoading: true }));
+      dispatch(clearError());
+      await authApi.changePassword(data);
+    } catch (err) {
+      const apiError: ApiError = {
+        success: false,
+        message: err instanceof Error ? err.message : 'Password change failed',
+        error: {
+          code: ErrorCodes.validation_error
+        }
+      };
+      dispatch(setError(apiError));
+      throw err;
+    } finally {
+      dispatch(setLoading({ type: 'passwordChange', isLoading: false }));
     }
   }, [dispatch]);
 
@@ -198,5 +256,7 @@ export const useAuth = (
     login,
     logout,
     socialLogin,
+    register,
+    changePassword
   };
 };

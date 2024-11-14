@@ -1,53 +1,29 @@
 import axios from 'axios';
-import TokenService from '../security/tokenService';
-
-const baseURL = import.meta.env.VITE_API_BASE_URL;
+import { tokenService } from '../security/tokenService';
+import { handleError } from '../../utils/errorHandler';
 
 const axiosInstance = axios.create({
-    baseURL,
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Request interceptor for adding auth token
+// Add interceptors
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = TokenService.getAccessToken();
+        const token = tokenService.getAccessToken();
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
     },
-    (error) => {
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(handleError(error))
 );
 
-// Response interceptor for handling token refresh
 axiosInstance.interceptors.response.use(
     (response) => response,
-    async (error) => {
-        const originalRequest = error.config;
-
-        if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true;
-
-            try {
-                const refreshResponse = await TokenService.refreshAccessToken();
-                if (refreshResponse.data?.access) {
-                    originalRequest.headers.Authorization = `Bearer ${refreshResponse.data.access}`;
-                    return axiosInstance(originalRequest);
-                }
-            } catch (refreshError) {
-                // Handle refresh token failure
-                TokenService.clearTokens();
-                return Promise.reject(refreshError);
-            }
-        }
-
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(handleError(error))
 );
 
-export default axiosInstance; 
+export { axiosInstance }; 

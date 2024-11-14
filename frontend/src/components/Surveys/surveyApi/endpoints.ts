@@ -1,7 +1,7 @@
 import type { AxiosResponse } from 'axios';
-import axiosInstance from '../api/axiosInstance';
-import { API_PATHS } from '../api/apiPaths';
-import type { components } from '../../types/api';
+import { axiosInstance } from '../../../services/api/axiosInstance';
+import { API_PATHS } from '../../../services/api/apiPaths';
+import type { components } from '../../../types/api';
 
 type Survey = components['schemas']['Survey'];
 type SurveyResponse = components['schemas']['SurveyResponse'];

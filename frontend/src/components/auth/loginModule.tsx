@@ -7,19 +7,18 @@ import {
 } from '@mui/material';
 
 import { AppDispatch, RootState } from '@/store/store';
-import { AuthService } from '@/services';
+import { authApi } from '@/services/api/authApi';
 import GoogleIcon from '@/components/assets/icons/google-Icon';
 import Button from '@/components/button/button';
-import Input from '@/components/input';
-import { 
-  setError, 
-  clearError 
-} from '@/store/authSlice';
-import { validateEmail, validatePassword } from '../../utils/validation';
-import EmailInput from '../input/email-input';
-import BrainIconPurple from '../assets/icons/brainIconPurlple';
-import { AuthProvider } from '../../types';
-import type { AuthResponse } from '@/types/auth';
+import Input from '@/components/Input';
+import { setError, clearError, login } from '@/store/authSlice';
+import { validateEmail, validatePassword } from '@/utils/validation';
+import EmailInput from '@/components/Input/email-input';
+import BrainIconPurple from '@/components/assets/icons/brainIconPurlple';
+import type { AuthProvider } from '@/types/auth';
+import { isApiError } from '@/types/error';
+import { useAuth } from '@/hooks/useAuth';
+
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
   width: "100%",
@@ -44,7 +43,7 @@ const DividerContainer = styled(Box)(({ theme }) => ({
   margin: `${theme.spacing(3)} 0`,
 }));
 
-const LoginModule = () => {
+export const LoginModule = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [showPassword, setShowPassword] = useState(false);
@@ -55,6 +54,7 @@ const LoginModule = () => {
   
   const authError = useSelector((state: RootState) => state.auth.error);
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { login } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -79,91 +79,22 @@ const LoginModule = () => {
 
     setIsLoading(true);
     try {
-      const response = await AuthService.loginUser({ email, password });
-      
-      if (!response?.data?.user?.email_verified) {
-        localStorage.setItem('pendingVerificationEmail', email);
-        navigate('/verify-email');
-        return;
-      }
-
+      await login({ email, password });
       navigate('/dashboard');
     } catch (error) {
       console.error("Login failed:", error);
-      dispatch(setError('Login failed'));
+      if (isApiError(error)) {
+        dispatch(setError(error));
+      } else {
+        dispatch(setError('Login failed. Please try again.'));
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSocialAuth = async (provider: AuthProvider, token: string) => {
-    if (!token) {
-      dispatch(setError(`${provider} authentication failed: No token`));
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      await AuthService.googleLogin({ token });
-      navigate('/dashboard');
-    } catch (error) {
-      console.error(`${provider} login failed:`, error);
-      dispatch(setError(`${provider} authentication failed`));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Add Google OAuth initialization
-  useEffect(() => {
+  const handleGoogleClick = () => {
     // Initialize Google OAuth
-    const initGoogleAuth = async () => {
-      try {
-        // Load Google's OAuth script
-        await new Promise((resolve) => {
-          const script = document.createElement('script');
-          script.src = 'https://accounts.google.com/gsi/client';
-          script.onload = resolve;
-          document.body.appendChild(script);
-        });
-
-        // Add null check and throw if missing
-        const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-        if (!clientId) {
-          throw new Error('Google client ID not configured');
-        }
-
-        window.google?.accounts.id.initialize({
-          client_id: clientId, // Now TypeScript knows this is string
-          callback: handleGoogleCallback
-        });
-      } catch (error) {
-        console.error('Failed to initialize Google OAuth:', error);
-        dispatch(setError('Google authentication configuration error'));
-      }
-    };
-
-    initGoogleAuth();
-  }, []);
-
-  interface GoogleAuthResponse {
-    credential?: string;
-    select_by?: string;
-  }
-
-  const handleGoogleCallback = async (response: GoogleAuthResponse) => {
-    if (response?.credential) {
-      try {
-        await AuthService.googleLogin({ token: response.credential });
-        navigate('/dashboard');
-      } catch (error) {
-        console.error('Google auth failed:', error);
-        dispatch(setError('Google authentication failed'));
-      }
-    }
-  };
-
-  const handleGoogleLogin = () => {
     window.google?.accounts.id.prompt();
   };
 
@@ -197,7 +128,7 @@ const LoginModule = () => {
           variant="action" 
           fullWidth 
           startIcon={<GoogleIcon />}
-          onClick={handleGoogleLogin}
+          onClick={handleGoogleClick}
           disabled={isLoading}
         >
           Sign in with Google

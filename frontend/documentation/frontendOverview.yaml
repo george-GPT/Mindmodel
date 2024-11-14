@@ -34,9 +34,13 @@ frontend_infrastructure:
           schema_types:
             - "Survey"
             - "SurveyResponse"
+            - "SurveyAnalytics"
+            - "VisualizationOptions"
           frontend_types:
             - "SurveyState"
             - "SurveyProgress"
+            - "ChartData"
+            - "AnalyticsResult"
         user:
           schema_types:
             - "UserProfile"
@@ -50,6 +54,22 @@ frontend_infrastructure:
           frontend_types:
             - "AIAnalysisState"
             - "AIAnalysisResult"
+        dashboard:
+          schema_types:
+            - "DashboardSection"
+            - "AnalyticsData"
+          frontend_types:
+            - "DashboardState"
+            - "ProgressState"
+        survey_analytics:
+          schema_types:
+            - "AnalyticsData"
+            - "QuestionStats"
+            - "ResponseDistribution"
+          frontend_types:
+            - "ChartData"
+            - "VisualizationOptions"
+            - "AnalyticsResult"
 
       patterns:
         api_response:
@@ -88,6 +108,7 @@ frontend_infrastructure:
               - "progress"
               - "analysis"
               - "session"
+              - "analytics"
           middleware:
             serialization:
               ignore:
@@ -97,6 +118,10 @@ frontend_infrastructure:
                 - "PERSIST"
                 - "PURGE"
                 - "REGISTER"
+          real_time:
+            websocket:
+              - "analytics"
+              - "progress"
         
         slices:
           auth:
@@ -263,15 +288,14 @@ frontend_infrastructure:
         contents:
           - "api.d.ts: Auto-generated OpenAPI types for API responses and requests."
           - "auth.d.ts: Authentication-related types."
-          - "games.d.ts: Game-related types."
-          - "surveys.d.ts: Survey-related types."
-          - "user.ts: User-related types."
+          - "game.d.ts: Game-related types."
+          - "survey.d.ts: Survey-related types."
+          - "error.ts: Error handling types and utilities."
           - "ai.types.ts: Types related to AI analysis."
-          - "error.d.ts: Error handling types."
           - "google.d.ts: Google OAuth-related types."
           - "declarations.d.ts: Global type declarations."
           - "env.d.ts: Environment variable types."
-          - "survey.d.ts: Survey-related types."
+          - "user.d.ts: User-related types."
           - "index.ts: Aggregates and exports all type definitions."
 
       components/:
@@ -302,6 +326,23 @@ frontend_infrastructure:
       - "Use OpenAPI-generated types for all API data to ensure consistency with the backend."
       - "Store frontend-specific types within the `domain/` folder to differentiate from backend types."
       - "Document any type extensions or custom types to provide clarity and context."
+    
+    analytics:
+      - "Use SurveyJS built-in analytics for basic metrics"
+      - "Implement custom visualization panels for specific survey types"
+      - "Cache analytics data with appropriate stale times"
+      - "Use lazy loading for visualization components"
+    
+    dashboard:
+      - "Maintain single source of truth for progress tracking"
+      - "Use WebSocket for real-time analytics updates"
+      - "Implement progressive loading for dashboard sections"
+      - "Cache dashboard data with appropriate invalidation"
+    survey_integration:
+      - "Use SurveyJS for core survey functionality"
+      - "Implement lazy loading for analytics visualizations"
+      - "Cache survey responses with appropriate invalidation"
+      - "Use WebSocket for real-time progress updates"
 
   rules:
     - "API calls only - no business logic should reside within the API layer."
@@ -320,6 +361,15 @@ frontend_infrastructure:
     - "Use `apiPaths.ts` to manage and organize all API endpoint paths centrally."
     - "Use a unified `useAuth.ts` hook to manage authentication logic and state access within React components."
     - "Leverage `AuthState.ts` to maintain and access authentication-related state consistently across the application."
+    - "Implement analytics visualization using SurveyJS Dashboard components"
+    - "Maintain separation between survey logic and analytics display"
+    - "Use lazy loading for heavy visualization components"
+    - "Cache analytics data with appropriate invalidation strategies"
+    - "Implement real-time updates only where necessary"
+    - "Survey integration maintains simplicity while providing essential analytics"
+    - "Real-time updates are limited to critical metrics for performance"
+    - "Analytics visualizations use progressive loading for better UX"
+    - "Dashboard sections follow modular structure for maintainability"
 
   implementation:
     steps:
@@ -340,6 +390,11 @@ frontend_infrastructure:
       15: "Update all import paths to reflect the new streamlined structure and ensure consistency across the codebase."
       16: "Thoroughly test each refactoring step to ensure functionality remains intact and no issues are introduced."
       17: "Document the new structure and guidelines to assist current and future developers in understanding the organization and adhering to best practices."
+      18: "Set up SurveyJS integration with basic analytics capabilities"
+      19: "Implement WebSocket connections for real-time updates"
+      20: "Configure data caching strategies with React Query"
+      21: "Set up lazy loading for visualization components"
+      22: "Implement progressive dashboard loading"
 
   notes:
     - "This streamlined frontend infrastructure ensures a clear separation of concerns, enhancing maintainability and scalability."
@@ -356,3 +411,12 @@ frontend_infrastructure:
     - "Leveraging `AuthState.ts` within the `useAuth.ts` hook ensures consistent and type-safe management of authentication state across the application."
     - "By consolidating API files and hooks, the codebase becomes more maintainable, reducing redundancy and potential inconsistencies."
     - "Regularly refer to this `frontend_infrastructure` guide to maintain alignment with best practices and ensure the frontend architecture remains streamlined and efficient."
+    - "SurveyJS Dashboard integration provides built-in analytics capabilities while maintaining simplicity"
+    - "Real-time updates are implemented only for critical metrics to optimize performance"
+    - "Analytics visualization components are lazy-loaded to improve initial load time"
+    - "Dashboard sections follow a progressive loading pattern for better user experience"
+    - "Survey analytics maintain a balance between functionality and simplicity using SurveyJS built-in features"
+    - "Survey integration maintains simplicity while providing essential analytics"
+    - "Real-time updates are limited to critical metrics for performance"
+    - "Analytics visualizations use progressive loading for better UX"
+    - "Dashboard sections follow modular structure for maintainability"

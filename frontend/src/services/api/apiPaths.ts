@@ -12,8 +12,14 @@ export const API_PATHS = {
         CHANGE_EMAIL: '/api/users/auth/change-email/',
         PROFILE: '/api/users/auth/profile/',
         TWO_FACTOR: {
-            ENABLE: '/api/users/auth/2fa/enable',
-            DISABLE: '/api/users/auth/2fa/disable'
+            ENABLE: '/api/users/auth/2fa/enable/',
+            DISABLE: '/api/users/auth/2fa/disable/'
+        },
+        SESSION: {
+            START: '/api/users/auth/session/start/',
+            END: '/api/users/auth/session/end/',
+            UPDATE: '/api/users/auth/session/update/',
+            RESET: '/api/users/auth/session/reset/'
         }
     },
     GAMES: {

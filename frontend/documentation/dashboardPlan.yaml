@@ -1,0 +1,87 @@
+# Dashboard State Management Overview
+
+## Core Slices Integration
+slices:
+  progress:
+    purpose: "Track completion status"
+    usage:
+      - "Display survey/game progress"
+      - "Control baseline survey access"
+      - "Unlock final results"
+    state_shape:
+      completedSurveys: string[]
+      completedGames: string[]
+
+  survey:
+    purpose: "Survey data and responses"
+    usage:
+      - "Track survey completion"
+      - "Store survey responses"
+      - "Manage analytics data"
+    state_shape:
+      surveys: Record<string, Survey>
+      responses: Record<string, SurveyResponse[]>
+      analytics: Record<string, SurveyAnalytics>
+
+  analysis:
+    purpose: "AI insights and analysis"
+    usage:
+      - "Store generated insights"
+      - "Track analysis status"
+      - "Display final results"
+    state_shape:
+      insights: Record<string, string[]>
+      status: 'pending' | 'complete' | 'error'
+
+  session:
+    purpose: "User session management"
+    usage:
+      - "Track active survey/game"
+      - "Handle session timeouts"
+      - "Manage UI state"
+    state_shape:
+      activeSurvey: string | null
+      activeGame: string | null
+      lastActivity: number
+
+## Data Flow
+dashboard_updates:
+  on_mount:
+    - "Load progress from progressSlice"
+    - "Check session status"
+    - "Initialize analytics if needed"
+  
+  on_survey_complete:
+    - "Update progressSlice"
+    - "Store response in surveySlice"
+    - "Generate analytics"
+    - "Update session state"
+
+  on_game_complete:
+    - "Update progressSlice"
+    - "Store metrics in analysisSlice"
+    - "Update session state"
+
+## State Access Patterns
+hooks:
+  useDashboard:
+    slices_used:
+      - "progress (completion status)"
+      - "survey (analytics data)"
+      - "session (active items)"
+    
+  useProgress:
+    slices_used:
+      - "progress (core tracking)"
+    computed_values:
+      - "totalSurveys from config"
+      - "totalGames from config"
+      - "completion status"
+
+## Error Handling
+error_management:
+  slice: "errorSlice"
+  dashboard_cases:
+    - "Failed analytics loading"
+    - "Survey submission errors"
+    - "Session timeout"

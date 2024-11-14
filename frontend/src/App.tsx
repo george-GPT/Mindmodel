@@ -5,11 +5,11 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
-import ErrorBoundary from './components/dashboard/common/error-boundary';
+import ErrorBoundary from './components/common/errorBoundary';
 import MainLayout from './components/layout/main-layout';
 import AppRoutes from './routes/routes';
 import theme from './theme/theme';
-import './styles/animations.css';
+import './theme/animations.css';
 
 const App: React.FC = () => {
   // Favicon setup effect

@@ -1,52 +1,48 @@
-import type { LoginCredentials, TokenResponse, GoogleAuthRequest } from '@/types/auth';
-import type { components } from '@/types/api';
 import type { AxiosResponse } from 'axios';
+import { axiosInstance } from './axiosInstance';
 import { API_PATHS } from './apiPaths';
-import axiosInstance from './axiosInstance';
+import type { components } from '@/types/api';
+import type { 
+  LoginCredentials,
+  RegisterData,
+  ChangePasswordData,
+  TokenResponse,
+  AuthResponse,
+  UserProfile
+} from '@/types/auth';
 
-export const authAPI = {
-    login: (credentials: LoginCredentials): Promise<AxiosResponse<TokenResponse>> => 
-        axiosInstance.post(API_PATHS.AUTH.LOGIN, credentials),
+export const authApi = {
+  // Core Authentication
+  login: (credentials: LoginCredentials): Promise<AxiosResponse<components['schemas']['AuthResponse']>> => 
+    axiosInstance.post(API_PATHS.AUTH.LOGIN, credentials),
 
-    register: (data: {
-        email: string;
-        username: string;
-        password: string;
-    }) => 
-        axiosInstance.post(API_PATHS.AUTH.REGISTER, data),
+  register: (data: RegisterData): Promise<AxiosResponse<components['schemas']['AuthResponse']>> => 
+    axiosInstance.post(API_PATHS.AUTH.REGISTER, data),
 
-    logout: () => 
-        axiosInstance.post(API_PATHS.AUTH.LOGOUT),
+  // OAuth
+  googleAuth: (token: string): Promise<AxiosResponse<components['schemas']['AuthResponse']>> =>
+    axiosInstance.post(API_PATHS.AUTH.GOOGLE_AUTH, { token }),
 
-    googleAuth: (data: GoogleAuthRequest): Promise<AxiosResponse<TokenResponse>> => 
-        axiosInstance.post(API_PATHS.AUTH.GOOGLE_AUTH, data),
+  // Session Management
+  refresh: (refreshToken: string): Promise<AxiosResponse<components['schemas']['TokenResponse']>> =>
+    axiosInstance.post(API_PATHS.AUTH.REFRESH, { refresh: refreshToken }),
 
-    verifyEmail: (token: string) => 
-        axiosInstance.post(API_PATHS.AUTH.VERIFY_EMAIL, { token }),
+  logout: () => 
+    axiosInstance.post<components['schemas']['SuccessResponse']>(API_PATHS.AUTH.LOGOUT),
 
-    resendVerification: (email: string) =>
-        axiosInstance.post(API_PATHS.AUTH.RESEND_VERIFICATION, { email }),
+  // Account Management
+  changePassword: (data: ChangePasswordData) => 
+    axiosInstance.post<components['schemas']['SuccessResponse']>(
+      API_PATHS.AUTH.CHANGE_PASSWORD, 
+      data
+    ),
 
-    changePassword: (data: {
-        old_password: string;
-        new_password: string;
-    }) => 
-        axiosInstance.post(API_PATHS.AUTH.CHANGE_PASSWORD, data),
+  getProfile: () => 
+    axiosInstance.get<components['schemas']['UserProfile']>(API_PATHS.AUTH.PROFILE),
 
-    changeEmail: (data: {
-        new_email: string;
-        password: string;
-    }) => 
-        axiosInstance.post(API_PATHS.AUTH.CHANGE_EMAIL, data),
-
-    getProfile: () => 
-        axiosInstance.get(API_PATHS.AUTH.PROFILE),
-
-    updateProfile: (data: components['schemas']['UserProfileRequest']) => 
-        axiosInstance.patch(API_PATHS.AUTH.PROFILE, data),
-
-    refreshToken: (refreshToken: string): Promise<AxiosResponse<TokenResponse>> =>
-        axiosInstance.post(API_PATHS.AUTH.REFRESH, { refresh: refreshToken }),
-};
-
-export type { TokenResponse }; 
+  updateProfile: (data: Partial<UserProfile>) => 
+    axiosInstance.patch<components['schemas']['UserProfile']>(
+      API_PATHS.AUTH.PROFILE, 
+      data
+    )
+}; 

@@ -7,6 +7,146 @@ Integration of SurveyJS and survey-analytics for comprehensive survey functional
 - WebSocket progress updates
 - Dashboard integration
 
+
+# Survey Integration Documentation
+
+## Overview
+core_functionality:
+  - "SurveyJS for survey rendering"
+  - "Basic analytics processing"
+  - "Redux state management"
+  - "Simple visualization"
+
+## Implementation Structure
+
+### Core Components
+generic_survey:
+  purpose: "Central survey rendering component"
+  file: "generic-survey.tsx"
+  key_functions:
+    - "Survey loading and rendering"
+    - "Response submission"
+    - "Basic analytics generation"
+    - "Navigation control"
+  reference:
+    startLine: 46
+    endLine: 132
+
+survey_analytics_display:
+  purpose: "Analytics visualization component"
+  file: "survey-endscreen-analytics.tsx"
+  features:
+    - "Basic chart rendering"
+    - "Key insights display"
+    - "Simple visualization options"
+  reference:
+    startLine: 1
+    endLine: 81
+
+### Survey Types
+survey_definitions:
+  baseline:
+    purpose: "Initial assessment"
+    analytics: false
+    navigation: "dashboard"
+    file: "baseline-survey.json"
+    reference:
+      startLine: 1
+      endLine: 47
+
+  executive_function:
+    purpose: "Executive functioning assessment"
+    analytics: true
+    file: "executive-function-survey.json"
+    reference:
+      startLine: 1
+      endLine: 25
+
+  processing:
+    purpose: "Processing speed assessment"
+    analytics: true
+    file: "processing-survey.json"
+    reference:
+      startLine: 1
+      endLine: 36
+
+### Analytics Integration
+analytics:
+  core_metrics:
+    - completion_rate
+    - response_patterns
+    - basic_insights
+  
+  visualization:
+    chart_types:
+      - bar
+      - pie
+    options:
+      allowHideQuestions: false
+      allowShowPercentages: true
+  
+  data_flow:
+    collection:
+      - "Capture survey responses"
+      - "Process basic metrics"
+      - "Generate simple insights"
+    storage:
+      - "Redux state updates"
+      - "Backend submission"
+    display:
+      - "Basic charts"
+      - "Key insights list"
+
+### State Management
+redux_integration:
+  slices:
+    survey:
+      - "Current survey state"
+      - "Response data"
+      - "Completion status"
+    progress:
+      - "Survey progress tracking"
+      - "Completion flags"
+
+  actions:
+    - "submitSurveyResponse"
+    - "completeSurvey"
+    - "setAnalyticsData"
+
+### Performance Considerations
+optimizations:
+  - "Lazy load survey components"
+  - "Minimize analytics processing"
+  - "Simple state updates"
+  - "Basic response caching"
+
+### Error Handling
+error_management:
+  types:
+    - "Survey loading errors"
+    - "Response submission failures"
+    - "Analytics processing issues"
+  handling:
+    - "Clear error messages"
+    - "Simple recovery options"
+    - "Fallback states"
+
+## Implementation Guidelines
+best_practices:
+  - "Keep analytics processing simple"
+  - "Use basic visualization types"
+  - "Implement clear error handling"
+  - "Maintain clean data flow"
+  - "Focus on core functionality"
+
+## Next Steps
+priorities:
+  1: "Simplify analytics to core metrics"
+  2: "Remove WebSocket complexity"
+  3: "Streamline visualization options"
+  4: "Implement basic caching"
+  5: "Add comprehensive error handling"
+
 ## Survey Analytics Integration
 
 ### Package Setup

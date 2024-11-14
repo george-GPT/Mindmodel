@@ -1,4 +1,4 @@
-// src/Store/analysisSlice.ts
+// src/store/analysisSlice.ts
 
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 

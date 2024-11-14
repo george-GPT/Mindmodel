@@ -1,92 +1,84 @@
 import type { components } from './api';
 import { ApiError } from './error';
 
-// Core types from API schema
-export type LoginCredentials = components['schemas']['LoginCredentials'];
-export type User = components['schemas']['UserProfile'];
-export type SessionStatus = components['schemas']['SessionStatus'];
-export type AuthProvider = 'google';
-
-// Token response type from API schema
-export type TokenResponse = components['schemas']['TokenResponse'];
-
-// Auth response type from API schema
-export type AuthResponse = components['schemas']['AuthResponse'];
-
-// Verification response types
-export interface VerificationResponse extends components['schemas']['SuccessResponse'] {
-    data: {
-        message: string;
-    };
-}
-
-export interface ResendVerificationResponse extends components['schemas']['SuccessResponse'] {
-    data: {
-        message: string;
-    };
-}
-
-export interface ErrorResponse extends components['schemas']['SuccessResponse'] {
-    data: {
-        message: string;
-    };
-}
-
-// Request types
-export interface GoogleAuthRequest {
-    token: string;
+// Core auth state
+export interface AuthState {
+  isAuthenticated: boolean;
+  user: components['schemas']['UserProfile'] | null;
+  isMember: boolean;
+  isAdmin: boolean;
+  error: ApiError | null;
+  loading: Record<LoadingStateType, boolean>;
+  session: SessionState;
+  verification: VerificationState;
 }
 
 // Loading states
 export type LoadingStateType = 
-    | 'login' 
-    | 'register'
-    | 'passwordChange'
-    | 'emailChange'
-    | 'twoFactor'
-    | 'auth'
-    | 'profile'
-    | 'verification'
-    | 'social';
+  | 'login'
+  | 'register'
+  | 'passwordChange'
+  | 'emailChange'
+  | 'twoFactor'
+  | 'auth'
+  | 'profile'
+  | 'verification'
+  | 'social';
 
-// Auth state
-export interface AuthState {
-    isAuthenticated: boolean;
-    isMember: boolean;
-    isAdmin?: boolean;
-    user: User | null;
-    loading: Record<LoadingStateType, boolean>;
-    error: ApiError | null;
-}
+// Request/Response types (from OpenAPI schema)
+export type {
+  UserProfile,
+  TokenResponse,
+  AuthResponse,
+  LoginCredentials
+} from './api';
 
-// Auth service interface
-export interface AuthServiceType {
-    loginUser: (credentials: LoginCredentials) => Promise<AuthResponse>;
-    googleLogin: (data: GoogleAuthRequest) => Promise<AuthResponse>;
-    logout: () => Promise<void>;
-    validateSession: () => Promise<boolean>;
-    changePassword: (data: {
-        old_password: string;
-        new_password: string;
-        new_password2: string;
-    }) => Promise<void>;
-}
-
-// Constants
-export const TOKEN_EXPIRY = {
-    VERIFICATION: 86400,
-    EMAIL_CHANGE: 3600,
-    PASSWORD_RESET: 3600,
-    REFRESH: 604800,
-    ACCESS: 900
-} as const;
-
-export type AuthStatus = 'authenticated' | 'unauthenticated' | 'loading';
-
-// Add this definition if it's missing
-export interface RegisterRequest {
-  email: string;
+// Frontend-specific types
+export interface RegisterData {
   username: string;
+  email: string;
   password: string;
 }
+
+export interface ChangePasswordData {
+  old_password: string;
+  new_password: string;
+}
+
+// Token management
+export interface TokenPair {
+  access: string;
+  refresh: string;
+}
+
+// OAuth types
+export interface GoogleSDKResponse {
+  credential: string;
+  select_by?: string;
+}
+
+// Auth provider type
+export type AuthProvider = 'google' | 'email';
+
+// Session management
+export interface SessionState {
+  expiresAt: number;
+  refreshExpiresAt: number;
+  lastActivity: number;
+}
+
+// Verification types
+export interface VerificationState {
+  isVerified: boolean;
+  verificationSent: boolean;
+  verificationExpiry: number;
+}
+
+// Auth error types
+export type AuthErrorType = 
+  | 'invalid_credentials'
+  | 'token_expired'
+  | 'email_not_verified'
+  | 'verification_failed'
+  | 'session_expired';
 

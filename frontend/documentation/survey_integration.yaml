@@ -1,0 +1,144 @@
+# Streamlined Survey Integration
+
+## Directory Structure
+root: "frontend/src/components/Surveys"
+
+graph TD
+    A[Dashboard] -->|Select Survey| B[Generic Survey]
+    B -->|Load Survey JSON| C[Survey Type Pages]
+    C -->|Complete Survey| D[Survey Analytics]
+    D -->|Baseline Survey| A
+    D -->|Other Surveys| E[Show Analytics]
+    E -->|Continue| A
+
+subdirectories:
+  surveyApi:
+    purpose: "API and type definitions"
+    files:
+      - "endpoints.ts"    # API endpoint definitions
+      - "index.ts"        # API exports
+      - "survey.d.ts"     # Survey type definitions
+
+  surveyHooks:
+    purpose: "Custom React hooks"
+    files:
+      - "design-tokens.ts"
+      - "survey-theme.ts"
+      - "use-survey-analytics.ts"
+      - "use-survey-letters.ts"
+      - "use-survey-theme.ts"
+
+  surveyJson:
+    purpose: "Survey definitions"
+    files:
+      - "attention-survey.json"
+      - "baseline-survey.json"
+      - "executive-function-survey.json"
+      - "memory-survey.json"
+      - "personality-survey.json"
+      - "processing-survey.json"
+
+  surveyLogic:
+    purpose: "Survey components"
+    files:
+      - "generic-survey.tsx"          # Core survey renderer
+      - "survey-endscreen-analytics.tsx"  # Analytics display
+      - "attention-page.tsx"          # Survey-specific pages
+      - "baseline-page.tsx"
+      - "executive-function-page.tsx"
+      - "memory-page.tsx"
+      - "personality-page.tsx"
+      - "processing-page.tsx"
+
+## Core Implementation
+generic_survey:
+  file: "surveyLogic/generic-survey.tsx"
+  purpose: "Central survey renderer"
+  key_functions:
+    - "Survey loading and rendering"
+    - "Response handling"
+    - "Basic analytics"
+
+## Data Flow
+process:
+  1_initialization:
+    component: "surveyLogic/generic-survey.tsx"
+    actions:
+      - "Load survey JSON from surveyJson/"
+      - "Initialize SurveyJS Model"
+  
+  2_api_handling:
+    component: "surveyApi/endpoints.ts"
+    actions:
+      - "Handle API requests"
+      - "Manage response submission"
+  
+  3_ui_processing:
+    component: "surveyHooks/use-survey-analytics.ts"
+    actions:
+      - "Process survey data"
+      - "Generate visualizations"
+  
+  4_completion:
+    component: "surveyLogic/survey-endscreen-analytics.tsx"
+    actions:
+      - "Display results"
+      - "Show completion status"
+
+## Analytics Integration
+analytics:
+  implementation:
+    - "Use SurveyJS built-in analytics"
+    - "Basic completion metrics"
+    - "Simple response visualization"
+  options:
+    chart_types: ["bar", "pie"]
+    settings:
+      allowHideQuestions: false
+      allowShowPercentages: true
+
+## Type Definitions
+types:
+  file: "surveyApi/survey.d.ts"
+  definitions:
+    - Survey:
+        required:
+          - id
+          - title
+          - pages
+    - SurveyResponse:
+        required:
+          - id
+          - survey_id
+          - responses
+    - SurveyAnalytics:
+        required:
+          - completionRate
+          - charts
+          - insights
+
+## API Integration
+api:
+  file: "surveyApi/endpoints.ts"
+  endpoints:
+    getSurveys:
+      response: SuccessResponse<Survey[]>
+    getSurveyDetails:
+      response: SuccessResponse<Survey>
+    submitSurveyResponse:
+      response: SuccessResponse<SurveyResponse>
+    getSurveyResponse:
+      response: SuccessResponse<SurveyResponse>
+
+
+
+The key changes needed:
+Move Data Management
+Survey response handling → surveySlice.ts
+API calls → surveyApi.ts
+Type definitions → survey.d.ts
+Keep in Hooks
+UI-specific transformations
+Chart data preparation
+Visual insights generation
+surveyLogic Updates
