@@ -11,14 +11,14 @@ import {
     useTheme
 } from '@mui/material';
 import { CheckCircleOutline, ErrorOutline, MailOutline } from '@mui/icons-material';
-import { AppDispatch } from '../../store/store';
-import { authAPI } from '../../services/api/authPath';
-import Button from '../button/button';
-import { 
-    VerificationResponse,
-    ResendVerificationResponse,
-    ErrorResponse 
-} from '../../types';
+import { AppDispatch } from '@/store/store';
+import { authAPI } from '@/services/api/authPath';
+import Button from '@/components/button/button';
+import { isApiError } from '@/types/error';
+import type { components } from '@/types/api';
+
+type VerificationResponse = components['schemas']['SuccessResponse'];
+type ResendVerificationResponse = components['schemas']['SuccessResponse'];
 
 const EmailVerification: React.FC = () => {
     const [verifying, setVerifying] = useState(true);
@@ -44,7 +44,11 @@ const EmailVerification: React.FC = () => {
                 await authAPI.verifyEmail(token);
                 setSuccess(true);
             } catch (err) {
-                setError('Email verification failed. Please try again.');
+                if (isApiError(err)) {
+                    setError(err.message);
+                } else {
+                    setError('Email verification failed. Please try again.');
+                }
             } finally {
                 setVerifying(false);
             }
@@ -65,7 +69,11 @@ const EmailVerification: React.FC = () => {
             setError(null);
             setSuccess(true);
         } catch (err) {
-            setError('Failed to resend verification email. Please try again.');
+            if (isApiError(err)) {
+                setError(err.message);
+            } else {
+                setError('Failed to resend verification email. Please try again.');
+            }
         } finally {
             setVerifying(false);
         }

@@ -8,14 +8,14 @@ import OurApproachPage from '../components/pages/our-approach';
 import ResearchPage from '../components/pages/research';
 import PrivacyPolicyPage from '../components/pages/privacy-policy';
 import ContactPage from '../components/pages/contact';
-import LoginModule from '../components/auth/login-module';
-import SignupModule from '../components/auth/signup-module';
-import EmailVerification from '../components/auth/email-verification';
+import LoginModule from '../components/auth/loginModule';
+import SignupModule from '../components/auth/signupModule';
+import EmailVerification from '../components/auth/emailVerification';
 import Dashboard from '../components/dashboard/dashboard';
 import AccountPage from '../components/pages/account';
 import SecurityPage from '../components/pages/account/SecurityPage';
 import FinalResults from '../components/dashboard/final-ai-results/final-results';
-import PrivateRoute from './private-routes';
+import PrivateRoute from './privateRoutes';
 import { NoPageFound } from '../components/pages/no-page-found';
 
 // Game imports

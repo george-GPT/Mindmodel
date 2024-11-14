@@ -1,5 +1,5 @@
 import axios from 'axios';
-import TokenService from './token-service';
+import TokenService from '../security/tokenService';
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 

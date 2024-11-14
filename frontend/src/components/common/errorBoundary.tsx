@@ -5,7 +5,7 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 import AlertIcon from '@mui/icons-material/ReportProblem'; // MUI Icon for alert
 import { Box, Button, Paper, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import type { ApiError } from '../../../types/error';
+import type { ApiError } from '@/types/error';
 
 interface Props {
   children: ReactNode;

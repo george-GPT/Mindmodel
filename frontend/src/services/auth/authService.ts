@@ -1,115 +1,147 @@
-// src/services/authService.ts
+// src/services/auth/authService.ts
 
-import type { AxiosResponse } from 'axios';
-import { authAPI } from '../api/authPath';
-import TokenService from '../api/token-service';
-import { login, logout, setLoading, clearError } from '../../store/authSlice';
-import { store } from '../../store/store';
+import { authAPI } from '@services/api/authApi';
+import { RateLimitService, TokenService } from '@services/security';
+import { ErrorCodes, ApiError } from '@/types';
 import type { 
-    AuthServiceType,
-    LoginCredentials,
-    GoogleAuthRequest,
-    AuthResponse,
-    TokenResponse
-} from '../../types/auth';
-import AuthenticationService from '../auth/authentication-service';
+  LoginCredentials, 
+  AuthResponse,
+  GoogleAuthRequest,
+  AuthServiceType,
+  TokenResponse
+} from '@/types';
 
-class AuthServiceImpl implements AuthServiceType {
-    private static instance: AuthServiceImpl;
-    private authManager: AuthenticationService;
-    private dispatch = store.dispatch;
+class AuthService implements AuthServiceType {
+  private static instance: AuthService;
 
-    private constructor() {
-        this.authManager = AuthenticationService.getInstance();
+  private constructor() {}
+
+  public static getInstance(): AuthService {
+    if (!AuthService.instance) {
+      AuthService.instance = new AuthService();
     }
+    return AuthService.instance;
+  }
 
-    public static getInstance(): AuthServiceImpl {
-        if (!AuthServiceImpl.instance) {
-            AuthServiceImpl.instance = new AuthServiceImpl();
+  public async loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
+    const rateLimitService = RateLimitService.getInstance();
+    
+    if (!rateLimitService.checkLoginAttempt(credentials.email)) {
+      throw {
+        success: false,
+        message: 'Rate limit exceeded',
+        error: {
+          code: ErrorCodes.RATE_LIMIT_EXCEEDED
         }
-        return AuthServiceImpl.instance;
+      } satisfies ApiError;
     }
+    
+    try {
+      const response = await authAPI.login(credentials);
+      
+      if (!response?.data?.data?.access || !response?.data?.data?.refresh || !response?.data?.data?.user) {
+        throw {
+          success: false,
+          message: 'Invalid token data received',
+          error: {
+            code: ErrorCodes.VALIDATION_ERROR
+          }
+        } satisfies ApiError;
+      }
 
-    private handleAuthResponse(response: AxiosResponse<TokenResponse>): AuthResponse {
-        if (!response.data?.data) {
-            throw new Error('Invalid auth response format');
+      TokenService.setTokens(response.data.data.access, response.data.data.refresh);
+      return response.data;
+    } catch (error) {
+      if ((error as ApiError).error?.code) {
+        throw error;
+      }
+      throw {
+        success: false,
+        message: 'Authentication failed',
+        error: {
+          code: ErrorCodes.AUTHENTICATION_ERROR
         }
-
-        const { data, success, message } = response.data;
-        
-        TokenService.setTokens(response.data);
-
-        return {
-            success,
-            message,
-            data: {
-                access: data.access,
-                refresh: data.refresh,
-                user: data.user
-            }
-        };
+      } satisfies ApiError;
     }
+  }
 
-    public async loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
-        try {
-            this.dispatch(setLoading({ type: 'login', isLoading: true }));
-            this.dispatch(clearError());
-
-            const canProceed = await this.authManager.handleLogin(credentials);
-            if (!canProceed) {
-                throw new Error('Login preconditions not met');
-            }
-            
-            const response = await authAPI.login(credentials);
-            const authResponse = this.handleAuthResponse(response);
-            
-            if (authResponse.data?.user) {
-                this.dispatch(login({
-                    user: authResponse.data.user,
-                    isMember: authResponse.data.user.is_member,
-                    isAdmin: false
-                }));
-            }
-            
-            return authResponse;
-        } catch (error) {
-            throw error;
-        } finally {
-            this.dispatch(setLoading({ type: 'login', isLoading: false }));
+  public async logout(): Promise<void> {
+    try {
+      await authAPI.logout();
+      TokenService.clearTokens();
+    } catch (error) {
+      TokenService.clearTokens();
+      if ((error as ApiError).error?.code) {
+        throw error;
+      }
+      throw {
+        success: false,
+        message: 'Logout failed',
+        error: {
+          code: ErrorCodes.AUTHENTICATION_ERROR
         }
+      } satisfies ApiError;
     }
+  }
 
-    public async googleLogin(data: GoogleAuthRequest): Promise<AuthResponse> {
-        try {
-            this.dispatch(setLoading({ type: 'login', isLoading: true }));
-            this.dispatch(clearError());
-            
-            await this.authManager.handleOAuthLogin('google', data.token);
-            const response = await authAPI.googleAuth(data.token);
-            return this.handleAuthResponse(response);
-        } catch (error) {
-            throw error;
-        } finally {
-            this.dispatch(setLoading({ type: 'login', isLoading: false }));
+  public async validateSession(): Promise<boolean> {
+    try {
+      const token = TokenService.getRefreshToken();
+      if (!token) return false;
+      
+      const response = await authAPI.refreshToken(token);
+      if (response?.data?.data?.access) {
+        TokenService.setTokens(response.data.data.access, token);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  public async googleLogin(data: GoogleAuthRequest): Promise<AuthResponse> {
+    const rateLimitService = RateLimitService.getInstance();
+    
+    if (!rateLimitService.checkOAuthAttempt()) {
+      throw {
+        success: false,
+        message: 'Rate limit exceeded',
+        error: {
+          code: ErrorCodes.RATE_LIMIT_EXCEEDED
         }
+      } satisfies ApiError;
     }
+    
+    try {
+      const response = await authAPI.googleAuth(data);
+      
+      if (!response?.data?.data?.access || !response?.data?.data?.refresh || !response?.data?.data?.user) {
+        throw {
+          success: false,
+          message: 'Invalid token data received',
+          error: {
+            code: ErrorCodes.VALIDATION_ERROR
+          }
+        } satisfies ApiError;
+      }
 
-    public async logout(): Promise<void> {
-        try {
-            await authAPI.logout();
-            await this.authManager.handleLogout();
-            this.dispatch(logout());
-        } catch (error) {
-            console.error('Logout error:', error);
-            await this.authManager.handleLogout();
-            this.dispatch(logout());
+      TokenService.setTokens(response.data.data.access, response.data.data.refresh);
+      return response.data;
+    } catch (error) {
+      if ((error as ApiError).error?.code) {
+        throw error;
+      }
+      throw {
+        success: false,
+        message: 'Google authentication failed',
+        error: {
+          code: ErrorCodes.AUTHENTICATION_ERROR
         }
+      } satisfies ApiError;
     }
-
-    public async validateSession(): Promise<boolean> {
-        return this.authManager.validateSession();
-    }
+  }
 }
 
-const authService = AuthServiceImpl.getInstance();
+const authService = AuthService.getInstance();
 export default authService;

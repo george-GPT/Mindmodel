@@ -1,0 +1,283 @@
+api_layer_strategy:
+  purpose: "Establish a simple, type-safe API layer that aligns with the backend structure while ensuring a streamlined and maintainable frontend architecture."
+  
+  current_issues:
+    - "Overcomplicated Codebase with unnecessary and duplicate files"
+    - "Multiple Axios instances causing redundancy and inconsistency."
+    - "Duplicate authentication files leading to potential inconsistencies."
+    - "Mixed business logic within the API layer, reducing clarity."
+    - "Inconsistent file structure complicating navigation and maintenance."
+
+  Planning_Considerations:
+    - **Separation of Concerns:**
+        - "API layer handles only HTTP requests."
+        - "Business logic is placed within services."
+        - "State management is managed by the store."
+    - **Consistency and Alignment:**
+        - "Maintain alignment with backend structure."
+        - "Use consistent naming conventions across all files and folders."
+    - **Consolidation and Simplification:**
+        - "Utilize a single Axios instance for all API calls."
+        - "Consolidate authentication APIs into a unified module."
+        - "Implement consistent error handling mechanisms."
+        - "Centralize API endpoint paths using `apiPaths.ts`."
+    - **Clear Boundaries:**
+        - "API layer strictly for HTTP requests."
+        - "Services layer for business logic."
+        - "Store layer for state management."
+    - **Unified Authentication Handling:**
+        - "Use a single `useAuth.ts` hook to manage authentication logic and state access."
+        - "Ensure `useAuth.ts` interacts seamlessly with the auth slice and services."
+
+  structure:
+    📁src:
+      📁services:             # Service layer handling API interactions, business logic, security, and monitoring
+        📁api:               # Centralized API interactions
+          ├── axiosInstance.ts        # Single Axios instance with centralized configuration and interceptors
+          ├── apiPaths.ts             # Defines and manages all API endpoint paths
+          ├── authApi.ts             # Authentication-related API endpoints
+          ├── gamesApi.ts            # Game-related API endpoints
+          ├── surveysApi.ts          # Survey-related API endpoints
+          ├── aiApi.ts               # AI analysis-related API endpoints
+          └── index.ts                # Aggregates and exports all API services
+
+        📁security:          # Security-related services ensuring token management and rate limiting
+          ├── tokenService.ts        # Manages token storage, retrieval, and clearing
+          ├── tokenSecurity.ts       # Implements token validation and security measures
+          ├── rateLimitService.ts    # Handles rate limiting logic to prevent abuse
+          └── index.ts                # Aggregates and exports all security services
+
+        📁auth:              # Authentication business logic separate from API calls
+          ├── authService.ts         # Handles higher-level authentication operations (login, register, logout, refresh)
+          └── index.ts                # Exports the auth service
+
+        📁games:             # Games business logic
+          ├── gamesService.ts        # Manages game-related operations (fetching games, submitting results)
+          └── index.ts                # Exports the games service
+
+        📁surveys:           # Surveys business logic
+          ├── surveysService.ts      # Manages survey-related operations (fetching surveys, submitting responses)
+          └── index.ts                # Exports the surveys service
+
+        📁monitoring:        # Monitoring services for tracking and logging important events
+          ├── oauthMonitoringService.ts # Handles monitoring of OAuth-related activities
+          ├── oauthMonitor.ts           # Implements specific monitoring logic for OAuth events
+          └── index.ts                  # Aggregates and exports all monitoring services
+
+        └── index.ts          # Aggregates and exports all services (api, security, auth, games, surveys, monitoring)
+
+      📁store:                 # Redux state management configuration and slices
+        📁slices:
+          ├── analysisSlice.ts    # Manages state related to AI analysis
+          ├── authSlice.ts        # Manages authentication state
+          ├── errorSlice.ts       # Handles global error states
+          ├── gamesSlice.ts       # Manages games-related state
+          ├── progressSlice.ts    # Tracks user progress
+          ├── surveySlice.ts      # Manages survey-related state
+          ├── sessionSlice.ts     # Handles session management
+          └── index.ts            # Aggregates and exports all slices
+
+        ├── rootReducer.ts      # Combines all Redux slices into a single root reducer
+        └── store.ts            # Configures and exports the Redux store with middleware and persistence
+
+      📁types:                  # Centralized type definitions for TypeScript
+        ├── ai.types.ts         # Types related to AI analysis
+        ├── api.d.ts            # Generated OpenAPI types for API responses and requests
+        ├── auth.d.ts           # Authentication-related types
+        ├── declarations.d.ts   # Global type declarations
+        ├── env.d.ts            # Environment variable types
+        ├── error.d.ts          # Error-related types
+        ├── game.d.ts           # Game-related types
+        ├── google.d.ts         # Google OAuth-related types
+        ├── index.ts            # Aggregates and exports all type definitions
+        ├── survey.d.ts         # Survey-related types
+        └── user.ts             # User-related types
+
+      📁hooks:                  # Custom React hooks
+        └── useAuth.ts           # Unified authentication hook managing logic and state access
+
+  rules:
+    - "API calls only - no business logic should reside within the API layer."
+    - "One API file per backend application to maintain clarity and separation."
+    - "Utilize generated OpenAPI types to ensure type safety and consistency."
+    - "Implement consistent error handling across all services."
+    - "Adhere to clear and descriptive file naming conventions (e.g., *.api.ts for API endpoints)."
+    - "Centralize API endpoint paths using `apiPaths.ts` for consistency and ease of maintenance."
+    - "Use a unified `useAuth.ts` hook to manage authentication logic and state access within React components."
+
+  implementation:
+    steps:
+      1: "Consolidate to a single Axios instance by maintaining only `axiosInstance.ts` and removing redundant Axios configuration files."
+      2: "Create one API file per backend application (`authApi.ts`, `gamesApi.ts`, `surveysApi.ts`, `aiApi.ts`) to organize API endpoints clearly."
+      3: "Implement `apiPaths.ts` to define and manage all API endpoint paths centrally, ensuring consistency across API service files."
+      4: "Move all business logic to their respective service folders (`authService.ts`, `gamesService.ts`, `surveysService.ts`) to separate concerns."
+      5: "Use type-safe requests and responses by leveraging generated OpenAPI types in the services and Redux slices."
+      6: "Standardize error handling by implementing global error handlers within Axios interceptors and managing errors within Redux slices."
+      7: "Ensure security and monitoring logic are properly implemented within the security and monitoring service folders without adding complexity."
+      8: "Develop and implement a unified `useAuth.ts` hook in the `hooks/` directory to manage authentication logic and state access within React components."
+      9: "Utilize existing Redux tools by maintaining a well-organized store folder with slices and configuring custom hooks for dispatching and selecting state."
+      10: "Update all import paths to reflect the new streamlined structure and ensure consistency across the codebase."
+      11: "Test each refactoring step thoroughly to ensure functionality remains intact and no issues are introduced."
+      12: "Document the new structure and guidelines to assist current and future developers in understanding the organization and adhering to best practices."
+      13: "Ensure `apiPaths.ts` is utilized across all API service files to manage endpoint paths centrally."
+      14: "Replace usage of `useAuthHook.ts` and `useAuthState.ts` with the consolidated `useAuth.ts` hook to simplify authentication management."
+
+  notes:
+    - "This refactored structure ensures a clear separation of concerns, enhancing maintainability and scalability."
+    - "Security and monitoring are treated as cross-cutting concerns, encapsulated within their own service folders to avoid cluttering business logic."
+    - "Redux state management is cleanly separated from services, promoting a modular and organized codebase."
+    - "Consistent naming conventions and centralized type definitions facilitate easier navigation and reduce the likelihood of errors."
+    - "Adhering to these guidelines will simplify the development process, making it easier to focus on building and testing core components like surveys and games."
+    - "Centralizing API endpoint paths using `apiPaths.ts` reduces duplication and ensures that any changes to endpoints are managed in a single location."
+    - "The unified `useAuth.ts` hook streamlines authentication logic, reducing the number of custom hooks and simplifying state access within components."
+    - "Leveraging `AuthState.ts` within the `useAuth.ts` hook ensures consistent and type-safe management of authentication state across the application."
+    - "By consolidating API files and hooks, the codebase becomes more maintainable, reducing redundancy and potential inconsistencies."
+    - "Regularly refer to this `api_layer_strategy` guide to maintain alignment with best practices and ensure the API layer remains streamlined and efficient."
+
+---
+  
+### **Final Recommendations**
+
+#### **1. Decouple `AuthService` from Redux Dispatching**
+
+- **Why:**
+  - To adhere to the **Separation of Concerns** principle, `AuthService` should focus solely on API interactions and token management without being responsible for updating the Redux store.
+  
+- **How:**
+  - **Remove** all `dispatch` calls from `AuthService`.
+  - **Return** relevant data or throw errors to be handled by the consuming hook (`useAuth.ts`).
+
+#### **2. Utilize `useAuth.ts` for State Management and Action Dispatching**
+
+- **Why:**
+  - To centralize state management within React hooks, making the flow of data and actions more predictable and easier to trace.
+  
+- **How:**
+  - **Invoke** `AuthService` methods within `useAuth.ts` for performing API calls.
+  - **Dispatch** Redux actions based on the outcomes of these API calls to update the store accordingly.
+
+#### **3. Update `useAuth.ts` to Leverage the Refactored `AuthService`**
+
+- **Why:**
+  - To eliminate overlapping responsibilities and ensure that each component has a clear, distinct role.
+  
+- **How:**
+  - **Refactor** `useAuth.ts` to handle action dispatching and state selection, while delegating API interactions to `AuthService`.
+  - **Ensure** that `useAuth.ts` manages side effects like navigation and error handling based on the responses from `AuthService`.
+
+#### **4. Ensure Consistent Usage Across the Codebase**
+
+- **Why:**
+  - To maintain a predictable and maintainable codebase, all components should interact with authentication logic through `useAuth.ts` only.
+  
+- **How:**
+  - **Audit** the codebase to replace any instances where `AuthService` was directly used for dispatching actions or handling state.
+  - **Update** components to utilize the `useAuth.ts` hook for all authentication-related functionalities.
+
+#### **5. Enhance Documentation and Guidelines**
+
+- **Why:**
+  - To assist current and future developers in understanding the refactored authentication flow and adhering to best practices.
+  
+- **How:**
+  - **Document** the responsibilities and usage patterns of both `AuthService` and `useAuth.ts`.
+  - **Provide** examples and guidelines on how to use `useAuth.ts` within components.
+
+#### **6. Implement Comprehensive Testing**
+
+- **Why:**
+  - To ensure that the refactored authentication flow works seamlessly and that no regressions are introduced during the consolidation.
+  
+- **How:**
+  - **Unit Test** `AuthService` to verify that API interactions work as expected.
+  - **Unit Test** `useAuth.ts` to ensure that state is managed correctly based on `AuthService` responses.
+  - **Integration Test** components that utilize `useAuth.ts` to confirm end-to-end functionality.
+
+---
+
+### **Example Refactored Workflow**
+
+**1. `AuthService` Handles API Interactions:**
+
+```typescript
+// src/services/auth/authService.ts
+
+import { authApi } from '../api/authApi';
+import { tokenService } from '../security/tokenService';
+import { handleError } from '../../utils/errorHandler';
+import type { 
+    LoginCredentials, 
+    AuthResponse, 
+    User,
+    TokenResponse,
+    GoogleAuthRequest 
+} from '../../types/auth';
+import type { ApiError } from '../../types/error';
+
+class AuthService {
+  private static instance: AuthService;
+
+  private constructor() {}
+
+  public static getInstance(): AuthService {
+    if (!AuthService.instance) {
+      AuthService.instance = new AuthService();
+    }
+    return AuthService.instance;
+  }
+
+  public async loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
+    try {
+      const response = await authApi.login(credentials);
+      const { data } = response;
+      
+      if (!data?.data?.access || !data?.data?.refresh) {
+        throw new Error('Invalid token data received');
+      }
+
+      tokenService.setTokens(data.data.access, data.data.refresh);
+      
+      return data;
+    } catch (error) {
+      throw handleError(error, 'Login failed');
+    }
+  }
+
+  public async logout(): Promise<void> {
+    try {
+      await authApi.logout();
+      tokenService.clearTokens();
+    } catch (error) {
+      tokenService.clearTokens();
+      throw handleError(error, 'Logout failed');
+    }
+  }
+
+  public async validateSession(): Promise<boolean> {
+    try {
+      const token = await tokenService.getAccessToken();
+      return !!token && await authApi.refresh(token);
+    } catch (error) {
+      return false;
+    }
+  }
+
+  public async googleLogin(token: string): Promise<AuthResponse> {
+    try {
+      const response = await authApi.googleAuth(token);
+      const { data } = response;
+      
+      if (!data?.data?.access || !data?.data?.refresh) {
+        throw new Error('Invalid token data received');
+      }
+
+      tokenService.setTokens(data.data.access, data.data.refresh);
+      
+      return data;
+    } catch (error) {
+      throw handleError(error, 'Social login failed');
+    }
+  }
+}
+
+export const authService = AuthService.getInstance();

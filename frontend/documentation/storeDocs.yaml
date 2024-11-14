@@ -1,0 +1,189 @@
+frontend_types_system:
+  purpose: "Single source of truth for frontend types aligned with backend OpenAPI schema"
+  
+  file_structure:
+    generated:
+      api.d.ts:
+        purpose: "Auto-generated OpenAPI types - DO NOT MODIFY"
+        source: "backend/mindmodel/core/schema.yaml"
+        content:
+          components:
+            schemas:
+              - UserProfile
+              - AuthResponse
+              - TokenResponse
+              - LoginCredentials
+              - SessionStatus
+              - GameConfig
+              - AIAnalysis
+              - SurveyResponse
+          operations:
+            auth:
+              - api_users_auth_login_create
+              - api_users_auth_google_create
+              - api_users_auth_2fa_create
+            games:
+              - api_games_games_record_score_create
+              - api_games_progress_list
+            surveys:
+              - api_surveys_responses_create
+
+    domain:
+      auth.d.ts:
+        purpose: "Authentication types and state"
+        maps_to: 
+          - components.schemas.LoginCredentials
+          - components.schemas.TokenResponse
+          - components.schemas.SessionStatus
+        frontend_specific:
+          - AuthState
+          - LoadingStateType
+          - TokenPair
+        constants:
+          TOKEN_EXPIRY:
+            VERIFICATION: 86400
+            EMAIL_CHANGE: 3600
+            PASSWORD_RESET: 3600
+            REFRESH: 604800
+            ACCESS: 900
+
+      game.d.ts:
+        purpose: "Game types and state"
+        maps_to:
+          - components.schemas.GameConfig
+          - components.schemas.GameProgress
+        frontend_specific:
+          - GameState
+          - GameEvent
+          - GameMetadata
+
+      survey.d.ts:
+        purpose: "Survey types and state"
+        maps_to:
+          - components.schemas.SurveyResponse
+        frontend_specific:
+          - SurveyState
+          - SurveyProgress
+
+      user.d.ts:
+        purpose: "User-related types"
+        maps_to:
+          - components.schemas.UserProfile
+          - components.schemas.AuthResponse
+        frontend_specific:
+          - UserProfile
+          - AuthResponse
+
+      ai.d.ts:
+        purpose: "AI analysis types and state"
+        maps_to:
+          - components.schemas.AIAnalysis
+        frontend_specific:
+          - AIAnalysisState
+          - AIAnalysisResult
+
+    utility:
+      error.d.ts:
+        purpose: "Error handling types"
+        maps_to: "components.schemas.ErrorResponse"
+        types:
+          - ApiError
+          - ValidationError
+
+  type_patterns:
+    api_imports: |
+      import type { components, operations } from './api';
+      type User = components['schemas']['UserProfile'];
+    
+    state_management: |
+      interface State {
+        data: components['schemas']['EntityType'];
+        loading: boolean;
+        error: ApiError | null;
+      }
+    
+    response_patterns: |
+      type ApiResponse<T> = {
+        success: boolean;
+        data: T;
+        message?: string;
+      }
+
+      type PaginatedResponse<T> = {
+        count: number;
+        results: T[];
+        next?: string;
+        previous?: string;
+      }
+
+  security:
+    auth_types:
+      jwt: "components['securitySchemes']['jwtAuth']"
+      session: "components['securitySchemes']['cookieAuth']"
+
+  validation:
+    pre_commit: "npm run type-check"
+    ci: "npm run test:types"
+    rules:
+      - "All API types must come from api.d.ts"
+      - "No duplicate type definitions"
+      - "Frontend-only types must be marked"
+      - "Extended types must document base type"
+
+  folder_structure:
+    store/:
+      - store.ts          # Store configuration with Redux Toolkit and Redux Persist
+      - rootReducer.ts    # Combines all Redux slices into a single root reducer
+      - slices/:
+        - authSlice.ts       # Manages authentication state and actions
+        - gamesSlice.ts      # Manages games-related state and actions
+        - surveysSlice.ts    # Manages surveys-related state and actions
+        - progressSlice.ts   # Tracks user progress state and actions
+        - analysisSlice.ts   # Manages AI analysis state and actions
+        - errorSlice.ts      # Manages global and field-specific error states and actions
+        - sessionSlice.ts    # Manages user session state and actions
+        - index.ts            # Aggregates and exports all slices
+
+      components/:
+        - ErrorBoundary/
+          - ErrorBoundary.tsx   # Error boundary implementation
+          - index.ts            # Exports the ErrorBoundary component
+
+      utils/:
+        - errorHandler.ts       # Centralized error handling utilities
+        - validation.ts         # Validation logic for form inputs and data
+
+  rules:
+    - "Centralize all state management within Redux slices."
+    - "Use Redux Toolkit's createSlice for defining slices with state and reducers."
+    - "Persist only essential slices to localStorage to optimize performance."
+    - "Ensure type safety by leveraging TypeScript throughout the store setup."
+    - "Maintain clear and descriptive naming conventions for slices and actions."
+    - "Separate concerns by keeping state management distinct from business logic and API interactions."
+    - "Centralize error handling within the `errorSlice` and use `ErrorBoundary` for render-time errors."
+    - "Map all API schemas from `api.d.ts` to corresponding domain-specific types."
+    - "Avoid duplicating type definitions and ensure all frontend-specific types are clearly marked."
+
+  implementation:
+    steps:
+      1: "Set up the Redux store configuration in `store.ts`, integrating Redux Toolkit and Redux Persist with the specified settings."
+      2: "Create individual slice files within the `slices/` directory for each feature (auth, games, surveys, progress, analysis, error, session)."
+      3: "Define the initial state and actions for each slice, ensuring they align with the `store_architecture` specifications."
+      4: "Combine all slices into a single root reducer in `rootReducer.ts` using Redux Toolkit's `combineReducers`."
+      5: "Configure the Redux store in `store.ts` with the root reducer and apply necessary middleware, including Redux Persist."
+      6: "Implement consistent state update patterns across all slices, utilizing `PayloadAction` for type-safe updates and maintaining immutability."
+      7: "Ensure that only the specified slices are whitelisted for persistence in the store configuration."
+      8: "Create and export custom hooks (`useAppDispatch`, `useAppSelector`) to enforce type safety when interacting with the Redux store."
+      9: "Refactor existing components and services to interact with the Redux store using the defined slices and actions."
+      10: "Thoroughly test each slice and the overall store configuration to ensure state updates and persistence work as intended."
+      11: "Document the Redux store setup and guidelines to assist current and future developers in maintaining consistency."
+
+  notes:
+    - "This streamlined Redux store architecture ensures centralized and type-safe state management, enhancing maintainability and scalability."
+    - "By separating state concerns into distinct slices, the architecture promotes clarity and ease of development."
+    - "Consistent patterns and type safety reduce the likelihood of bugs and improve the developer experience."
+    - "Adhering to this structure facilitates efficient collaboration and onboarding of new developers."
+    - "Persistence settings are optimized to store only essential state slices, balancing performance with functionality."
+    - "Clear separation between state management and business logic ensures that the codebase remains organized and easy to navigate."
+    - "Centralizing error handling within the `errorSlice` and using `ErrorBoundary` components prevents scattered error logic and enhances reliability."
+    - "Mapping all API schemas to domain-specific types ensures consistency between frontend and backend, leveraging TypeScript's type safety."

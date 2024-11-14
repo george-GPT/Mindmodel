@@ -1,11 +1,11 @@
-import type { TokenResponse } from '../../types/auth';
-import { authAPI } from './auth-api';
-import SessionSyncService from '../session/session-sync-service';
+import type { TokenResponse } from '@/types/auth';
+import type { SuccessResponse } from '@/types/api';
+import { authAPI } from '@/services/api/authApi';
+import { handleError } from '@/utils/errorHandler';
 import CryptoJS from 'crypto-js';
 
 class TokenService {
     private static refreshPromise: Promise<TokenResponse> | null = null;
-    private static sessionSync = SessionSyncService.getInstance();
     private static readonly STORAGE_KEY_PREFIX = 'auth_';
     private static readonly ENCRYPTION_KEY = import.meta.env.VITE_ENCRYPTION_KEY || 'default-key';
 
@@ -44,17 +44,11 @@ class TokenService {
                 this.encrypt(tokenResponse.data.refresh)
             );
         }
-        
-        this.sessionSync.broadcastLogin({
-            access: tokenResponse.data.access,
-            refresh: tokenResponse.data.refresh
-        });
     }
 
     static clearTokens(): void {
         localStorage.removeItem(`${this.STORAGE_KEY_PREFIX}accessToken`);
         localStorage.removeItem(`${this.STORAGE_KEY_PREFIX}refreshToken`);
-        this.sessionSync.broadcastLogout();
     }
 
     static isTokenExpired(token: string): boolean {
@@ -91,7 +85,6 @@ class TokenService {
             
             if (tokenResponse.data?.access) {
                 this.setTokens(tokenResponse);
-                this.sessionSync.broadcastTokenRefresh(tokenResponse.data.access);
             }
 
             return tokenResponse;

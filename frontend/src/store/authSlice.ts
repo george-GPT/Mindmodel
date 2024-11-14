@@ -1,17 +1,7 @@
-// src/Store/authSlice.ts
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import type { User, LoadingStateType } from '../types/auth';
-import type { ApiError } from '../types/error';
-
-interface AuthState {
-  isAuthenticated: boolean;
-  user: User | null;
-  isMember: boolean;
-  isAdmin: boolean;
-  error: ApiError | null;
-  loading: Record<LoadingStateType, boolean>;
-}
+import type { AuthState, User, LoadingStateType } from '@/types/auth';
+import type { ApiError } from '@/types/error';
+import { ErrorCodes } from '@/types/error';
 
 const initialState: AuthState = {
   isAuthenticated: false,
@@ -38,7 +28,7 @@ interface LoginPayload {
     isAdmin?: boolean;
 }
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -46,30 +36,29 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
       state.user = action.payload.user;
       state.isMember = action.payload.isMember;
-      state.isAdmin = action.payload.isAdmin || false;
+      state.isAdmin = action.payload.isAdmin ?? false;
       state.error = null;
     },
-    logout: (state) => {
-      return initialState;
-    },
+    logout: () => initialState,
     setLoading: (state, action: PayloadAction<{ 
       type: LoadingStateType; 
       isLoading: boolean 
     }>) => {
       state.loading[action.payload.type] = action.payload.isLoading;
     },
-    setError: (state, action: PayloadAction<string | null>) => {
-      if (action.payload) {
+    setError: (state, action: PayloadAction<ApiError | string | null>) => {
+      if (action.payload === null) {
+        state.error = null;
+      } else if (typeof action.payload === 'string') {
         state.error = {
           success: false,
           message: action.payload,
           error: {
-            code: 'validation_error',
-            details: {}
+            code: ErrorCodes.VALIDATION_ERROR
           }
         };
       } else {
-        state.error = null;
+        state.error = action.payload;
       }
     },
     clearError: (state) => {

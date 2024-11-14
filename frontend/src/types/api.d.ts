@@ -480,10 +480,9 @@ export interface components {
             message?: string;
         };
         SuccessResponse: {
-            /** @default true */
             success: boolean;
             message?: string;
-            data?: Record<string, never>;
+            data?: unknown;
         };
         PaginatedResponse: components["schemas"]["SuccessResponse"] & {
             data?: {
@@ -1652,3 +1651,5 @@ export interface operations {
         };
     };
 }
+
+export type SuccessResponse = components['schemas']['SuccessResponse'];

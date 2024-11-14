@@ -3,7 +3,7 @@ import React from 'react';
 
 import { Button as MuiButton } from '@mui/material';
 
-import { ButtonProps } from './button-types';
+import { ButtonProps } from './buttonTypes';
 
 export const Button: React.FC<ButtonProps> = ({
   variant = "solid",

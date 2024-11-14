@@ -1,7 +1,7 @@
-import { store } from '../../store/store';
-import { setError } from '../../store/authSlice';
-import TokenService from '../api/token-service';
-import { TokenResponse } from '../../types/auth';
+import { store } from '@/store/store';
+import { setError } from '@/store/authSlice';
+import TokenService from '@/services/security/tokenService';
+import type { TokenResponse } from '@/types/auth';
 
 interface TokenSecurityConfig {
     refreshThreshold: number;      // Time in ms before expiry to trigger refresh
@@ -161,4 +161,6 @@ class TokenSecurityService {
     }
 }
 
-export default TokenSecurityService; 
+// Export the singleton instance
+export const TokenSecurity = TokenSecurityService.getInstance();
+export default TokenSecurity; 

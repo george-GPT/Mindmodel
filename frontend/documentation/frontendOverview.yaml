@@ -1,0 +1,358 @@
+frontend_infrastructure:
+  purpose: "Provide a clear and streamlined overview of the frontend architecture, detailing state management, data handling, authentication, API structure, and core logic to ensure maintainability and prevent confusion."
+  
+  core_patterns:
+    type_system:
+      generated:
+        api:
+          source: "OpenAPI schema"
+          location: "types/api.d.ts"
+          validation:
+            - "All API types must originate from api.d.ts."
+            - "Avoid duplicate type definitions."
+            - "Mark frontend-specific types clearly."
+      
+      domain:
+        auth:
+          schema_types:
+            - "LoginCredentials"
+            - "TokenResponse"
+            - "SessionStatus"
+          frontend_types:
+            - "AuthState"
+            - "LoadingStateType"
+            - "TokenPair"
+        games:
+          schema_types:
+            - "GameConfig"
+            - "GameProgress"
+          frontend_types:
+            - "GameState"
+            - "GameEvent"
+            - "GameMetadata"
+        surveys:
+          schema_types:
+            - "Survey"
+            - "SurveyResponse"
+          frontend_types:
+            - "SurveyState"
+            - "SurveyProgress"
+        user:
+          schema_types:
+            - "UserProfile"
+            - "AuthResponse"
+          frontend_types:
+            - "UserProfile"
+            - "AuthResponse"
+        ai:
+          schema_types:
+            - "AIAnalysis"
+          frontend_types:
+            - "AIAnalysisState"
+            - "AIAnalysisResult"
+
+      patterns:
+        api_response:
+          base: "ApiResponse<T>"
+          paginated: "PaginatedResponse<T>"
+          error: "ApiError"
+
+    error_handling:
+      types:
+        base: "ApiError"
+        specialized:
+          - "NetworkError"
+          - "ValidationError"
+          - "GameError"
+        guards:
+          - "isAPIError"
+          - "isNetworkError"
+          - "isValidationError"
+          - "isGameError"
+      
+      patterns:
+        service: "Utilize a handleError utility for consistent API error handling."
+        component: "Implement an ErrorBoundary component at the application root to catch render errors."
+        store: "Manage error states within the errorSlice in Redux."
+
+    state_management:
+      store:
+        config:
+          persistence:
+            storage: "localStorage"
+            key: "root"
+            whitelist:
+              - "auth"
+              - "games"
+              - "surveys"
+              - "progress"
+              - "analysis"
+              - "session"
+          middleware:
+            serialization:
+              ignore:
+                - "FLUSH"
+                - "REHYDRATE"
+                - "PAUSE"
+                - "PERSIST"
+                - "PURGE"
+                - "REGISTER"
+        
+        slices:
+          auth:
+            state:
+              isAuthenticated: "boolean"
+              user: "User | null"
+              isMember: "boolean"
+              isAdmin: "boolean"
+              error: "ApiError | null"
+              loading: "Record<LoadingStateType, boolean>"
+            actions:
+              - "login(payload: LoginPayload)"
+              - "logout()"
+              - "setLoading(type: LoadingStateType, isLoading: boolean)"
+              - "setError(message: string | null)"
+              - "clearError()"
+            loading_states:
+              - "login"
+              - "register"
+              - "passwordChange"
+              - "emailChange"
+              - "twoFactor"
+              - "auth"
+              - "profile"
+              - "verification"
+              - "social"
+          
+          games:
+            state:
+              scores: "GameScore[]"
+            actions:
+              - "submitGameScore(score: GameScore)"
+              - "resetGames()"
+          
+          surveys:
+            state:
+              responses: "SurveyResponse[]"
+            actions:
+              - "submitSurveyResponse(response: SurveyResponse)"
+              - "resetSurveys()"
+          
+          progress:
+            state:
+              completedSurveys: "string[]"
+              completedGames: "string[]"
+            actions:
+              - "completeSurvey(id: string)"
+              - "completeGame(id: string)"
+              - "resetProgress()"
+          
+          analysis:
+            state:
+              processingStatus: "'idle' | 'loading' | 'completed' | 'error'"
+              results: "AnalysisResult | null"
+              error: "string | null"
+            actions:
+              - "startProcessing()"
+              - "processingSuccess(results: AnalysisResult)"
+              - "processingFailure(error: string)"
+              - "resetAnalysis()"
+          
+          error:
+            state:
+              globalError: "ApiError | null"
+              fieldErrors: "ValidationErrors"
+              lastError:
+                timestamp: "number"
+                code: "string"
+              loadingStates: "Record<string, boolean>"
+            actions:
+              - "setError(error: ApiError)"
+              - "setFieldErrors(errors: ValidationErrors)"
+              - "setLoading({ key: string, isLoading: boolean })"
+              - "clearErrors()"
+              - "clearFieldErrors()"
+          
+          session:
+            state:
+              sessionId: "string | null"
+              userSessionData: "UserSessionData | null"
+              isActive: "boolean"
+            actions:
+              - "startSession(sessionId: string, data: UserSessionData)"
+              - "endSession()"
+              - "updateSessionData(data: UserSessionData)"
+              - "resetSession()"
+
+  service_layer:
+    api_service:
+      pattern: "Singleton pattern with Axios interceptors for centralized configuration and error handling."
+      error_handling: "Global error interceptor to manage API errors consistently."
+      auth: "Automatic token management including attaching tokens to requests and handling token refresh."
+
+    auth_service:
+      session:
+        storage: "Securely manage token storage using tokenService."
+        validation: "Perform token expiry checks to maintain session integrity."
+        sync: "Synchronize token state with Redux store to reflect authentication status."
+
+  folder_structure:
+    src:
+      services:
+        api/:
+          description: "Handles all API interactions using a single Axios instance and organizes endpoints by feature."
+          contents:
+            - "axiosInstance.ts: Single Axios instance with interceptors."
+            - "apiPaths.ts: Defines and manages all API endpoint paths."
+            - "authApi.ts: Authentication-related API endpoints."
+            - "gamesApi.ts: Game-related API endpoints."
+            - "surveysApi.ts: Survey-related API endpoints."
+            - "aiApi.ts: AI analysis-related API endpoints."
+            - "index.ts: Aggregates and exports all API services."
+        security/:
+          description: "Security-related services ensuring token management and rate limiting."
+          contents:
+            - "tokenService.ts: Manages token storage, retrieval, and clearing."
+            - "tokenSecurity.ts: Implements token validation and security measures."
+            - "rateLimitService.ts: Handles rate limiting logic to prevent abuse."
+            - "index.ts: Aggregates and exports all security services."
+        auth/:
+          description: "Authentication business logic and hooks."
+          contents:
+            - "authService.ts: Handles higher-level authentication operations (login, register, logout, refresh)."
+            - "useAuth.ts: Unified authentication hook managing logic and state access."
+            - "index.ts: Exports the auth service and hook."
+        games/:
+          description: "Games business logic."
+          contents:
+            - "gamesService.ts: Manages game-related operations (fetching games, submitting results)."
+            - "index.ts: Exports the games service."
+        surveys/:
+          description: "Surveys business logic."
+          contents:
+            - "surveysService.ts: Manages survey-related operations (fetching surveys, submitting responses)."
+            - "index.ts: Exports the surveys service."
+        monitoring/:
+          description: "Monitoring services for tracking and logging important events."
+          contents:
+            - "oauthMonitoringService.ts: Handles monitoring of OAuth-related activities."
+            - "oauthMonitor.ts: Implements specific monitoring logic for OAuth events."
+            - "index.ts: Aggregates and exports all monitoring services."
+        index.ts:
+          description: "Aggregates and exports all services (api, security, auth, games, surveys, monitoring)."
+
+      store/:
+        slices/:
+          description: "Contains individual Redux slices for each feature."
+          contents:
+            - "authSlice.ts: Manages authentication state and actions."
+            - "gamesSlice.ts: Manages games-related state and actions."
+            - "surveysSlice.ts: Manages surveys-related state and actions."
+            - "progressSlice.ts: Tracks user progress state and actions."
+            - "analysisSlice.ts: Manages AI analysis state and actions."
+            - "errorSlice.ts: Manages global and field-specific error states and actions."
+            - "sessionSlice.ts: Manages user session state and actions."
+            - "index.ts: Aggregates and exports all slices."
+        rootReducer.ts:
+          description: "Combines all Redux slices into a single root reducer."
+        store.ts:
+          description: "Configures and exports the Redux store with middleware and persistence settings."
+
+      types/:
+        description: "Centralized type definitions for TypeScript."
+        contents:
+          - "api.d.ts: Auto-generated OpenAPI types for API responses and requests."
+          - "auth.d.ts: Authentication-related types."
+          - "games.d.ts: Game-related types."
+          - "surveys.d.ts: Survey-related types."
+          - "user.ts: User-related types."
+          - "ai.types.ts: Types related to AI analysis."
+          - "error.d.ts: Error handling types."
+          - "google.d.ts: Google OAuth-related types."
+          - "declarations.d.ts: Global type declarations."
+          - "env.d.ts: Environment variable types."
+          - "survey.d.ts: Survey-related types."
+          - "index.ts: Aggregates and exports all type definitions."
+
+      components/:
+        ErrorBoundary/:
+          description: "Error boundary component for catching and handling render-time errors."
+          contents:
+            - "ErrorBoundary.tsx: Implements the ErrorBoundary component."
+            - "index.ts: Exports the ErrorBoundary component."
+
+      utils/:
+        description: "Utility functions and helpers."
+        contents:
+          - "errorHandler.ts: Centralized error handling utilities."
+          - "validation.ts: Validation logic for form inputs and data."
+
+  conventions:
+    code:
+      - "Enable TypeScript strict mode for type safety."
+      - "Follow ESLint rules to maintain code quality and consistency."
+      - "Document public interfaces and functions for better maintainability."
+    
+    state:
+      - "Use immutable updates via Redux Toolkit to ensure state integrity."
+      - "Clear error states upon successful operations to avoid stale errors."
+      - "Reset relevant states upon user logout to maintain security and data integrity."
+    
+    types:
+      - "Use OpenAPI-generated types for all API data to ensure consistency with the backend."
+      - "Store frontend-specific types within the `domain/` folder to differentiate from backend types."
+      - "Document any type extensions or custom types to provide clarity and context."
+
+  rules:
+    - "API calls only - no business logic should reside within the API layer."
+    - "One API file per backend application to maintain clarity and separation."
+    - "Utilize generated OpenAPI types to ensure type safety and consistency."
+    - "Implement consistent error handling across all services."
+    - "Adhere to clear and descriptive file naming conventions (e.g., *.api.ts for API endpoints)."
+    - "Centralize state management within Redux slices."
+    - "Use Redux Toolkit's createSlice for defining slices with state and reducers."
+    - "Persist only essential slices to localStorage to optimize performance."
+    - "Ensure type safety by leveraging TypeScript throughout the store setup."
+    - "Separate concerns by keeping state management distinct from business logic and API interactions."
+    - "Centralize error handling within the `errorSlice` and use `ErrorBoundary` for render-time errors."
+    - "Map all API schemas from `api.d.ts` to corresponding domain-specific types."
+    - "Avoid duplicating type definitions and ensure all frontend-specific types are clearly marked."
+    - "Use `apiPaths.ts` to manage and organize all API endpoint paths centrally."
+    - "Use a unified `useAuth.ts` hook to manage authentication logic and state access within React components."
+    - "Leverage `AuthState.ts` to maintain and access authentication-related state consistently across the application."
+
+  implementation:
+    steps:
+      1: "Set up the Redux store configuration in `store.ts`, integrating Redux Toolkit and Redux Persist with the specified settings."
+      2: "Create individual slice files within the `slices/` directory for each feature (auth, games, surveys, progress, analysis, error, session)."
+      3: "Define the initial state and actions for each slice, ensuring they align with the `store_architecture` specifications."
+      4: "Combine all slices into a single root reducer in `rootReducer.ts` using Redux Toolkit's `combineReducers`."
+      5: "Configure the Redux store in `store.ts` with the root reducer and apply necessary middleware, including Redux Persist."
+      6: "Implement consistent state update patterns across all slices, utilizing `PayloadAction` for type-safe updates and maintaining immutability."
+      7: "Ensure that only the specified slices are whitelisted for persistence in the store configuration."
+      8: "Develop and implement `useAuth.ts` within the `auth/` folder to manage authentication logic and state access, leveraging `AuthState` and interacting with the auth slice."
+      9: "Move all business logic to their respective service folders (`authService.ts`, `gamesService.ts`, `surveysService.ts`) to separate concerns."
+      10: "Use type-safe requests and responses by leveraging generated OpenAPI types in the services and Redux slices."
+      11: "Standardize error handling by implementing global error handlers within Axios interceptors and managing errors within Redux slices."
+      12: "Ensure security and monitoring logic are properly implemented within the security and monitoring service folders without adding complexity."
+      13: "Implement `apiPaths.ts` to define and manage all API endpoint paths centrally, ensuring consistency across API service files."
+      14: "Replace usage of `useAuthHook.ts` and `useAuthState.ts` with the consolidated `useAuth.ts` hook to simplify authentication management."
+      15: "Update all import paths to reflect the new streamlined structure and ensure consistency across the codebase."
+      16: "Thoroughly test each refactoring step to ensure functionality remains intact and no issues are introduced."
+      17: "Document the new structure and guidelines to assist current and future developers in understanding the organization and adhering to best practices."
+
+  notes:
+    - "This streamlined frontend infrastructure ensures a clear separation of concerns, enhancing maintainability and scalability."
+    - "Centralizing state management within Redux slices promotes clarity and ease of development."
+    - "Consistent type systems and error handling patterns reduce the likelihood of bugs and improve the developer experience."
+    - "Adhering to these guidelines facilitates efficient collaboration and onboarding of new developers."
+    - "Persistence settings are optimized to store only essential state slices, balancing performance with functionality."
+    - "Clear separation between state management, business logic, and API interactions ensures that the codebase remains organized and easy to navigate."
+    - "Utilizing generated OpenAPI types ensures consistency between frontend and backend, leveraging TypeScript's type safety."
+    - "Implementing `ErrorBoundary` components and centralized error handling prevents scattered error logic and enhances application reliability."
+    - "Maintaining a single source of truth for types and adhering to naming conventions facilitates easier navigation and reduces confusion."
+    - "Using `apiPaths.ts` ensures centralized management of API endpoints, reducing duplication and simplifying updates."
+    - "The unified `useAuth.ts` hook streamlines authentication logic, reducing the number of custom hooks and simplifying state access within components."
+    - "Leveraging `AuthState.ts` within the `useAuth.ts` hook ensures consistent and type-safe management of authentication state across the application."
+    - "By consolidating API files and hooks, the codebase becomes more maintainable, reducing redundancy and potential inconsistencies."
+    - "Regularly refer to this `frontend_infrastructure` guide to maintain alignment with best practices and ensure the frontend architecture remains streamlined and efficient."

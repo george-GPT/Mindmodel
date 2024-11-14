@@ -1,0 +1,127 @@
+frontend_types_system:
+  purpose: "Single source of truth for frontend types aligned with backend OpenAPI schema"
+
+  file_structure:
+    generated:
+      api.d.ts:
+        purpose: "Auto-generated OpenAPI types - DO NOT MODIFY"
+        source: "backend/mindmodel/core/schema.yaml"
+        content:
+          components:
+            schemas:
+              - UserProfile
+              - AuthResponse
+              - TokenResponse
+              - LoginCredentials
+              - SessionStatus
+              - GameConfig
+              - AIAnalysis
+              - SurveyResponse
+          operations:
+            auth:
+              - api_users_auth_login_create
+              - api_users_auth_google_create
+              - api_users_auth_2fa_create
+            games:
+              - api_games_games_record_score_create
+              - api_games_progress_list
+            surveys:
+              - api_surveys_responses_create
+
+    domain:
+      auth.d.ts:
+        purpose: "Authentication types and state"
+        maps_to: 
+          - components.schemas.LoginCredentials
+          - components.schemas.TokenResponse
+          - components.schemas.SessionStatus
+        frontend_specific:
+          - AuthState
+          - LoadingStateType
+          - TokenPair
+
+      game.d.ts:
+        purpose: "Game types and state"
+        maps_to:
+          - components.schemas.Game
+          - components.schemas.GameProgress
+        frontend_specific:
+          - GameState
+          - GameEvent
+          - GameMetadata
+
+      survey.d.ts:
+        purpose: "Survey types and state"
+        maps_to:
+          - components.schemas.Survey
+          - components.schemas.SurveyResponse
+        frontend_specific:
+          - SurveyState
+          - SurveyProgress
+
+    utility:
+      error.d.ts:
+        purpose: "Error handling types"
+        maps_to: "components.schemas.ErrorResponse"
+        types:
+          - ApiError
+          - ValidationError
+
+  type_patterns:
+    api_imports: |
+      import type { components, operations } from './api';
+      type User = components['schemas']['UserProfile'];
+    
+    state_management: |
+      interface State {
+        data: components['schemas']['EntityType'];
+        loading: boolean;
+        error: ApiError | null;
+      }
+
+    response_patterns: |
+      type ApiResponse<T> = {
+        success: boolean;
+        data: T;
+        message?: string;
+      }
+
+      type PaginatedResponse<T> = {
+        count: number;
+        results: T[];
+        next?: string;
+        previous?: string;
+      }
+
+  security:
+    auth_types:
+      jwt: "components['securitySchemes']['jwtAuth']"
+      session: "components['securitySchemes']['cookieAuth']"
+
+  validation:
+    pre_commit: "npm run type-check"
+    ci: "npm run test:types"
+    rules:
+      - "All API types must come from api.d.ts"
+      - "No duplicate type definitions"
+      - "Frontend-only types must be marked"
+      - "Extended types must document base type"
+
+          domain:
+      auth.d.ts:
+        purpose: "Authentication types and state"
+        maps_to: 
+          - components.schemas.LoginCredentials
+          - components.schemas.TokenResponse
+          - components.schemas.SessionStatus
+        frontend_specific:
+          - AuthState
+          - LoadingStateType
+          - TokenPair
+        constants:
+          TOKEN_EXPIRY:
+            VERIFICATION: 86400
+            EMAIL_CHANGE: 3600
+            PASSWORD_RESET: 3600
+            REFRESH: 604800
+            ACCESS: 900

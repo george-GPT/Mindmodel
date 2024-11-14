@@ -1,4 +1,4 @@
-import { components } from './api';
+import type { components } from './api.d';
 
 // Game-specific types that extend API types
 export interface GameData extends components['schemas']['Game'] {
@@ -7,8 +7,9 @@ export interface GameData extends components['schemas']['Game'] {
     config?: Record<string, any>;
 }
 
-// Export game-specific enums and types
-export { DifficultyEnum } from './api';
+// Export game-specific types
 export type GameConfig = components['schemas']['GameConfig'];
 export type GameProgress = components['schemas']['GameProgress'];
-export type GameScore = components['schemas']['GameScore']; 
+export type GameScore = components['schemas']['GameScore'];
+
+// Note: DifficultyEnum is not in the API schema, so we shouldn't export it 

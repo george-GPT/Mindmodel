@@ -1,6 +1,6 @@
 import type { AxiosResponse } from 'axios';
-import axiosInstance from './axios-instance';
-import { API_PATHS } from '../../constants/api-paths';
+import axiosInstance from './axiosInstance';
+import { API_PATHS } from './apiPaths';
 import type { components } from '../../types/api';
 
 type AIAnalysisData = components['schemas']['AIAnalysisRequest'];

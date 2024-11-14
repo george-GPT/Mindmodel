@@ -7,18 +7,30 @@ export type User = components['schemas']['UserProfile'];
 export type SessionStatus = components['schemas']['SessionStatus'];
 export type AuthProvider = 'google';
 
-// Token types that match the backend schema exactly
-export type TokenResponse = {
-    success: boolean;
-    message?: string;
-    data: {
-        access: string;
-        refresh: string;
-        user: User;
-    };
-};
+// Token response type from API schema
+export type TokenResponse = components['schemas']['TokenResponse'];
 
+// Auth response type from API schema
 export type AuthResponse = components['schemas']['AuthResponse'];
+
+// Verification response types
+export interface VerificationResponse extends components['schemas']['SuccessResponse'] {
+    data: {
+        message: string;
+    };
+}
+
+export interface ResendVerificationResponse extends components['schemas']['SuccessResponse'] {
+    data: {
+        message: string;
+    };
+}
+
+export interface ErrorResponse extends components['schemas']['SuccessResponse'] {
+    data: {
+        message: string;
+    };
+}
 
 // Request types
 export interface GoogleAuthRequest {
@@ -65,3 +77,4 @@ export const TOKEN_EXPIRY = {
 } as const;
 
 export type AuthStatus = 'authenticated' | 'unauthenticated' | 'loading';
+

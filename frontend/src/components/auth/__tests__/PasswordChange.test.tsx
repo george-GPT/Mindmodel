@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
-import PasswordChange from '../password-change';
+import PasswordChange from '../passwordChange';
 import { AuthService } from '../../../services';
 import authReducer from '../../../store/authSlice';
 

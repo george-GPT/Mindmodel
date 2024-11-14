@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
-import EmailVerification from '../email-verification';
+import EmailVerification from '../emailVerification';
 import { authAPI } from '../../../services/api/authPath';
 import authReducer from '../../../store/authSlice';
 

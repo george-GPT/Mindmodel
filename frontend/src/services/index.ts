@@ -1,9 +1,14 @@
+import type { components } from '@/types/api';
+
 // API exports
-export { authAPI } from './api/auth-api';
-export { aiAPI } from './api/ai-api';
-export { surveyAPI } from './api/survey-api';
-export { gamesAPI } from './api/games-api';
+export { authAPI } from './api/authApi';
+export { aiAPI } from './api/aiApi';
+export { surveyAPI } from './surveys/surveyApi';
+export { gamesAPI } from './games/gamesApi';
 
 // Service exports
 export { default as AuthService } from './auth/authService';
-export { default as TokenService } from './api/token-service';
+export { default as TokenService } from './security/tokenService';
+
+// Type exports from API schema
+export type { LoginCredentials } from '@/types/auth';
