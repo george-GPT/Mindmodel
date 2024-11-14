@@ -2,10 +2,10 @@
 export * from './api.d';
 
 // Core type definitions
-export * from './auth.d';
+export * from './auth';
 export * from './error';
-export * from './game.d';
-export * from './survey.d';
+export * from './game';
+export * from './survey';
 export * from './user';
 export * from './ai.types';
 

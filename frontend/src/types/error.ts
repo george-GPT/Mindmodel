@@ -1,15 +1,18 @@
 import type { components } from './api';
 
-// Error codes matching backend schema
+/**
+ * @description Error codes supported by the backend API
+ * @see backend/mindmodel/core/schema.yaml
+ */
 export const ErrorCodes = {
     // Auth errors
     AUTHENTICATION_ERROR: 'authentication_error' as const,
     TOKEN_INVALID: 'token_invalid' as const,
     TOKEN_EXPIRED: 'token_expired' as const,
+    EMAIL_NOT_VERIFIED: 'email_not_verified' as const,
     
     // Validation errors
     VALIDATION_ERROR: 'validation_error' as const,
-    EMAIL_NOT_VERIFIED: 'email_not_verified' as const,
     
     // Permission errors
     PERMISSION_DENIED: 'permission_denied' as const,
@@ -20,15 +23,17 @@ export const ErrorCodes = {
     
     // Server errors
     SERVER_ERROR: 'server_error' as const,
+    NETWORK_ERROR: 'network_error' as const,
     
     // Rate limiting
     RATE_LIMIT_EXCEEDED: 'rate_limit_exceeded' as const
 } as const;
 
-// Extract type from const values
 export type ErrorCode = typeof ErrorCodes[keyof typeof ErrorCodes];
 
-// Base API error type from backend schema
+/**
+ * @description Base API error response type
+ */
 export interface ApiError {
     success: false;
     message: string;
@@ -38,11 +43,8 @@ export interface ApiError {
     };
 }
 
-// Type guard implementation
 export const isApiError = (error: unknown): error is ApiError => {
-    if (!error || typeof error !== 'object') {
-        return false;
-    }
+    if (!error || typeof error !== 'object') return false;
     
     const candidate = error as { success?: boolean; message?: string; error?: { code?: string } };
     
@@ -54,4 +56,20 @@ export const isApiError = (error: unknown): error is ApiError => {
         typeof candidate.error.code === 'string' &&
         Object.values(ErrorCodes).includes(candidate.error.code as ErrorCode)
     );
+};
+
+/**
+ * @description Creates a standardized API error from any error type
+ */
+export const createApiError = (error: unknown, defaultMessage = 'An error occurred'): ApiError => {
+    if (isApiError(error)) return error;
+    
+    return {
+        success: false,
+        message: error instanceof Error ? error.message : defaultMessage,
+        error: {
+            code: ErrorCodes.SERVER_ERROR,
+            details: { originalError: error }
+        }
+    };
 }; 

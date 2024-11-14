@@ -1,6 +1,6 @@
-import { AppDispatch } from '../store/store';
-import { setError } from '../store/authSlice';
-import { ApiError, ErrorCodes } from 'types/error';
+import { AppDispatch } from '@/store/store';
+import { setError } from '@/store/authSlice';
+import { ApiError, ErrorCodes } from '@/types';
 
 export const handleAuthError = (error: unknown, dispatch: AppDispatch): ApiError => {
     let apiError: ApiError;
@@ -80,7 +80,7 @@ export const handleAuthError = (error: unknown, dispatch: AppDispatch): ApiError
         console.error('Error:', apiError);
     }
 
-    dispatch(setError(apiError.message));
+    dispatch(setError(apiError));
     return apiError;
 };
 

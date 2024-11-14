@@ -5,18 +5,20 @@ import {
     Paper,
     Typography,
     Alert,
-    Fade
 } from '@mui/material';
-import { AppDispatch, RootState } from '../../store/store';
-import { AuthService } from '../../services';
-import Button from '../button/button';
-import Input from '../input';
-import { validatePassword, validatePasswordMatch } from '../../utils/validation';
-import { setError, clearError } from '../../store/authSlice';
-import { 
-  PasswordChangeRequest, 
-  ErrorResponse 
-} from '../../types'; // Updated imports
+import type { AppDispatch, RootState } from '@/store/store';
+import authService from '@/services/auth/authService';
+import Button from '@/components/button/button';
+import Input from '@/components/input';
+import { validatePassword, validatePasswordMatch } from '@/utils/validation';
+import { setError, clearError } from '@/store/authSlice';
+import type { ApiError } from '@/types';
+
+interface PasswordChangeRequest {
+    old_password: string;
+    new_password: string;
+    new_password2: string;
+}
 
 const PasswordChange = () => {
     const dispatch = useDispatch<AppDispatch>();
@@ -43,11 +45,11 @@ const PasswordChange = () => {
 
         setIsLoading(true);
         try {
-            await dispatch(AuthService.changePassword({
+            await authService.changePassword({
                 old_password: oldPassword,
                 new_password: newPassword,
                 new_password2: confirmPassword
-            }));
+            });
             setSuccess(true);
             // Clear form
             setOldPassword('');
@@ -55,6 +57,7 @@ const PasswordChange = () => {
             setConfirmPassword('');
         } catch (error) {
             console.error('Password change failed:', error);
+            dispatch(setError(error as ApiError));
         } finally {
             setIsLoading(false);
         }
@@ -74,7 +77,7 @@ const PasswordChange = () => {
 
             {authError && (
                 <Alert severity="error" sx={{ mb: 3 }}>
-                    {authError}
+                    {authError.message || 'An error occurred'}
                 </Alert>
             )}
 

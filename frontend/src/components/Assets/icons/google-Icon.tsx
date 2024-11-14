@@ -13,7 +13,7 @@ const GoogleIcon: React.FC<SvgIconProps> = (props) => {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <g clip-path="url(#clip0_240_270)">
+        <g clipPath="url(#clip0_240_270)">
           <path
             d="M36.3989 19.1647C36.3989 17.9411 36.2997 16.7109 36.088 15.5071H19.1099V22.4386H28.8325C28.429 24.6741 27.1327 26.6517 25.2344 27.9084V32.4059H31.0349C34.4411 29.2708 36.3989 24.641 36.3989 19.1647Z"
             fill="#4285F4"

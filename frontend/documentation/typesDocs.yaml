@@ -59,13 +59,18 @@ frontend_types_system:
           - SurveyState
           - SurveyProgress
 
-    utility:
-      error.d.ts:
-        purpose: "Error handling types"
-        maps_to: "components.schemas.ErrorResponse"
-        types:
+      error.ts:
+        purpose: "Error handling types and utilities"
+        maps_to: 
+          - components.schemas.ErrorResponse
+        frontend_specific:
+          - ErrorCode
           - ApiError
-          - ValidationError
+          - isApiError
+          - createApiError
+        utilities:
+          - "isApiError: Type guard for API errors"
+          - "createApiError: Error factory function"
 
   type_patterns:
     api_imports: |

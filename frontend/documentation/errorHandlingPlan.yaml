@@ -41,7 +41,7 @@ error_handling_strategy:
         └── validation.ts         # Validation logic for form inputs and data
 
       📁types:
-        ├── error.d.ts            # Error-related types and interfaces
+        ├── error.ts             # Error-related types, interfaces, and utilities
         └── index.ts              # Aggregates and exports all type definitions
 
   rules:

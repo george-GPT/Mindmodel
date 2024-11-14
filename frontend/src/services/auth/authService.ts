@@ -1,5 +1,6 @@
 // src/services/auth/authService.ts
 
+import { BaseService } from '../base/BaseService';
 import { authAPI } from '@services/api/authApi';
 import { RateLimitService, TokenService } from '@services/security';
 import { ErrorCodes, ApiError } from '@/types';
@@ -8,13 +9,20 @@ import type {
   AuthResponse,
   GoogleAuthRequest,
   AuthServiceType,
-  TokenResponse
+  TokenResponse,
+  RegisterRequest
 } from '@/types';
 
-class AuthService implements AuthServiceType {
+/**
+ * @description Service handling authentication-related operations
+ * @extends {BaseService}
+ */
+class AuthService extends BaseService implements AuthServiceType {
   private static instance: AuthService;
 
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
   public static getInstance(): AuthService {
     if (!AuthService.instance) {
@@ -24,44 +32,26 @@ class AuthService implements AuthServiceType {
   }
 
   public async loginUser(credentials: LoginCredentials): Promise<AuthResponse> {
-    const rateLimitService = RateLimitService.getInstance();
-    
-    if (!rateLimitService.checkLoginAttempt(credentials.email)) {
-      throw {
-        success: false,
-        message: 'Rate limit exceeded',
-        error: {
-          code: ErrorCodes.RATE_LIMIT_EXCEEDED
-        }
-      } satisfies ApiError;
-    }
-    
     try {
-      const response = await authAPI.login(credentials);
+      const rateLimitService = RateLimitService.getInstance();
       
-      if (!response?.data?.data?.access || !response?.data?.data?.refresh || !response?.data?.data?.user) {
-        throw {
-          success: false,
-          message: 'Invalid token data received',
-          error: {
-            code: ErrorCodes.VALIDATION_ERROR
-          }
-        } satisfies ApiError;
+      if (!rateLimitService.checkLoginAttempt(credentials.email)) {
+        throw this.createRateLimitError();
       }
-
-      TokenService.setTokens(response.data.data.access, response.data.data.refresh);
-      return response.data;
+      
+      const response = await authAPI.login(credentials);
+      const authResponse = this.validateResponse<AuthResponse>(response);
+      
+      if (!authResponse.data) {
+        throw new Error('Invalid response data');
+      }
+      
+      this.validateRequiredData(authResponse.data.user, 'Invalid user data received');
+      await this.handleTokens(authResponse);
+      
+      return authResponse;
     } catch (error) {
-      if ((error as ApiError).error?.code) {
-        throw error;
-      }
-      throw {
-        success: false,
-        message: 'Authentication failed',
-        error: {
-          code: ErrorCodes.AUTHENTICATION_ERROR
-        }
-      } satisfies ApiError;
+      this.handleError(error, 'Authentication failed');
     }
   }
 
@@ -91,7 +81,14 @@ class AuthService implements AuthServiceType {
       
       const response = await authAPI.refreshToken(token);
       if (response?.data?.data?.access) {
-        TokenService.setTokens(response.data.data.access, token);
+        TokenService.setTokens({
+          success: true,
+          data: {
+            access: response.data.data.access,
+            refresh: token,
+            user: response.data.data.user
+          }
+        });
         return true;
       }
       return false;
@@ -126,7 +123,14 @@ class AuthService implements AuthServiceType {
         } satisfies ApiError;
       }
 
-      TokenService.setTokens(response.data.data.access, response.data.data.refresh);
+      TokenService.setTokens({
+        success: true,
+        data: {
+          access: response.data.data.access,
+          refresh: response.data.data.refresh,
+          user: response.data.data.user
+        }
+      });
       return response.data;
     } catch (error) {
       if ((error as ApiError).error?.code) {
@@ -139,6 +143,54 @@ class AuthService implements AuthServiceType {
           code: ErrorCodes.AUTHENTICATION_ERROR
         }
       } satisfies ApiError;
+    }
+  }
+
+  public async changePassword(data: {
+    old_password: string;
+    new_password: string;
+    new_password2: string;
+  }): Promise<void> {
+    try {
+      await authAPI.changePassword({
+        old_password: data.old_password,
+        new_password: data.new_password
+      });
+    } catch (error) {
+      if ((error as ApiError).error?.code) {
+        throw error;
+      }
+      throw {
+        success: false,
+        message: 'Password change failed',
+        error: {
+          code: ErrorCodes.VALIDATION_ERROR
+        }
+      } satisfies ApiError;
+    }
+  }
+
+  public async registerUser(data: RegisterRequest): Promise<AuthResponse> {
+    try {
+      const rateLimitService = RateLimitService.getInstance();
+      
+      if (!rateLimitService.checkRegisterAttempt(data.email)) {
+        throw this.createRateLimitError();
+      }
+      
+      const response = await authAPI.register(data);
+      const authResponse = this.validateResponse<AuthResponse>(response);
+      
+      if (!authResponse.data) {
+        throw new Error('Invalid response data');
+      }
+      
+      this.validateRequiredData(authResponse.data.user, 'Invalid user data received');
+      await this.handleTokens(authResponse);
+      
+      return authResponse;
+    } catch (error) {
+      this.handleError(error, 'Registration failed');
     }
   }
 }

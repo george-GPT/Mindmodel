@@ -6,20 +6,20 @@ import {
     Box, Divider, IconButton, InputAdornment, Paper, styled, Typography, Alert
 } from '@mui/material';
 
-import { AppDispatch, RootState } from '../../store/store';
-import authService from '../../services/auth/authService';
-import GoogleIcon from '../assets/icons/google-Icon';
-import Button from '../button/button';
-import Input from '../input';
+import { AppDispatch, RootState } from '@/store/store';
+import { AuthService } from '@/services';
+import GoogleIcon from '@/components/assets/icons/google-Icon';
+import Button from '@/components/button/button';
+import Input from '@/components/input';
 import { 
   setError, 
   clearError 
-} from '../../store/authSlice';
+} from '@/store/authSlice';
 import { validateEmail, validatePassword } from '../../utils/validation';
 import EmailInput from '../input/email-input';
 import BrainIconPurple from '../assets/icons/brainIconPurlple';
 import { AuthProvider } from '../../types';
-import type { AuthResponse } from 'types/auth';
+import type { AuthResponse } from '@/types/auth';
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
   width: "100%",
@@ -79,7 +79,7 @@ const LoginModule = () => {
 
     setIsLoading(true);
     try {
-      const response = await authService.loginUser({ email, password });
+      const response = await AuthService.loginUser({ email, password });
       
       if (!response?.data?.user?.email_verified) {
         localStorage.setItem('pendingVerificationEmail', email);
@@ -104,7 +104,7 @@ const LoginModule = () => {
 
     setIsLoading(true);
     try {
-      await authService.googleLogin({ token });
+      await AuthService.googleLogin({ token });
       navigate('/dashboard');
     } catch (error) {
       console.error(`${provider} login failed:`, error);
@@ -146,10 +146,15 @@ const LoginModule = () => {
     initGoogleAuth();
   }, []);
 
-  const handleGoogleCallback = async (response: any) => {
+  interface GoogleAuthResponse {
+    credential?: string;
+    select_by?: string;
+  }
+
+  const handleGoogleCallback = async (response: GoogleAuthResponse) => {
     if (response?.credential) {
       try {
-        await authService.googleLogin({ token: response.credential });
+        await AuthService.googleLogin({ token: response.credential });
         navigate('/dashboard');
       } catch (error) {
         console.error('Google auth failed:', error);

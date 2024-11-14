@@ -65,6 +65,11 @@ export interface AuthServiceType {
     googleLogin: (data: GoogleAuthRequest) => Promise<AuthResponse>;
     logout: () => Promise<void>;
     validateSession: () => Promise<boolean>;
+    changePassword: (data: {
+        old_password: string;
+        new_password: string;
+        new_password2: string;
+    }) => Promise<void>;
 }
 
 // Constants
@@ -77,4 +82,11 @@ export const TOKEN_EXPIRY = {
 } as const;
 
 export type AuthStatus = 'authenticated' | 'unauthenticated' | 'loading';
+
+// Add this definition if it's missing
+export interface RegisterRequest {
+  email: string;
+  username: string;
+  password: string;
+}
 

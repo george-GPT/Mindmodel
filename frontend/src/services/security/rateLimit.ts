@@ -121,6 +121,10 @@ class RateLimitService {
         return true;
     }
 
+    public checkRegisterAttempt(email: string): boolean {
+        // Implement logic similar to checkLoginAttempt
+    }
+
     private setRateLimitError(type: 'login' | 'oauth'): void {
         const error: ApiError = {
             success: false,
