@@ -279,8 +279,13 @@ const Header: React.FC = () => {
                     sx={{
                         textDecoration: "none",
                         color: "white",
-                        "&:hover": {
-                            textDecoration: "none",
+                        '& svg': {
+                            width: 44,
+                            height: 44,
+                            transition: 'transform 0.2s ease-in-out',
+                            '&:hover': {
+                                transform: 'scale(1.1)',
+                            },
                         },
                     }}
                 >

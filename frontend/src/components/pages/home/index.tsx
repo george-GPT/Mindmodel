@@ -506,7 +506,7 @@ export const HomePage: React.FC = () => {
                         transition: 'all 0.2s ease-in-out',
                         '&:hover': {
                           bgcolor: 'rgba(255, 255, 255, 0.02)',
-                          transform: 'translateX(4px)',
+                          transform: 'translateX(2px)',
                         }
                       }}
                     >
@@ -608,7 +608,7 @@ export const HomePage: React.FC = () => {
                         transition: 'all 0.2s ease-in-out',
                         '&:hover': {
                           bgcolor: 'rgba(255, 255, 255, 0.02)',
-                          transform: 'translateX(4px)',
+                          transform: 'translateX(2px)',
                         }
                       }}
                     >
@@ -713,7 +713,7 @@ export const HomePage: React.FC = () => {
                         transition: 'all 0.2s ease-in-out',
                         '&:hover': {
                           bgcolor: 'rgba(255, 255, 255, 0.02)',
-                          transform: 'translateX(4px)',
+                          transform: 'translateX(2px)',
                         }
                       }}
                     >

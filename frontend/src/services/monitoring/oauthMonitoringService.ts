@@ -1,4 +1,5 @@
 import { axiosInstance } from '../api/axiosInstance';
+import { API_PATHS } from '../api/apiPaths';
 import type { components } from '../../types/api.d';
 import { OAuthEvent } from './oauthMonitor';
 
@@ -17,8 +18,8 @@ type OAuthStatsResponse = components['schemas']['BaseResponse'] & {
 
 export const oAuthMonitoringService = {
     logOAuthEvent: (data: OAuthEvent) => 
-        axiosInstance.post<SuccessResponse>(
-            `/api/monitoring/oauth/event`,
+        axiosInstance.post<components['schemas']['SuccessResponse']>(
+            API_PATHS.MONITORING.OAUTH_EVENT,
             data
         ),
 

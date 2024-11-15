@@ -306,7 +306,8 @@ const SignupModule = () => {
               sx={{ 
                 textDecoration: "none",
                 minWidth: 'auto',
-                p: '0 4px'
+                p: '0 4px',
+                color: '#FFFFFF'
               }}
             >
               Login

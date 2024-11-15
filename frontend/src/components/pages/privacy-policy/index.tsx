@@ -13,16 +13,19 @@ import { styled } from '@mui/material/styles';
 
 const Section = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(4),
-  marginBottom: theme.spacing(2),
+  marginBottom: theme.spacing(1),
   borderRadius: theme.spacing(2),
-  border: '1px solid',
+  border: '2px solid',
   borderColor: theme.palette.divider,
   display: 'flex',
   gap: theme.spacing(3),
   alignItems: 'flex-start',
-  transition: 'background-color 0.2s ease-in-out',
+  boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
+  transition: 'all 0.2s ease-in-out',
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
+    boxShadow: '0 3px 6px rgba(0,0,0,0.12)',
+    borderColor: theme.palette.primary[100],
   },
 }));
 
@@ -118,7 +121,7 @@ const PrivacyPolicyPage = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={1}>
         {sections.map((section, index) => (
           <Grid item xs={12} key={index}>
             <Section>
@@ -157,10 +160,18 @@ const PrivacyPolicyPage = () => {
         mt: 8,
         p: 4,
         bgcolor: 'primary.100',
-        opacity: 1,
         borderRadius: 4,
         maxWidth: '1000px',
-        mx: 'auto'
+        mx: 'auto',
+        border: '2px solid',
+        borderColor: 'divider',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
+        transition: 'all 0.2s ease-in-out',
+        '&:hover': {
+          bgcolor: 'action.hover',
+          boxShadow: '0 3px 6px rgba(0,0,0,0.12)',
+          borderColor: 'primary.100',
+        }
       }}>
         <VerifiedUser sx={{ fontSize: 40, color: 'primary.dark', mb: 2 }} />
         <Typography variant="h6" gutterBottom sx={{ fontWeight: 600, color: 'primary.dark' }}>

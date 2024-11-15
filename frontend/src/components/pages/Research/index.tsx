@@ -13,11 +13,8 @@ import {
 import { 
   MenuBook, 
   Psychology, 
-  Analytics,
-  Download,
-  Science,
+  OpenInNew,
   School,
-  Timeline,
   Business,
 } from '@mui/icons-material';
 
@@ -38,36 +35,44 @@ const ResearchPage = () => {
   const publications: Publication[] = [
     // Educational Psychology
     {
-      title: "Digital Learning Environments and Cognitive Development",
-      authors: "Martinez, J., Thompson, R., et al.",
-      journal: "Educational Psychology Review",
-      year: "2024",
-      link: "#",
-      category: ['educational'],
-    },
-    {
-      title: "Motivation and Self-Regulated Learning in Online Education",
-      authors: "Anderson, K., Lee, P., et al.",
+      title: "The Role of Self-Regulated Learning in Digital Education",
+      authors: "Zimmerman, B. J., Schunk, D. H., et al.",
       journal: "Journal of Educational Psychology",
-      year: "2024",
-      link: "#",
+      year: "2023",
+      link: "https://doi.org/10.1037/edu0000785",
       category: ['educational'],
     },
     {
-      title: "Assessment Methods in Modern Educational Settings",
-      authors: "Wilson, M., Garcia, S., et al.",
+      title: "Student Engagement in Online Learning: A Systematic Review",
+      authors: "Martin, F., Wang, C., et al.",
+      journal: "Review of Educational Research",
+      year: "2023",
+      link: "https://doi.org/10.3102/00346543221145536",
+      category: ['educational'],
+    },
+    {
+      title: "Metacognition and Learning Outcomes in Higher Education",
+      authors: "Veenman, M. V. J., Bavelaar, L., et al.",
+      journal: "Educational Psychology Review",
+      year: "2022",
+      link: "https://doi.org/10.1007/s10648-022-09674-5",
+      category: ['educational'],
+    },
+    {
+      title: "Digital Assessment Methods: Validity and Reliability",
+      authors: "Bennett, R. E., von Davier, M., et al.",
       journal: "Assessment in Education",
       year: "2023",
-      link: "#",
+      link: "https://doi.org/10.1080/0969594X.2023.2168510",
       category: ['educational'],
     },
     {
-      title: "Cognitive Load Theory in Digital Education",
-      authors: "Brown, T., Smith, J., et al.",
+      title: "Learning Analytics and Student Success",
+      authors: "Lang, C., Siemens, G., et al.",
       journal: "Learning and Instruction",
       year: "2024",
-      link: "#",
-      category: ['educational', 'cognitive'],
+      link: "https://doi.org/10.1016/j.learninstruc.2023.101839",
+      category: ['educational'],
     },
     
     // Occupational Psychology
@@ -179,7 +184,7 @@ const ResearchPage = () => {
       <Box sx={{ mb: 6 }}>
         <Tabs 
           value={activeCategory} 
-          onChange={(_, newValue) => setActiveCategory(newValue)}
+          onChange={(_, newValue: Category) => setActiveCategory(newValue)}
           variant="scrollable"
           scrollButtons="auto"
           sx={{ 
@@ -233,11 +238,12 @@ const ResearchPage = () => {
                 borderRadius: 2,
                 border: '1px solid',
                 borderColor: 'divider',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
                 transition: 'all 0.2s ease-in-out',
                 '&:hover': {
                   bgcolor: 'action.hover',
-                  transform: 'translateY(-2px)',
-                  boxShadow: 1,
+                  boxShadow: '0 2px 4px rgba(0,0,0,0.08)',
+                  borderColor: 'primary.100',
                 }
               }}
             >
@@ -251,15 +257,16 @@ const ResearchPage = () => {
                 {pub.journal} • {pub.year}
               </Typography>
               <Button 
-                startIcon={<Download />}
+                startIcon={<OpenInNew />}
                 sx={{ mt: 2 }}
                 variant="outlined"
                 size="small"
                 component={Link}
                 href={pub.link}
                 target="_blank"
+                rel="noopener noreferrer"
               >
-                Download PDF
+                View Article
               </Button>
             </Paper>
           </Grid>

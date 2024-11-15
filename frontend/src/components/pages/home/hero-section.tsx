@@ -28,17 +28,23 @@ const HighlightedText = styled("span")(({ theme }) => ({
   },
 }));
 
-// Add floating icon animation
+// Update the FloatingIcon animation
 const FloatingIcon = styled("img")(({ theme }) => ({
   position: 'absolute',
-  opacity: 0.1,
-  animation: 'float 20s infinite linear',
+  opacity: 0.15,
+  animation: 'float 16s infinite linear',
   '@keyframes float': {
     '0%': {
       transform: 'translate(0, 0) rotate(0deg)',
     },
+    '25%': {
+      transform: 'translate(100px, -50px) rotate(90deg)',
+    },
     '50%': {
-      transform: 'translate(100px, 50px) rotate(180deg)',
+      transform: 'translate(180px, 80px) rotate(180deg)',
+    },
+    '75%': {
+      transform: 'translate(-50px, 100px) rotate(270deg)',
     },
     '100%': {
       transform: 'translate(0, 0) rotate(360deg)',
@@ -55,10 +61,72 @@ const BrainIcon2 = styled(FloatingIcon)({
   zIndex: 0,
 });
 
+const ProcessIcon2 = styled(FloatingIcon)({
+  top: '25%',
+  right: '18%',
+  width: '55px',
+  height: '55px',
+  zIndex: 0,
+  animationDelay: '-3s',
+});
+
+const IdeaIcon2 = styled(FloatingIcon)({
+  bottom: '20%',
+  left: '22%',
+  width: '50px',
+  height: '50px',
+  zIndex: 0,
+  animationDelay: '-6s',
+});
+
+const InnovationIcon2 = styled(FloatingIcon)({
+  bottom: '25%',
+  right: '15%',
+  width: '58px',
+  height: '58px',
+  zIndex: 0,
+  animationDelay: '-9s',
+});
+
+const KnowledgeIcon2 = styled(FloatingIcon)({
+  top: '40%',
+  left: '8%',
+  width: '52px',
+  height: '52px',
+  zIndex: 0,
+  animationDelay: '-12s',
+});
+
+// Add these two new styled icons
+const CenterBottomIcon = styled(FloatingIcon)({
+  bottom: '15%',
+  left: '50%',
+  transform: 'translateX(-50%)',  // Center horizontally
+  width: '54px',
+  height: '54px',
+  zIndex: 0,
+  animationDelay: '-8s',
+});
+
+const UpLeftCenterIcon = styled(FloatingIcon)({
+  top: '30%',
+  left: '35%',
+  width: '56px',
+  height: '56px',
+  zIndex: 0,
+  animationDelay: '-15s',
+});
+
 export const HeroSection: React.FC = () => {
   return (
     <Container maxWidth="md" sx={{ position: 'relative', overflow: 'hidden' }}>
       <BrainIcon2 src={logo} alt="" />
+      <ProcessIcon2 src={logo} alt="" />
+      <IdeaIcon2 src={logo} alt="" />
+      <InnovationIcon2 src={logo} alt="" />
+      <KnowledgeIcon2 src={logo} alt="" />
+      <CenterBottomIcon src={logo} alt="" />
+      <UpLeftCenterIcon src={logo} alt="" />
       <Stack
         spacing={8}
         alignItems="center"

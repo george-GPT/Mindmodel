@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Box, TextField, Button, FormControlLabel, Checkbox, Typography } from '@mui/material';
-import { useAuthentication } from '../../hooks/useAuthHook';
-import { LoginCredentials } from '../../types/auth';
+import { useAuth } from '@/hooks/useAuth';
+import type { components } from '@/types/api';
+import type { GoogleSDKResponse } from '@/types/auth';
 import { GoogleLogin } from '@react-oauth/google';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
+import { isApiError } from '@/types/error';
+
+type LoginCredentials = components['schemas']['LoginCredentials'];
 
 const LoginForm: React.FC = () => {
     const [credentials, setCredentials] = useState<LoginCredentials>({
@@ -13,7 +15,7 @@ const LoginForm: React.FC = () => {
         rememberMe: false
     });
 
-    const { login, socialLogin, isLoading } = useAuthentication({
+    const { login, socialLogin, isLoading } = useAuth({
         redirectTo: '/dashboard',
         requireAuth: false
     });
@@ -23,16 +25,23 @@ const LoginForm: React.FC = () => {
         try {
             await login(credentials);
         } catch (error) {
-            // Error handling is managed by useAuthentication
-            console.error('Login failed:', error);
+            if (isApiError(error)) {
+                console.error('Login failed:', error.message);
+            } else {
+                console.error('Unexpected error during login');
+            }
         }
     };
 
-    const handleGoogleSuccess = async (response: any) => {
+    const handleGoogleSuccess = async (response: GoogleSDKResponse) => {
         try {
             await socialLogin('google', response.credential);
         } catch (error) {
-            console.error('Google login failed:', error);
+            if (isApiError(error)) {
+                console.error('Google login failed:', error.message);
+            } else {
+                console.error('Unexpected error during Google login');
+            }
         }
     };
 
@@ -91,7 +100,7 @@ const LoginForm: React.FC = () => {
                 sx={{ mt: 3, mb: 2 }}
                 disabled={isLoading}
             >
-                Sign In
+                {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
             <Box sx={{ mt: 2, mb: 2 }}>
                 <Typography variant="body2" align="center" sx={{ mb: 2 }}>

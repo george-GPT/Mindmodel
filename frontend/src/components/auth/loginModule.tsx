@@ -7,17 +7,20 @@ import {
 } from '@mui/material';
 
 import { AppDispatch, RootState } from '@/store/store';
-import { authApi } from '@/services/api/authApi';
+import type { components } from '@/types/api';
+import type { ApiError, GoogleSDKResponse } from '@/types/auth';
 import GoogleIcon from '@/components/assets/icons/google-Icon';
 import Button from '@/components/button/button';
 import Input from '@/components/Input';
-import { setError, clearError, login } from '@/store/authSlice';
+import { setError, clearError } from '@/store/authSlice';
 import { validateEmail, validatePassword } from '@/utils/validation';
 import EmailInput from '@/components/Input/email-input';
 import BrainIconPurple from '@/components/assets/icons/brainIconPurlple';
-import type { AuthProvider } from '@/types/auth';
 import { isApiError } from '@/types/error';
 import { useAuth } from '@/hooks/useAuth';
+
+// Types
+type LoginCredentials = components['schemas']['LoginCredentials'];
 
 // Styled components
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -52,9 +55,9 @@ export const LoginModule = () => {
   const [password, setPassword] = useState('');
   const [isEmailValid, setIsEmailValid] = useState(false);
   
-  const authError = useSelector((state: RootState) => state.auth.error);
+  const authError = useSelector((state: RootState) => state.auth.er ror);
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const { login } = useAuth();
+  const { login, socialLogin } = useAuth();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -68,25 +71,25 @@ export const LoginModule = () => {
     e.preventDefault();
     dispatch(clearError());
 
-    // Validate fields
     const emailError = validateEmail(email);
     const passwordError = validatePassword(password);
 
     if (emailError || passwordError) {
-      dispatch(setError(emailError || passwordError));
+      dispatch(setError({ message: emailError || passwordError } as ApiError));
       return;
     }
 
     setIsLoading(true);
     try {
-      await login({ email, password });
+      const credentials: LoginCredentials = { email, password };
+      await login(credentials);
       navigate('/dashboard');
     } catch (error) {
       console.error("Login failed:", error);
       if (isApiError(error)) {
         dispatch(setError(error));
       } else {
-        dispatch(setError('Login failed. Please try again.'));
+        dispatch(setError({ message: 'Login failed. Please try again.' } as ApiError));
       }
     } finally {
       setIsLoading(false);
@@ -94,8 +97,22 @@ export const LoginModule = () => {
   };
 
   const handleGoogleClick = () => {
-    // Initialize Google OAuth
-    window.google?.accounts.id.prompt();
+    window.google?.accounts.id.prompt()
+      .then((response: GoogleSDKResponse) => {
+        if (response?.credential) {
+          return socialLogin('google', response.credential);
+        }
+      })
+      .then(() => {
+        navigate('/dashboard');
+      })
+      .catch((error) => {
+        if (isApiError(error)) {
+          dispatch(setError(error));
+        } else {
+          dispatch(setError({ message: 'Google login failed. Please try again.' }));
+        }
+      });
   };
 
   return (
@@ -144,7 +161,10 @@ export const LoginModule = () => {
 
         <Box
           component="form"
-          onSubmit={handleEmailLogin}
+          onSubmit={(e: React.FormEvent) => {
+            e.preventDefault();
+            void handleEmailLogin(e);
+          }}
           sx={{ display: "flex", flexDirection: "column", gap: 2 }}
         >
           <EmailInput
@@ -189,22 +209,25 @@ export const LoginModule = () => {
             variant="primary" 
             size="large"
             disabled={isLoading || !isEmailValid}
+            sx={{
+              color: '#FFFFFF'
+            }}
           >
             {isLoading ? 'Signing in...' : 'Log In'}
           </Button>
         </Box>
 
         <Box sx={{ textAlign: "center", mt: 2 }}>
-          <Typography variant="body2" sx={{ color: "secondary.500" }}>
-            Don't have an account?{' '}
+          <Typography variant="body2" sx={{ color: "text.secondary" }}>
+            Don&apos;t have an account?{' '}
             <Button 
               variant="neutral" 
               onClick={() => navigate('/sign-up')}
-              disabled={isLoading}
               sx={{ 
                 textDecoration: "none",
                 minWidth: 'auto',
-                p: '0 4px'
+                p: '0 4px',
+                color: "primary.main"
               }}
             >
               Sign Up
